@@ -34,8 +34,45 @@
   </head>
 
   <body>
-    <div>
+    <script type="text/x-handlebars" data-template-name="application">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="#">Gemini Checklists</a>
+        <ul class="nav pull-right">
+          <li class="active">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Change Site
+            <b class="caret"></b>
+            </a>
+              <ul class="dropdown-menu">
+                <li><a tabindex="-1" href="#">Gemini South</a></li>
+                <li><a tabindex="-1" href="#">Gemini North</a></li>
+              </ul>
+          </li>
+        </ul>
+      </div>
     </div>
+      <div class="content-fluid">
+        <div class="row-fluid">
+          {{outlet}}
+        </div>
+      </div>
+    </script>
+    <script type="text/x-handlebars" data-template-name="select_sites">
+        <div class="span6 offset3 centered-content">
+      <div class="well centered-content">
+          <h1>Select site</h1>
+          <div class="btn-group btn-group-vertical">
+            {{#each site in controller}}
+              <button class="btn btn-large site-button" {{action showSite site}}>{{site.name}}</button>
+            {{/each}}
+          </div>
+      </div>
+      </div>
+    </script>
+    <script type="text/x-handlebars" data-template-name="site_checklist">
+      <h1>{{name}} checklist for today</h1>
+    </script>
 
     <!-- JS Files
     ================================================== -->
@@ -43,8 +80,8 @@
     <script src="@routes.Assets.at("javascripts/jquery-1.8.2.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
 
+    <script src="@routes.Assets.at("javascripts/handlebars-1.0.rc.1.js")"></script>
     <script src="@routes.Assets.at("javascripts/ember-1.0.0-pre.2.js")"></script>
-    <script src="@routes.Assets.at("javascripts/templates.pre.js")"></script>
     <script src="@routes.Assets.at("app.js")"></script>
 
   </body>
