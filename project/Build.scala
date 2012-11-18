@@ -30,15 +30,18 @@ object ApplicationBuild extends Build {
   val appVersion = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
-    //"postgresql" % "postgresql" % "9.1-901.jdbc4",
-    "rhino" % "js" % "1.7R2"
-    //"org.scalaz" %% "scalaz-core" % "6.0.4"
+    "postgresql" % "postgresql" % "9.1-901.jdbc4",
+    "rhino" % "js" % "1.7R2",
+    "se.radley" %% "play-plugins-salat" % "1.1",
+    "org.scalaz" %% "scalaz-core" % "6.0.4"
   )
 
   val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-    resolvers += "gemini repo" at "http://build.cl.gemini.edu:8081/artifactory/libs-releases",
+    resolvers += "sgodbillon" at "https://bitbucket.org/sgodbillon/repository/raw/master/snapshots/",
     emberEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" / "templates"),
-    emberOptions := Seq.empty[String]
+    emberOptions := Seq.empty[String],
+    routesImport += "se.radley.plugin.salat.Binders._",
+    templatesImport += "org.bson.types.ObjectId"
 
 //    resourceGenerators in Compile <+= EmberCompiler(ember = "ember-1.0.0-pre.2.js", handlebars = "handlebars-1.0.rc.1.js")
   )
