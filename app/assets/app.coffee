@@ -24,7 +24,7 @@ App.ChecklistItem.reopenClass
   createFromJson: (json) ->
     App.ChecklistItem.create
       description: json.description
-      status: json.status
+      status: null
       comment: json.comment
 
 ###
