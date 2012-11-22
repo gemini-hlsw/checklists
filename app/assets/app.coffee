@@ -49,8 +49,6 @@ App.ChecksGroups.reopenClass
 App.SiteChecklistGroupsController = Ember.ArrayController.extend
   content: Ember.A()
 
-App.SiteChecklistController = Ember.ObjectController.extend()
-
 App.Checklist = Ember.Object.extend
   formattedDate: ( ->
     App.formatDate(@get('date')) if @get('date')
@@ -65,13 +63,16 @@ App.Checklist.reopenClass
     groups.addObject(App.ChecksGroup.createFromJson(g)) for g in json.groups
     checklist.set('groups', groups)
 
+App.SiteChecklistController = Ember.ObjectController.extend()
+
 App.SiteChecklistController.reopenClass
   findChecklist: (site) ->
     checklist = App.Checklist.create
       date: new Date()
     today = App.formatDate(new Date())
+    siteName = site.site
     $.ajax
-      url: "/api/v1.0/checklist/#{site.site}/#{today}",
+      url: "/api/v1.0/checklist/#{siteName}/#{today}",
       success: (response, code) =>
         App.Checklist.updateFromJson(checklist, response)
     checklist
@@ -93,13 +94,17 @@ App.SiteChecklistTemplate = Ember.ArrayController.extend
   site: ''
   name: ''
 
-App.Site = Ember.ObjectController.extend()
+App.Site = Ember.ObjectController.extend
+  formattedDate: ( ->
+     App.formatDate(@get('date')) if @get('date')
+   ).property('date')
 
 App.Site.reopenClass
   createFromJson: (site) ->
     App.Site.create
       site: site.site
       name: site.name
+      date: new Date()
 
 ###
 # Controller and view to select a site
@@ -125,19 +130,23 @@ App.Router = Ember.Router.extend
   enableLogging: true
   root: Ember.Route.extend
     index: Ember.Route.extend
-      route: '/'
-      connectOutlets: (router) ->
+      route: '/',
+      connectOutlets: (router, context) ->
         router.get('applicationController').connectOutlet('siteSelector', App.SiteSelectorController.findSites())
-      showSite:  Ember.Route.transitionTo('checklist')
+      showSite: Ember.Route.transitionTo('checklist')
     checklist: Ember.Route.extend
       route: '/:site/:date'
       connectOutlets: (router, context) ->
-        router.get('applicationController').connectOutlet('siteChecklist', App.SiteChecklistController.findChecklist(context))
+        checklist = App.SiteChecklistController.findChecklist(context)
+        checklistController = router.get('siteChecklistController')
+        checklistController.set('content', checklist)
+
+        router.get('applicationController').connectOutlet('siteChecklist')
       serialize: (router, context) ->
         console.log(context)
         site: context.get('site')
-        date: context.get('date')
-      deserialize: (router, urlParams) ->
+        date: context.get('formattedDate')
+      deserializ: (router, urlParams) ->
         console.log(urlParams)
         App.SiteChecklistController.findChecklist(urlParams)
       saveChecklist: (router, event) ->
