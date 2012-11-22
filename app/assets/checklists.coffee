@@ -18,6 +18,7 @@ Checklists.ApplicationView = Ember.View.extend
 Checklists.Site = Ember.Object.extend
   site: ''
   name: ''
+  date: ''
 
 Checklists.SitesView = Ember.View.extend
   templateName: 'sites'
@@ -25,14 +26,22 @@ Checklists.SitesController = Ember.ArrayController.extend
   content: []
 
 Checklists.SitesRepository = Ember.Object.create
+  sites: []
+  createFromJson: (json) ->
+    Checklists.Site.create
+      site: json.site
+      name: json.name
+      date: new Date()
   findAll: ->
-    gs = Checklists.Site.create
-      site: 'GS'
-      name: 'Gemini South'
-    gn = Checklists.Site.create
-      site: 'GN'
-      name: 'Gemini North'
-    [gs, gn]
+    self = this
+    $.ajax
+      url: '/api/v1.0/sites'
+      success: (response) ->
+        response.forEach (site) =>
+          console.log(site)
+          self.sites.pushObject(Checklists.SitesRepository.createFromJson(site))
+
+    self.sites
 
 Checklists.Router = Ember.Router.extend
   enableLogging: true

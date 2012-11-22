@@ -11,9 +11,10 @@ import se.radley.plugin.salat._
 import play.api.Play.current
 import play.api.libs.json._
 import java.util.Date
-import org.joda.time.DateTime
+import org.joda.time.{DateMidnight, DateTime}
+import JsonFormatters._
 
-case class Site(site:String, name: String)
+case class Site(site:String, name: String, date: DateMidnight = new DateMidnight())
 
 object Site extends ModelCompanion[Site, ObjectId] {
   val dao = new SalatDAO[Site, ObjectId](collection = mongoCollection("sites")) {}
@@ -23,7 +24,8 @@ object Site extends ModelCompanion[Site, ObjectId] {
   implicit object SiteFormat extends Writes[Site] {
     def writes(s: Site) = JsObject(Seq(
       "site" -> JsString(s.site),
-      "name" -> JsString(s.name)
+      "name" -> JsString(s.name),
+      "date" -> Json.toJson(s.date)
     ))
   }
 }
@@ -115,12 +117,6 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def saveChecklist(t:Checklist) {
     com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers()
     dao.save(t, WriteConcern.Normal)
-  }
-
-  implicit object JodaDateFormat extends Format[DateTime] {
-    def reads(json: JsValue) = new DateTime(json.as[String])
-
-    def writes(date: DateTime) = JsNumber(date.getMillis)
   }
 
   implicit object ChecklistFormat extends Format[Checklist] {
