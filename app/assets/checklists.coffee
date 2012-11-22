@@ -40,13 +40,45 @@ Checklists.SitesRepository = Ember.Object.create
       date: json.date
   findAll: ->
     self = this
-    $.ajax
-      url: '/api/v1.0/sites'
-      success: (response) ->
-        response.forEach (site) =>
-          self.sites.pushObject(Checklists.SitesRepository.createFromJson(site))
-
+    if self.sites.length is 0
+      $.ajax
+        url: '/api/v1.0/sites'
+        success: (response) ->
+          response.forEach (site) =>
+            self.sites.pushObject(Checklists.SitesRepository.createFromJson(site))
     self.sites
+
+Checklists.CheckValues = ['done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
+
+###
+# View and controller for a checklist
+###
+Checklists.ChecklistView = Ember.View.extend
+  templateName: 'checklist'
+Checklists.ChecklistController = Ember.ObjectController.extend
+  content: null
+
+Checklists.Checklist = Ember.ObjectController.extend
+  site: ''
+  name: ''
+  date: ''
+  groups: []
+
+Checklists.ChecklistRepository = Ember.Object.create
+  findOne: (site, date) ->
+    checklist = Checklists.Checklist.create
+      site: ''
+      name: ''
+      date: ''
+      groups: []
+    console.log(typeof checklist)
+    $.ajax
+      url: "/api/v1.0/checklist/#{site}/#{date}",
+      success: (response) =>
+        checklist.setProperties(response)
+        checklist.get('groups').forEach (v)->
+          console.log(v.checks)
+    checklist
 
 Checklists.Router = Ember.Router.extend
   location : "hash"
@@ -58,8 +90,8 @@ Checklists.Router = Ember.Router.extend
       connectOutlets: (router, context) ->
         router.get('applicationController').connectOutlet('sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
-      route: '/:site'
+      route: '/:site/:date'
       connectOutlets: (router, site) ->
-        router.get('applicationController').connectOutlet('sites', Checklists.SitesRepository.findAll())
+        router.get('applicationController').connectOutlet('checklist', Checklists.ChecklistRepository.findOne(site.site, site.date))
 
 Checklists.initialize()
