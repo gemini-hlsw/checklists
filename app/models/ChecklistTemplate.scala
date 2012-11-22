@@ -1,16 +1,12 @@
 package models
 
 import org.bson.types.ObjectId
-import com.novus.salat.dao.{SalatDAO, ModelCompanion}
 import mongoContext._
 import com.mongodb.casbah.Imports._
-import com.novus.salat._
-import com.novus.salat.annotations._
 import com.novus.salat.dao._
 import se.radley.plugin.salat._
 import play.api.Play.current
 import play.api.libs.json._
-import java.util.Date
 import org.joda.time.{DateMidnight, DateTime}
 import JsonFormatters._
 
