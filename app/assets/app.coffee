@@ -67,14 +67,22 @@ App.SiteChecklistController = Ember.ObjectController.extend()
 
 App.SiteChecklistController.reopenClass
   findChecklist: (site) ->
+    console.log(site)
+    clDate = if site.date then site.date else App.formatDate(new Date())
+
     checklist = App.Checklist.create
-      date: new Date()
-    today = App.formatDate(new Date())
+      site: site.site
+      date: clDate
+    console.log("date " + clDate)
     siteName = site.site
-    $.ajax
-      url: "/api/v1.0/checklist/#{siteName}/#{today}",
-      success: (response, code) =>
-        App.Checklist.updateFromJson(checklist, response)
+    debugger
+    content = App.SiteChecklistController.get('content')
+    if (content.site isnt checklist.site and content.date isnt checklist.date)
+      $.ajax
+        url: "/api/v1.0/checklist/#{siteName}/#{clDate}",
+        success: (response, code) =>
+          App.Checklist.updateFromJson(checklist, response)
+    App.SiteChecklistController.set('content', checklist)
     checklist
   saveChecklist: (checklist) ->
     date = App.formatDate(checklist.date)
@@ -143,10 +151,12 @@ App.Router = Ember.Router.extend
 
         router.get('applicationController').connectOutlet('siteChecklist')
       serialize: (router, context) ->
+        console.log("serial")
         console.log(context)
         site: context.get('site')
         date: context.get('formattedDate')
-      deserializ: (router, urlParams) ->
+      deserialize: (router, urlParams) ->
+        console.log("Deserial")
         console.log(urlParams)
         App.SiteChecklistController.findChecklist(urlParams)
       saveChecklist: (router, event) ->
