@@ -94,7 +94,6 @@ Checklists.ChecklistRepository = Ember.Object.create
       name: ''
       date: ''
       groups: []
-    console.log(typeof checklist)
     $.ajax
       url: "/api/v1.0/checklist/#{site}/#{date}",
       success: (response) =>
@@ -102,8 +101,12 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups = Ember.A()
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
+        console.log('load')
+        console.log(checklist)
     checklist
   saveChecklist: (checklist) ->
+    console.log("save")
+    console.log(checklist)
     $.ajax
       url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
       type: 'POST'
@@ -130,9 +133,11 @@ Checklists.Router = Ember.Router.extend
         checklist =  router.get('checklistController').get('content')
         # current date
         yesterday = moment(checklist.get('date'), 'YYYYMMDD').subtract('days', 1)
-        router.transitionTo('checklist', {site: checklist.get('site'), date: yesterday.format('YYYYMMDD')})
+        router.transitionTo('checklist', {
+        site: checklist.get('site'), date: yesterday.format('YYYYMMDD')})
       connectOutlets: (router, site) ->
-        console.log(site)
+        console.log('sitch ')
+        console.log site
         router.get('applicationController').connectOutlet('checklist', Checklists.ChecklistRepository.findOne(site.site, site.date))
 
 
