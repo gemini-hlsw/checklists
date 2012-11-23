@@ -103,8 +103,8 @@
             </table>
             </div>
             <div class="row-fluid">
-              <button class="btn pull-left" {{action saveChecklist}}><< Yesterday</button>
-              <button class="btn pull-left" {{action saveChecklist}}>Tomorrow >></button>
+              <button class="btn pull-left" {{action goToPrevious}}><< Prev</button>
+              <button class="btn pull-left" {{action goToNext}}>Next >></button>
               <button class="btn btn-primary pull-right" {{action saveChecklist this}}>Save</button>
             </div>
           </div>
@@ -117,9 +117,11 @@
     <script src="@routes.Assets.at("javascripts/jquery-1.8.2.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/jquery.format-1.2.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/moment.min.js")"></script>
 
     <script src="@routes.Assets.at("javascripts/handlebars-1.0.rc.1.js")"></script>
     <script src="@routes.Assets.at("javascripts/ember-1.0.0-pre.2.js")"></script>
+
     <script src="@routes.Assets.at("checklists.js")"></script>
 
   </body>
