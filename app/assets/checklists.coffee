@@ -119,7 +119,7 @@ Checklists.Router = Ember.Router.extend
     index: Ember.Route.extend
       route: '/'
       siteChecklist: Ember.Router.transitionTo('checklist')
-      connectOutlets: (router, context) ->
+      connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'

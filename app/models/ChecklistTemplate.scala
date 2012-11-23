@@ -103,15 +103,14 @@ object CheckGroup {
   }
 }
 
-case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, date:DateTime, groups: Seq[CheckGroup])
+case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, date:DateMidnight, groups: Seq[CheckGroup])
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
 
   def newFromTemplate(t:ChecklistTemplate): Checklist =
-    Checklist(site = t.site, name = t.name, date = new DateTime(), groups = t.groups.map(CheckGroup.newFromTemplate(_)))
+    Checklist(site = t.site, name = t.name, date = DateMidnight.now(), groups = t.groups.map(CheckGroup.newFromTemplate(_)))
   def saveChecklist(t:Checklist) {
-    com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers()
     dao.save(t, WriteConcern.Normal)
   }
 
@@ -126,7 +125,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     def reads(json: JsValue) = Checklist(
       site = (json \ "site").asOpt[String].getOrElse(""),
       name = (json \ "name").asOpt[String].getOrElse(""),
-      date = (json \ "date").asOpt[DateTime].getOrElse(new DateTime()),
+      date = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
       groups = (json \ "groups").as[Seq[CheckGroup]]
     )
   }
