@@ -16,7 +16,7 @@ object Api extends Controller {
   }
 
   def checkList(site:String, date:String) = Action {
-    ChecklistTemplate.findTemplate(site).map(Checklist.newFromTemplate).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
+    Checklist.findOrCreate(site, JsonFormatters.fmt.parseDateTime(date).toDateMidnight).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
   }
 
   def saveCheckList(site:String, date:String) = Action { implicit request =>

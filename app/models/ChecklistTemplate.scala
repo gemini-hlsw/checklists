@@ -71,7 +71,9 @@ object Check {
 
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
-      "description" -> JsString(c.description)
+      "description" -> JsString(c.description),
+      "status" -> JsString(c.status.getOrElse("")),
+      "comment" -> JsString(c.comment.getOrElse(""))
     ))
 
     def reads(json: JsValue) = Check(
@@ -110,8 +112,13 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def newFromTemplate(t:ChecklistTemplate): Checklist =
     Checklist(site = t.site, name = t.name, date = DateMidnight.now(), groups = t.groups.map(CheckGroup.newFromTemplate(_)))
+
+  def findOrCreate(site:String, date:DateMidnight):Option[Checklist] = findChecklist(site, date).orElse(ChecklistTemplate.findTemplate(site).map(newFromTemplate(_)))
+
+  def findChecklist(site:String, date:DateMidnight):Option[Checklist] = dao.findOne(MongoDBObject("site" -> site, "date" -> date))
+
   def saveChecklist(t:Checklist) {
-    val id = dao.find(MongoDBObject("site" -> t.site, "date" -> t.date)).toIterable.headOption.map(_.id).getOrElse(t.id)
+    val id = findChecklist(t.site, t.date).toIterable.headOption.map(_.id).getOrElse(t.id)
     dao.update(MongoDBObject("_id" -> id), t.copy(id = id), true, false, WriteConcern.Normal)
   }
 
