@@ -103,6 +103,14 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
     checklist
+  saveChecklist: (checklist) ->
+    $.ajax
+      url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
+      type: 'POST'
+      contentType: 'application/json'
+      data: JSON.stringify(checklist)
+      success: (response, code) =>
+        console.log(response)
 
 Checklists.Router = Ember.Router.extend
   location : "hash"
@@ -115,7 +123,11 @@ Checklists.Router = Ember.Router.extend
         router.get('applicationController').connectOutlet('sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
+      saveChecklist: (router) ->
+        checklist =  router.get('checklistController').get('content')
+        Checklists.ChecklistRepository.saveChecklist(checklist)
       connectOutlets: (router, site) ->
         router.get('applicationController').connectOutlet('checklist', Checklists.ChecklistRepository.findOne(site.site, site.date))
+
 
 Checklists.initialize()
