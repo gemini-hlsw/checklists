@@ -6,14 +6,14 @@ import org.bson.{BSON, Transformer}
 import org.joda.time.DateMidnight
 
 object RegisterJodaDateMidnightConversionHelpers extends JodaDateMidnightHelpers {
-  def apply() = {
+  def apply() {
     log.debug("Registering  Joda Date Time Scala Conversions.")
     super.register()
   }
 }
 
 object DeregisterJodaDateMidnightConversionHelpers extends JodaDateMidnightHelpers {
-  def apply() = {
+  def apply() {
     log.debug("Unregistering Joda Date Time Scala Conversions.")
     super.unregister()
   }

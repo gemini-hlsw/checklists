@@ -111,7 +111,8 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def newFromTemplate(t:ChecklistTemplate): Checklist =
     Checklist(site = t.site, name = t.name, date = DateMidnight.now(), groups = t.groups.map(CheckGroup.newFromTemplate(_)))
   def saveChecklist(t:Checklist) {
-    dao.save(t, WriteConcern.Normal)
+    val id = dao.find(MongoDBObject("site" -> t.site, "date" -> t.date)).toIterable.headOption.map(_.id).getOrElse(t.id)
+    dao.update(MongoDBObject("_id" -> id), t.copy(id = id), true, false, WriteConcern.Normal)
   }
 
   implicit object ChecklistFormat extends Format[Checklist] {
