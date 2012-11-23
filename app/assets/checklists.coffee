@@ -64,7 +64,30 @@ Checklists.Checklist = Ember.ObjectController.extend
   date: ''
   groups: []
 
+Checklists.Check = Ember.Object.extend
+  description: ''
+  status: ''
+  comment: ''
+
+Checklists.ChecksGroup = Ember.Object.extend
+  name: ''
+  title: ''
+  checks: ''
+
 Checklists.ChecklistRepository = Ember.Object.create
+  checkFromJson: (json) ->
+    check = Checklists.Check.create()
+    check.setProperties(json)
+  checklistGroupFromJson: (json) ->
+    group = Checklists.ChecksGroup.create
+      name: ''
+      title: ''
+      checks: Ember.A()
+    group.setProperties(json)
+    checks = Ember.A()
+    checks.addObject(Checklists.ChecklistRepository.checkFromJson(c)) for c in json.checks
+    group.set('checks', checks)
+
   findOne: (site, date) ->
     checklist = Checklists.Checklist.create
       site: ''
@@ -76,8 +99,9 @@ Checklists.ChecklistRepository = Ember.Object.create
       url: "/api/v1.0/checklist/#{site}/#{date}",
       success: (response) =>
         checklist.setProperties(response)
-        checklist.get('groups').forEach (v)->
-          console.log(v.checks)
+        groups = Ember.A()
+        groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
+        checklist.set('groups', groups)
     checklist
 
 Checklists.Router = Ember.Router.extend
