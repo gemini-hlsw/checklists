@@ -6,3 +6,40 @@
     margin-top: 40px;
     margin-bottom: 40px;
 }
+
+td.centered {
+    vertical-align: middle; /* center checkbox vertically */
+}
+
+.centered-box {
+    text-align: center;
+}
+
+.centered-box:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */
+.center-box {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/*.check-container {
+    position: relative;
+}
+
+.vcenter {
+    line-height: 22px;
+}
+
+.check-description {
+    top: 40%;
+    bottom: 50%;
+    position: absolute;
+}*/

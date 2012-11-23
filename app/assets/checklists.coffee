@@ -48,7 +48,7 @@ Checklists.SitesRepository = Ember.Object.create
             self.sites.pushObject(Checklists.SitesRepository.createFromJson(site))
     self.sites
 
-Checklists.CheckValues = ['done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
+Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
 
 ###
 # View and controller for a checklist

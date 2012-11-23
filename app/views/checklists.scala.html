@@ -78,23 +78,24 @@
             <table class="table table-stripped table-bordered">
               <thead>
                 <tr>
-                  <th>Systems functional checks</th>
-                  <th>Status</th>
-                  <th>Comment</th>
+                  <th><h3>Systems functional checks</h3></th>
+                  <th><h3>Status</h3></th>
+                  <th><h3>Comment</h3></th>
                 </tr>
               </thead>
               <tbody>
                 {{#each group in groups}}
-                <tr><td colspan="3">{{group.title}}</td></tr>
+                <tr><td colspan="3"><h4>{{group.title}}</h4></td></tr>
                 {{#each item in group.checks}}
                   <tr>
-                    <td>{{item.description}}</td>
-                    <td>
+                    <td class="centered">{{item.description}}</td>
+                    <td class="centered centered-content">
                       {{view Ember.Select
+                          class="input-small"
                           contentBinding="Checklists.CheckValues"
                           selectionBinding="item.status"}}
                     </td>
-                    <td>{{view Ember.TextField name="description" valueBinding="item.comment"}}</td>
+                    <td class="centered centered-content">{{view Ember.TextField name="description" valueBinding="item.comment"}}</td>
                   </tr>
                 {{/each}}
                 {{/each}}
