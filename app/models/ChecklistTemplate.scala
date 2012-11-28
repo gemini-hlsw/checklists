@@ -10,12 +10,27 @@ import play.api.libs.json._
 import org.joda.time.{DateMidnight, DateTime}
 import JsonFormatters._
 
-case class Site(site:String, name: String, date: DateMidnight = new DateMidnight())
+import org.bson.types.ObjectId
+import mongoContext._
+import com.mongodb.casbah.Imports._
+import com.novus.salat.dao._
+import se.radley.plugin.salat._
+import play.api.Play.current
+import play.api.libs.json._
+import org.joda.time.{DateMidnight, DateTime}
+import JsonFormatters._
+
+import scalaz._
+import Scalaz._
+
+case class Site(id: ObjectId = new ObjectId, site:String, name: String, date: DateMidnight = new DateMidnight())
 
 object Site extends ModelCompanion[Site, ObjectId] {
   val dao = new SalatDAO[Site, ObjectId](collection = mongoCollection("sites")) {}
 
   def findSites:Seq[Site] = dao.find(MongoDBObject()).toSeq
+
+  def insertSite(site:Site):Site = site.copy(id = dao.insert(site, WriteConcern.Normal).getOrElse(ObjectId.get())) // TBD Do proper validation of the error
 
   implicit object SiteFormat extends Writes[Site] {
     def writes(s: Site) = JsObject(Seq(
