@@ -9277,6 +9277,7 @@ var ClassMixin = Mixin.create({
     computed property functions may close over variables that are then no longer
     available for introspection.
 
+
     You can pass a hash of these values to a computed property like this:
 
         person: function() {

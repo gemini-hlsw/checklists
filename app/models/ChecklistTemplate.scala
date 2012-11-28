@@ -78,7 +78,9 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 }
 
-case class Check(description:String, status: Option[String], comment: Option[String])
+case class Check(description:String, status: Option[String], comment: Option[String]) {
+  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment))
+}
 
 object Check {
   def newFromTemplate(t: String):Check=
@@ -123,7 +125,7 @@ object CheckGroup {
 case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, date:DateMidnight, groups: Seq[CheckGroup])
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
-  val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
+  lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
     Checklist(site = t.site, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
@@ -132,7 +134,23 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def findChecklist(site:String, date:DateMidnight):Option[Checklist] = dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
-  private def mergeLists(newCL:Checklist)(oldCL:Checklist):Checklist = newCL.copy(id = oldCL.id)
+  def mergeChecks(newChecks:Seq[Check], oldChecks:Seq[Check]):Seq[Check] = {
+    for {
+      nc <- newChecks
+      oc <- oldChecks
+      if (nc.description == oc.description)
+    } yield nc.merge(oc)
+  }
+
+  def mergeLists(newCL:Checklist)(oldCL:Checklist):Checklist = {
+    val cl = newCL.copy(id = oldCL.id)
+    val mergedGroups = for {
+      og <- oldCL.groups
+      ng <- cl.groups
+      if (og.name == ng.name)
+    } yield ng.copy(checks = mergeChecks(ng.checks, og.checks))
+    cl.copy(groups = mergedGroups)
+  }
 
   def saveChecklist(t:Checklist) {
     val merged = findChecklist(t.site, t.date).map(mergeLists(t)).getOrElse(t)
