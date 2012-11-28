@@ -95,8 +95,8 @@ object Check {
 
     def reads(json: JsValue) = Check(
       (json \ "description").asOpt[String].getOrElse(""),
-      (json \ "status").asOpt[String],
-      (json \ "comment").asOpt[String]
+      (json \ "status").asOpt[String].filter(_.nonEmpty),
+      (json \ "comment").asOpt[String].filter(_.nonEmpty)
     )
   }
 }
@@ -154,7 +154,6 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def saveChecklist(t:Checklist) {
     val merged = findChecklist(t.site, t.date).map(mergeLists(t)).getOrElse(t)
-    //val id = findChecklist(t.site, t.date).toIterable.headOption.map(_.id).getOrElse(t.id)
     dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
   }
 
