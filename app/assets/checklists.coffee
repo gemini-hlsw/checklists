@@ -79,6 +79,7 @@ Checklists.ChecksGroup = Ember.Object.extend
   checks: ''
 
 Checklists.ChecklistRepository = Ember.Object.create
+  checklistsCache: {}
   checkFromJson: (json) ->
     check = Checklists.Check.create()
     check.setProperties(json)
@@ -93,19 +94,23 @@ Checklists.ChecklistRepository = Ember.Object.create
     group.set('checks', checks)
 
   findOne: (site, date) ->
-    checklist = Checklists.Checklist.create
-      site: site
-      name: ''
-      date: date
-      groups: []
-    $.ajax
-      url: "/api/v1.0/checklist/#{site}/#{date}",
-      success: (response) =>
-        checklist.setProperties(response)
-        groups = Ember.A()
-        groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
-        checklist.set('groups', groups)
-    checklist
+    if @checklistsCache["#{site}-#{date}"]?
+      @checklistsCache["#{site}-#{date}"]
+    else
+      checklist = Checklists.Checklist.create
+        site: site
+        name: ''
+        date: date
+        groups: []
+      @checklistsCache["#{site}-#{date}"] = checklist
+      $.ajax
+        url: "/api/v1.0/checklist/#{site}/#{date}",
+        success: (response) =>
+          checklist.setProperties(response)
+          groups = Ember.A()
+          groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
+          checklist.set('groups', groups)
+      checklist
   saveChecklist: (checklist) ->
     $.ajax
       url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
