@@ -31,6 +31,14 @@ Checklists.SitesView = Ember.View.extend
   templateName: 'sites'
 Checklists.SitesController = Ember.ArrayController.extend
   content: []
+  isLoaded: true
+
+# Displays an overlay with a spinning wheel
+Checklists.OverlayView = Ember.View.extend
+  templateName: 'overlay'
+  didInsertElement: ->
+    this._super()
+    this.$('.overlay').spin('large', 'white')
 
 Checklists.SitesRepository = Ember.Object.create
   sites: []

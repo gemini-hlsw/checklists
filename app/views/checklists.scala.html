@@ -89,6 +89,7 @@
         <span class="add-on"><i class="icon-calendar"></i></span>
     </script>
     <script type="text/x-handlebars" data-template-name="sites">
+      {{#if isLoaded}}
       <div class="span6 offset3 centered-content">
         <div class="well centered-content">
           <h1>Select site</h1>
@@ -99,6 +100,12 @@
           </div>
         </div>
       </div>
+      {{else}}
+        {{view Checklists.OverlayView}}
+      {{/if}}
+    </script>
+    <script type="text/x-handlebars" data-template-name="overlay">
+      <div class="overlay"></div>
     </script>
       <script type="text/x-handlebars" data-template-name="checklist">
         <div class="span6 offset3 centered-content">
@@ -148,6 +155,8 @@
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
     <script src="@routes.Assets.at("javascripts/moment.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/spin.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/jquery.spin.js")"></script>
 
     <script src="@routes.Assets.at("javascripts/handlebars-1.0.rc.1.js")"></script>
     <script src="@routes.Assets.at("javascripts/ember-1.0.0-pre.2.js")"></script>
