@@ -63,6 +63,10 @@ Checklists.Checklist = Ember.ObjectController.extend
   name: ''
   date: ''
   groups: []
+  formattedDate: ( ->
+    d = moment(@get('date'), 'YYYYMMDD')
+    if d? then d.format('dddd, MMMM Do YYYY') else ''
+  ).property('date')
 
 Checklists.Check = Ember.Object.extend
   description: ''
