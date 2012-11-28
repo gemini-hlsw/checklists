@@ -4,7 +4,9 @@ Checklists = window.Checklists
 ###
 # Utility functions
 ###
-Checklists.dateFormat = 'YYYYMMDD'
+Checklists.urlDateFormat = 'YYYYMMDD'
+Checklists.longDateFormat = 'dddd, MMMM Do YYYY'
+Checklists.calendarDateFormat = 'DD/MM/YYYY'
 
 ###
 # Top level controller and view
@@ -49,13 +51,45 @@ Checklists.SitesRepository = Ember.Object.create
 
 Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
 
+Checklists.DatePicker = Ember.View.extend
+  classNames: ['ember-text-field','input-small']
+  tagName: "input"
+  attributeBindings: ['data','value','format','readonly','type','size']
+  size:"16"
+  type: "text"
+  format:'mm/dd/yyyy'
+  value: (->
+    date = this.get('data')
+#    if date?
+#      date.format(this.get('format'))
+#    else
+#      ""
+    date
+  ).property('data'),
+  data: null,
+  didInsertElement: ->
+    $().datepicker({
+      format:this.get(this.get('format'))
+    }).on 'changeDate', ->
+      console.log(ev.date)
+      console.log(ev.target)
+      ev.target.setAttribute('data',ev.date)
+
 ###
 # View and controller for the calendar
 ###
 Checklists.CalendarView = Ember.View.extend
   templateName: 'calendar'
+  currentDate: ''
+  dateObserver: ( ->
+    @get('controller.calendarFormattedDate')
+    console.log("changes")
+  ).observes('controller.calendarFormattedDate')
   didInsertElement: ->
-    $('#date_picker').datepicker('place')
+    @set('currentDate', @get('controller.calendarFormattedDate'))
+#    $('#date_picker').datepicker
+#      format: Checklists.calendarDateFormat
+#    $('#date_picker').datepicker('setValue', '27/11/2012')
 Checklists.CalendarController = Ember.ObjectController.extend
   content: null
 
@@ -96,9 +130,13 @@ Checklists.Checklist = Ember.ObjectController.extend
   name: ''
   date: ''
   groups: []
-  formattedDate: ( ->
-    d = moment(@get('date'), 'YYYYMMDD')
-    if d? then d.format('dddd, MMMM Do YYYY') else ''
+  longFormattedDate: ( ->
+    d = moment(@get('date'), Checklists.urlDateFormat)
+    if d? then d.format(Checklists.longDateFormat) else ''
+  ).property('date')
+  calendarFormattedDate: ( ->
+    d = moment(@get('date'), Checklists.urlDateFormat)
+    if d? then d.format(Checklists.calendarDateFormat) else ''
   ).property('date')
 
 Checklists.Check = Ember.Object.extend
@@ -174,13 +212,13 @@ Checklists.Router = Ember.Router.extend
       goToPrevious: (router) ->
         checklist =  router.get('checklistController').get('content')
         # current date
-        previousDay = moment(checklist.get('date'), 'YYYYMMDD').subtract('days', 1)
-        router.transitionTo('checklist', {site: checklist.get('site'), date: previousDay.format('YYYYMMDD')})
+        previousDay = moment(checklist.get('date'), Checklists.urlDateFormat).subtract('days', 1)
+        router.transitionTo('checklist', {site: checklist.get('site'), date: previousDay.format(Checklists.urlDateFormat)})
       goToNext: (router) ->
         checklist =  router.get('checklistController').get('content')
         # current date
-        nextDay = moment(checklist.get('date'), 'YYYYMMDD').add('days', 1)
-        router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format('YYYYMMDD')})
+        nextDay = moment(checklist.get('date'), Checklists.urlDateFormat).add('days', 1)
+        router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, site) ->
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
