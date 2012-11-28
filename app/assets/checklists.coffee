@@ -50,6 +50,40 @@ Checklists.SitesRepository = Ember.Object.create
 Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
 
 ###
+# View and controller for the calendar
+###
+Checklists.CalendarView = Ember.View.extend
+  templateName: 'calendar'
+  didInsertElement: ->
+    $('#date_picker').datepicker('place')
+Checklists.CalendarController = Ember.ObjectController.extend
+  content: null
+
+###
+# View and controller for the calendar
+###
+Checklists.SiteSwitchView = Ember.View.extend
+  templateName: 'site_switch'
+Checklists.SiteSwitchController = Ember.ObjectController.extend
+  content: null
+
+###
+# View and controller to edit a template
+###
+Checklists.TemplateView = Ember.View.extend
+  templateName: 'edit_template'
+Checklists.TemplateController = Ember.ObjectController.extend
+  content: null
+
+###
+# View and controller for the toolbar
+###
+Checklists.ToolbarView = Ember.View.extend
+  templateName: 'toolbar'
+Checklists.ToolbarController = Ember.ObjectController.extend
+  content: null
+
+###
 # View and controller for a checklist
 ###
 Checklists.ChecklistView = Ember.View.extend
@@ -148,7 +182,9 @@ Checklists.Router = Ember.Router.extend
         nextDay = moment(checklist.get('date'), 'YYYYMMDD').add('days', 1)
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format('YYYYMMDD')})
       connectOutlets: (router, site) ->
-        router.get('applicationController').connectOutlet('checklist', Checklists.ChecklistRepository.findOne(site.site, site.date))
+        checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
+        router.get('applicationController').connectOutlet('main', 'checklist', checklist)
+        router.get('applicationController').connectOutlet('toolbar', 'toolbar', checklist)
 
 
 Checklists.initialize()
