@@ -93,13 +93,11 @@ Checklists.ChecklistRepository = Ember.Object.create
     group.set('checks', checks)
 
   findOne: (site, date) ->
-    console.log("load #{site} #{date}")
     checklist = Checklists.Checklist.create
       site: site
       name: ''
       date: date
       groups: []
-    console.log(checklist)
     $.ajax
       url: "/api/v1.0/checklist/#{site}/#{date}",
       success: (response) =>
@@ -107,19 +105,15 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups = Ember.A()
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
-        console.log('load')
-        console.log(checklist)
     checklist
   saveChecklist: (checklist) ->
-    console.log("save")
-    console.log(checklist)
     $.ajax
       url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
       type: 'POST'
       contentType: 'application/json'
       data: JSON.stringify(checklist)
       success: (response, code) =>
-        console.log(response)
+        true
 
 Checklists.Router = Ember.Router.extend
   location : "hash"
@@ -138,12 +132,14 @@ Checklists.Router = Ember.Router.extend
       goToPrevious: (router) ->
         checklist =  router.get('checklistController').get('content')
         # current date
-        yesterday = moment(checklist.get('date'), 'YYYYMMDD').subtract('days', 1)
-        router.transitionTo('checklist', {
-        site: checklist.get('site'), date: yesterday.format('YYYYMMDD')})
+        previousDay = moment(checklist.get('date'), 'YYYYMMDD').subtract('days', 1)
+        router.transitionTo('checklist', {site: checklist.get('site'), date: previousDay.format('YYYYMMDD')})
+      goToNext: (router) ->
+        checklist =  router.get('checklistController').get('content')
+        # current date
+        nextDay = moment(checklist.get('date'), 'YYYYMMDD').add('days', 1)
+        router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format('YYYYMMDD')})
       connectOutlets: (router, site) ->
-        console.log('sitch ')
-        console.log site
         router.get('applicationController').connectOutlet('checklist', Checklists.ChecklistRepository.findOne(site.site, site.date))
 
 
