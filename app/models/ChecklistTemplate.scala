@@ -132,9 +132,12 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def findChecklist(site:String, date:DateMidnight):Option[Checklist] = dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
+  private def mergeLists(newCL:Checklist)(oldCL:Checklist):Checklist = newCL.copy(id = oldCL.id)
+
   def saveChecklist(t:Checklist) {
-    val id = findChecklist(t.site, t.date).toIterable.headOption.map(_.id).getOrElse(t.id)
-    dao.update(MongoDBObject("_id" -> id), t.copy(id = id), true, false, WriteConcern.Normal)
+    val merged = findChecklist(t.site, t.date).map(mergeLists(t)).getOrElse(t)
+    //val id = findChecklist(t.site, t.date).toIterable.headOption.map(_.id).getOrElse(t.id)
+    dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
   }
 
   implicit object ChecklistFormat extends Format[Checklist] {

@@ -4,8 +4,7 @@ Checklists = window.Checklists
 ###
 # Utility functions
 ###
-Checklists.formatDate = (date) ->
-  $.format.date(date, 'yyyyMMdd')
+Checklists.dateFormat = 'YYYYMMDD'
 
 ###
 # Top level controller and view
