@@ -111,7 +111,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
-    Checklist(site = t.site, name = t.name, date = DateMidnight.now(), groups = t.groups.map(CheckGroup.newFromTemplate(_)))
+    Checklist(site = t.site, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
 
   def findOrCreate(site:String, date:DateMidnight):Option[Checklist] = findChecklist(site, date).orElse(ChecklistTemplate.findTemplate(site).map(newFromTemplate(_, date)))
 

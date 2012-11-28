@@ -93,11 +93,13 @@ Checklists.ChecklistRepository = Ember.Object.create
     group.set('checks', checks)
 
   findOne: (site, date) ->
+    console.log("load #{site} #{date}")
     checklist = Checklists.Checklist.create
-      site: ''
+      site: site
       name: ''
-      date: ''
+      date: date
       groups: []
+    console.log(checklist)
     $.ajax
       url: "/api/v1.0/checklist/#{site}/#{date}",
       success: (response) =>
