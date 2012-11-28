@@ -122,7 +122,6 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
         @checklistsCache["#{site}-#{date}"] = checklist
-        true
 
 Checklists.Router = Ember.Router.extend
   location : "hash"
@@ -132,7 +131,7 @@ Checklists.Router = Ember.Router.extend
       route: '/'
       siteChecklist: Ember.Router.transitionTo('checklist')
       connectOutlets: (router) ->
-        router.get('applicationController').connectOutlet('sites', Checklists.SitesRepository.findAll())
+        router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
       saveChecklist: (router) ->

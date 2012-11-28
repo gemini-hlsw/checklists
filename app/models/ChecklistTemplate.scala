@@ -10,16 +10,6 @@ import play.api.libs.json._
 import org.joda.time.{DateMidnight, DateTime}
 import JsonFormatters._
 
-import org.bson.types.ObjectId
-import mongoContext._
-import com.mongodb.casbah.Imports._
-import com.novus.salat.dao._
-import se.radley.plugin.salat._
-import play.api.Play.current
-import play.api.libs.json._
-import org.joda.time.{DateMidnight, DateTime}
-import JsonFormatters._
-
 import scalaz._
 import Scalaz._
 
