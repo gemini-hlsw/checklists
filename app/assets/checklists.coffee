@@ -52,12 +52,13 @@ Checklists.SitesRepository = Ember.Object.create
 Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
 
 Checklists.DatePicker = Ember.View.extend
-  classNames: ['ember-text-field','input-small']
-  tagName: "input"
-  attributeBindings: ['data','value','format','readonly','type','size']
+  templateName: 'datepicker'
+  classNames: ['input-append date']
+  tagName: 'div'
+  attributeBindings: ['value','format','readonly','type','size']
   size:"16"
   type: "text"
-  format:'mm/dd/yyyy'
+  format:'dd-mm-yyyy'
   value: (->
     date = this.get('data')
 #    if date?
@@ -68,9 +69,10 @@ Checklists.DatePicker = Ember.View.extend
   ).property('data'),
   data: null,
   didInsertElement: ->
-    $().datepicker({
-      format:this.get(this.get('format'))
-    }).on 'changeDate', ->
+    $('.date').datepicker
+      format: @get('format')
+    $('.date').datepicker('setValue', '27/11/2012')
+    $('.date').on 'changeDate', ->
       console.log(ev.date)
       console.log(ev.target)
       ev.target.setAttribute('data',ev.date)

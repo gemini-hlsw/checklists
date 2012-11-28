@@ -80,14 +80,13 @@
     <script type="text/x-handlebars" data-template-name="calendar">
       <ul class="nav pull-right">
         <li class="active">
-            {{currentDate}} {{controller.calendarFormattedDate}}
-          <div class="input-append date" id="date_picker" data-date="{{calendarFormattedDate}}" data-date-format="{{Checklists.calendarDateFormat}}">
-            {{view Ember.TextField class="span2" size="16" readonly="true" valueBinding="calendarFormattedDate"}}
-            <span class="add-on"><i class="icon-calendar"></i></span>
-          </div>
-            {{view Checklists.DatePicker dataBinding="calendarFormattedDate" format="dd/mm/yyyy"}}
+          {{view Checklists.DatePicker dataBinding="calendarFormattedDate" format="dd/mm/yyyy"}}
         </li>
       </ul>
+    </script>
+    <script type="text/x-handlebars" data-template-name="datepicker">
+        {{view Ember.TextField class="span2 input-small" size="16" readonly="readonly" valueBinding="view.data"}}
+        <span class="add-on"><i class="icon-calendar"></i></span>
     </script>
     <script type="text/x-handlebars" data-template-name="sites">
       <div class="span6 offset3 centered-content">
