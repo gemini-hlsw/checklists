@@ -152,9 +152,10 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     cl.copy(groups = mergedGroups)
   }
 
-  def saveChecklist(t:Checklist) {
+  def saveChecklist(t:Checklist):Checklist = {
     val merged = findChecklist(t.site, t.date).map(mergeLists(t)).getOrElse(t)
     dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
+    merged
   }
 
   implicit object ChecklistFormat extends Format[Checklist] {

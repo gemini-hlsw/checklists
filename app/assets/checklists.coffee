@@ -116,7 +116,12 @@ Checklists.ChecklistRepository = Ember.Object.create
       type: 'POST'
       contentType: 'application/json'
       data: JSON.stringify(checklist)
-      success: (response, code) =>
+      success: (response) =>
+        checklist.setProperties(response)
+        groups = Ember.A()
+        groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
+        checklist.set('groups', groups)
+        @checklistsCache["#{site}-#{date}"] = checklist
         true
 
 Checklists.Router = Ember.Router.extend

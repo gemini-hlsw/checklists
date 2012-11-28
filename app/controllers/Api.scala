@@ -20,7 +20,6 @@ object Api extends Controller {
   }
 
   def saveCheckList(site:String, date:String) = Action { implicit request =>
-    request.body.asJson.map(_.as[Checklist]).map(Checklist.saveChecklist)
-    Ok
+    request.body.asJson.map(_.as[Checklist]).map(Checklist.saveChecklist).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
   }
 }
