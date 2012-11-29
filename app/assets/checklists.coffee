@@ -88,32 +88,6 @@ Checklists.DatePicker = Ember.View.extend
       console.log(@get('data'))
 
 ###
-# View and controller for the calendar
-###
-Checklists.CalendarView = Ember.View.extend
-  templateName: 'calendar'
-  currentDate: ''
-  dateObserver: ( ->
-    @get('controller.calendarFormattedDate')
-    console.log("changes")
-  ).observes('controller.calendarFormattedDate')
-  didInsertElement: ->
-    @set('currentDate', @get('controller.calendarFormattedDate'))
-#    $('#date_picker').datepicker
-#      format: Checklists.calendarDateFormat
-#    $('#date_picker').datepicker('setValue', '27/11/2012')
-Checklists.CalendarController = Ember.ObjectController.extend
-  content: null
-
-###
-# View and controller for the calendar
-###
-Checklists.SiteSwitchView = Ember.View.extend
-  templateName: 'site_switch'
-Checklists.SiteSwitchController = Ember.ObjectController.extend
-  content: null
-
-###
 # View and controller to edit a template
 ###
 Checklists.TemplateView = Ember.View.extend
@@ -235,6 +209,10 @@ Checklists.Router = Ember.Router.extend
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar', checklist)
-
+    editTemplate: Ember.Router.transitionTo('template')
+    template: Ember.Route.extend
+      route: '/:site/template'
+      connectOutlets: (router, context) ->
+        router.get('applicationController').connectOutlet('main', 'template', {site: context.get('site')})
 
 Checklists.initialize()

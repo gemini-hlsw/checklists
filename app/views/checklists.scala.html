@@ -51,7 +51,7 @@
     <script type="text/x-handlebars" data-template-name="toolbar">
         <ul class="nav pull-right">
           <li class="active">
-            <button class="btn" {{action editTemplate site}}>Edit {{site}} Template</button>
+            <button class="btn" {{action editTemplate this}}>Edit {{site}} Template</button>
         </ul>
     </script>
     <script type="text/x-handlebars" data-template-name="site_switch">
@@ -96,6 +96,9 @@
       {{/if}}
     </script>
     <script type="text/x-handlebars" data-template-name="overlay">
+      <div class="overlay"></div>
+    </script>
+    <script type="text/x-handlebars" data-template-name="edit_template">
       <div class="overlay"></div>
     </script>
       <script type="text/x-handlebars" data-template-name="checklist">
