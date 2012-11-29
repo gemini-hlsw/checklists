@@ -65,27 +65,19 @@ Checklists.DatePicker = Ember.View.extend
   templateName: 'datepicker'
   classNames: ['input-append date']
   tagName: 'div'
-  attributeBindings: ['value','format','readonly','type','size']
-  size:"16"
-  type: "text"
+  attributeBindings: ['data-date','format']
   format:'dd-mm-yyyy'
-  value: (->
-    date = this.get('data')
-#    if date?
-#      date.format(this.get('format'))
-#    else
-#      ""
-    date
+  'data-date': (->
+    @get('data')
   ).property('data'),
   data: null,
   didInsertElement: ->
     $('.date').datepicker
       format: @get('format')
-    $('.date').datepicker('setValue', '27/11/2012')
-    $('.date').on 'changeDate', ->
-      console.log(ev.date)
-      console.log(ev.target)
-      ev.target.setAttribute('data',ev.date)
+#    $('.date').on 'changeDate', ->
+#      console.log(ev.date)
+#      console.log(ev.target)
+#      ev.target.setAttribute('data',ev.date)
 
 ###
 # View and controller for the calendar
