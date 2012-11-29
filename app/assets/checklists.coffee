@@ -1,5 +1,7 @@
 window.Checklists = Ember.Application.create()
 
+Ember.LOG_BINDINGS = true
+
 Checklists = window.Checklists
 ###
 # Utility functions
@@ -65,19 +67,25 @@ Checklists.DatePicker = Ember.View.extend
   templateName: 'datepicker'
   classNames: ['input-append date']
   tagName: 'div'
-  attributeBindings: ['data-date','format']
-  format:'dd-mm-yyyy'
+  attributeBindings: ['data', 'data-date', 'inputFormat', 'format']
+  format:'dd/mm/yyyy'
+  inputFormat: Checklists.urlDateFormat
   'data-date': (->
-    @get('data')
+    console.log(@get('data'))
+    console.log(@get('inputFormat'))
+    c = moment(@get('data'), @get('inputFormat'))
+    console.log c.toDate()
+    c.format(Checklists.calendarFormattedDate)
   ).property('data'),
-  data: null,
+  dataBinding: null,
   didInsertElement: ->
+    self = this
     $('.date').datepicker
       format: @get('format')
-#    $('.date').on 'changeDate', ->
-#      console.log(ev.date)
-#      console.log(ev.target)
-#      ev.target.setAttribute('data',ev.date)
+    $('.date').on 'changeDate', (ev) =>
+      self.set('data', ev.date)
+      $('.date').datepicker('hide')
+      console.log(@get('data'))
 
 ###
 # View and controller for the calendar
