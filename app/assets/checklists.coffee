@@ -92,6 +92,11 @@ Checklists.DatePicker = Ember.View.extend
 ###
 Checklists.TemplateView = Ember.View.extend
   templateName: 'edit_template'
+  deleteGroup: (event) ->
+    name = event.context
+    g = @get('controller.content.groups')
+    g = (i for i in g when i.name isnt name)
+    @set('controller.content.groups', g)
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
 
