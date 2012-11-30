@@ -71,10 +71,7 @@ Checklists.DatePicker = Ember.View.extend
   format:'dd/mm/yyyy'
   inputFormat: Checklists.urlDateFormat
   'data-date': (->
-    console.log(@get('data'))
-    console.log(@get('inputFormat'))
     c = moment(@get('data'), @get('inputFormat'))
-    console.log c.toDate()
     c.format(Checklists.calendarFormattedDate)
   ).property('data'),
   dataBinding: null,
@@ -92,6 +89,15 @@ Checklists.DatePicker = Ember.View.extend
 ###
 Checklists.TemplateView = Ember.View.extend
   templateName: 'edit_template'
+  addGroup: () ->
+    confirm = (result) =>
+      if result?
+        group = Checklists.TemplateGroup.create
+          name: result
+          title: result
+          checks: Ember.A()
+        @get('controller.content.groups').insertAt(0, group)
+    bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   deleteGroup: (event) ->
     name = event.context
     g = @get('controller.content.groups')
@@ -104,9 +110,22 @@ Checklists.Template = Ember.Object.extend
   site: ''
   name: ''
   groups: []
+Checklists.TemplateGroup = Ember.Object.extend
+  name: ''
+  title: ''
+  checks: []
 
 Checklists.TemplateRepository = Ember.Object.create
   templates: {}
+  groupFromJson: (json) ->
+    group = Checklists.TemplateGroup.create
+      name: ''
+      title: ''
+      checks: Ember.A()
+    group.setProperties(json)
+    checks = Ember.A()
+    checks.addObject(c) for c in json.checks
+    group.set('checks', checks)
   findTemplate: (site) ->
     key = site.get('site')
     if @templates[key]?
@@ -119,6 +138,9 @@ Checklists.TemplateRepository = Ember.Object.create
         url: "/api/v1.0/templates/#{key}",
         success: (response) =>
           template.setProperties response
+          groups = Ember.A()
+          groups.addObject(Checklists.TemplateRepository.groupFromJson(g)) for g in response.groups
+          template.set('groups', groups)
       @templates[key] = template
       template
   saveTemplate: (template) ->

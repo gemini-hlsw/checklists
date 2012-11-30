@@ -103,6 +103,7 @@
           <div class="well centered-content">
             <div class="row-fluid">
             <h1>{{name}} template</h1>
+              <button class="btn btn-success pull-right" {{action addGroup group.name target="view"}}>Add Group</button>
               <table class="table table-stripped table-bordered">
                 <tbody>
                   {{#each group in groups}}
