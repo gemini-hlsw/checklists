@@ -98,6 +98,9 @@ Checklists.TemplateView = Ember.View.extend
           checks: Ember.A()
         @get('controller.content.groups').insertAt(0, group)
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
+  addCheck: (event) ->
+    t = g for g in @get('controller.content.groups') when g.name is event.context
+    t.get('checks').insertAt(0, '')
   deleteGroup: (event) ->
     name = event.context
     g = @get('controller.content.groups')
@@ -110,13 +113,18 @@ Checklists.Template = Ember.Object.extend
   site: ''
   name: ''
   groups: []
+Checklists.TemplateCheck = Ember.Object.extend
+  title: ''
 Checklists.TemplateGroup = Ember.Object.extend
   name: ''
   title: ''
-  checks: []
+  checks: Ember.A()
 
 Checklists.TemplateRepository = Ember.Object.create
   templates: {}
+  checkFromJson: (json) ->
+    Checklists.TemplateCheck.create
+      title: json
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
       name: ''
@@ -124,7 +132,7 @@ Checklists.TemplateRepository = Ember.Object.create
       checks: Ember.A()
     group.setProperties(json)
     checks = Ember.A()
-    checks.addObject(c) for c in json.checks
+    checks.addObject(Checklists.TemplateRepository.checkFromJson(c)) for c in json.checks
     group.set('checks', checks)
   findTemplate: (site) ->
     key = site.get('site')
@@ -144,6 +152,7 @@ Checklists.TemplateRepository = Ember.Object.create
       @templates[key] = template
       template
   saveTemplate: (template) ->
+    console.log(c.get('checks')) for c in template.get('groups')
     $.ajax
       url: "/api/v1.0/templates/#{template.site}",
       type: 'POST'
