@@ -106,15 +106,21 @@
               <table class="table table-stripped table-bordered">
                 <tbody>
                   {{#each group in groups}}
-                  <tr><td colspan="3"><h4>{{group.title}}</h4></td></tr>
+                    <tr>
+                        <td><h4>{{view Ember.TextField name="check" valueBinding="group.title"}}</h4></td>
+                        <td><button class="btn btn-danger">Delete</button></td>
+                    </tr>
                       {{#each item in group.checks}}
                         <tr>
-                          <td class="centered centered-content">{{view Ember.TextField name="description" valueBinding="item"}}</td>
+                          <td>{{view Ember.TextField name="check" valueBinding="item"}}</td>
                         </tr>
                       {{/each}}
                   {{/each}}
                 </tbody>
               </table>
+              <div class="row-fluid">
+                <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
+              </div>
           </div>
         </div>
     </script>
