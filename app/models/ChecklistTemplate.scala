@@ -57,6 +57,13 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).toSeq
   def findTemplate(site: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("site" -> site))
 
+  def saveTemplate(t: ChecklistTemplate) = {
+    val id = findTemplate(t.site).map(_.id).getOrElse(t.id)
+    dao.removeById(id, WriteConcern.Normal)
+    dao.save(t.copy(id = id))
+    t.copy(id = id)
+  }
+
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
       "site" -> JsString(t.site),

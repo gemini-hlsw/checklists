@@ -108,7 +108,7 @@
                   {{#each group in groups}}
                     <tr>
                         <td><h4>{{view Ember.TextField name="check" valueBinding="group.title"}}</h4></td>
-                        <td><button class="btn btn-danger">Delete</button></td>
+                        <td><button class="btn btn-danger pull-right">Delete Group</button></td>
                     </tr>
                       {{#each item in group.checks}}
                         <tr>
