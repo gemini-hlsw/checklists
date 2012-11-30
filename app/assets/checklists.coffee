@@ -95,6 +95,19 @@ Checklists.TemplateView = Ember.View.extend
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
 
+Checklists.Template = Ember.Object.extend
+  site: ''
+  name: ''
+  groups: []
+
+Checklists.TemplateRepository = Ember.Object.create
+  templates: {}
+  findTemplate: (site) ->
+    template = Checklists.Template.create
+      site: site.get('site')
+      name: site.get('name')
+    template
+
 ###
 # View and controller for the toolbar
 ###
@@ -215,6 +228,7 @@ Checklists.Router = Ember.Router.extend
     template: Ember.Route.extend
       route: '/:site/template'
       connectOutlets: (router, context) ->
-        router.get('applicationController').connectOutlet('main', 'template', {site: context.get('site')})
+        router.get('templateController').set('content', Checklists.TemplateRepository.findTemplate(context))
+        router.get('applicationController').connectOutlet('main', 'template')
 
 Checklists.initialize()
