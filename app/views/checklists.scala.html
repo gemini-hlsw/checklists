@@ -103,6 +103,18 @@
           <div class="well centered-content">
             <div class="row-fluid">
             <h1>{{name}} template</h1>
+              <table class="table table-stripped table-bordered">
+                <tbody>
+                  {{#each group in groups}}
+                  <tr><td colspan="3"><h4>{{group.title}}</h4></td></tr>
+                      {{#each item in group.checks}}
+                        <tr>
+                          <td class="centered centered-content">{{view Ember.TextField name="description" valueBinding="item"}}</td>
+                        </tr>
+                      {{/each}}
+                  {{/each}}
+                </tbody>
+              </table>
           </div>
         </div>
     </script>
