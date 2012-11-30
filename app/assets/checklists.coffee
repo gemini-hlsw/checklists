@@ -116,6 +116,7 @@ Checklists.Checklist = Ember.ObjectController.extend
   name: ''
   date: ''
   groups: []
+  isLoaded: false
   longFormattedDate: ( ->
     d = moment(@get('date'), Checklists.urlDateFormat)
     if d? then d.format(Checklists.longDateFormat) else ''
@@ -167,6 +168,7 @@ Checklists.ChecklistRepository = Ember.Object.create
           groups = Ember.A()
           groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
           checklist.set('groups', groups)
+          checklist.set('isLoaded', true)
       checklist
   saveChecklist: (checklist) ->
     $.ajax
