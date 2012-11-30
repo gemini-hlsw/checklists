@@ -31,23 +31,21 @@ object Site extends ModelCompanion[Site, ObjectId] {
   }
 }
 
-case class CheckTemplate(checks:String)
-
-object CheckTemplate {
-  implicit object CheckTemplateFormat extends Writes[CheckTemplate] {
-    def writes(c: CheckTemplate) = JsString(c.checks)
-  }
-}
-
 case class CheckTemplateGroup(name:String, title:String, checks: Seq[String])
 
 object CheckTemplateGroup {
-  implicit object ChecklistTemplateGroupFormat extends Writes[CheckTemplateGroup] {
+  implicit object ChecklistTemplateGroupFormat extends Format[CheckTemplateGroup] {
     def writes(g: CheckTemplateGroup) = JsObject(Seq(
       "name" -> JsString(g.name),
       "title" -> JsString(g.title),
       "checks" -> JsArray(g.checks.map(JsString(_)))
     ))
+
+    def reads(json: JsValue) = CheckTemplateGroup(
+      name = (json \ "name").asOpt[String].getOrElse(""),
+      title = (json \ "title").asOpt[String].getOrElse(""),
+      checks = (json \ "checks").as[Seq[String]]
+    )
   }
 }
 
@@ -59,12 +57,18 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).toSeq
   def findTemplate(site: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("site" -> site))
 
-  implicit object ChecklistTemplateFormat extends Writes[ChecklistTemplate] {
+  implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
       "site" -> JsString(t.site),
       "name" -> JsString(t.name),
       "groups" -> Json.toJson(t.groups)
     ))
+
+    def reads(json: JsValue) = ChecklistTemplate(
+      site = (json \ "site").asOpt[String].getOrElse(""),
+      name = (json \ "name").asOpt[String].getOrElse(""),
+      groups = (json \ "groups").as[Seq[CheckTemplateGroup]]
+    )
   }
 }
 
