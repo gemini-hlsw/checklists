@@ -256,5 +256,12 @@ Checklists.Router = Ember.Router.extend
       saveTemplate: (router) ->
         template =  router.get('templateController').get('content')
         Checklists.TemplateRepository.saveTemplate(template)
+      serialize: (router, context) ->
+        site: context.get('site')
+      deserialize: (router, urlParams) ->
+        context = Ember.Object.create
+          site: urlParams.site
+          name: ''
+        Checklists.TemplateRepository.findTemplate(context)
 
 Checklists.initialize()
