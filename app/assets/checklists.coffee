@@ -116,6 +116,14 @@ Checklists.TemplateRepository = Ember.Object.create
           template.setProperties response
       @templates[key] = template
       template
+  saveTemplate: (template) ->
+    $.ajax
+      url: "/api/v1.0/templates/#{template.site}",
+      type: 'POST'
+      contentType: 'application/json'
+      data: JSON.stringify(template)
+      success: (response) =>
+        console.log(response)
 
 ###
 # View and controller for the toolbar
@@ -240,5 +248,8 @@ Checklists.Router = Ember.Router.extend
         template = Checklists.TemplateRepository.findTemplate(context)
         router.get('templateController').set('content', template)
         router.get('applicationController').connectOutlet('main', 'template', template)
+      saveTemplate: (router) ->
+        template =  router.get('templateController').get('content')
+        Checklists.TemplateRepository.saveTemplate(template)
 
 Checklists.initialize()
