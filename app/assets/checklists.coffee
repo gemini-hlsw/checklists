@@ -124,7 +124,7 @@ Checklists.TemplateRepository = Ember.Object.create
   templates: {}
   checkFromJson: (json) ->
     Checklists.TemplateCheck.create
-      title: json
+      title: json.title
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
       name: ''

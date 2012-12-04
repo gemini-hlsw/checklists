@@ -31,20 +31,35 @@ object Site extends ModelCompanion[Site, ObjectId] {
   }
 }
 
-case class CheckTemplateGroup(name:String, title:String, checks: Seq[String])
+case class CheckTemplate(title:String)
+
+object CheckTemplate {
+  implicit object CheckTemplateFormat extends Format[CheckTemplate] {
+    def writes(c: CheckTemplate) = JsObject(Seq(
+      "title" -> JsString(c.title)
+    ))
+
+    def reads(json: JsValue) = CheckTemplate(
+      title = (json \ "title").asOpt[String].getOrElse("")
+    )
+  }
+}
+
+
+case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate])
 
 object CheckTemplateGroup {
   implicit object ChecklistTemplateGroupFormat extends Format[CheckTemplateGroup] {
     def writes(g: CheckTemplateGroup) = JsObject(Seq(
       "name" -> JsString(g.name),
       "title" -> JsString(g.title),
-      "checks" -> JsArray(g.checks.map(JsString(_)))
+      "checks" -> Json.toJson(g.checks)
     ))
 
     def reads(json: JsValue) = CheckTemplateGroup(
       name = (json \ "name").asOpt[String].getOrElse(""),
       title = (json \ "title").asOpt[String].getOrElse(""),
-      checks = (json \ "checks").as[Seq[String]]
+      checks = (json \ "checks").as[Seq[CheckTemplate]]
     )
   }
 }
@@ -84,8 +99,8 @@ case class Check(description:String, status: Option[String], comment: Option[Str
 }
 
 object Check {
-  def newFromTemplate(t: String):Check=
-    Check(t, None, None)
+  def newFromTemplate(t: CheckTemplate):Check=
+    Check(t.title, None, None)
 
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
