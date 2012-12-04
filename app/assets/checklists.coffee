@@ -76,13 +76,16 @@ Checklists.DatePicker = Ember.View.extend
   ).property('data'),
   dataBinding: null,
   didInsertElement: ->
-    self = this
     $('.date').datepicker
       format: @get('format')
-    $('.date').on 'changeDate', (ev) =>
-      self.set('data', ev.date)
-      $('.date').datepicker('hide')
-      console.log(@get('data'))
+
+###
+# View and controller for the calendar
+###
+Checklists.SiteSwitchView = Ember.View.extend
+  templateName: 'site_switch'
+Checklists.SiteSwitchController = Ember.ObjectController.extend
+  content: null
 
 ###
 # View and controller to edit a template
