@@ -113,6 +113,7 @@ Checklists.Template = Ember.Object.extend
   site: ''
   name: ''
   groups: []
+  isLoaded: false
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
 Checklists.TemplateGroup = Ember.Object.extend
@@ -149,6 +150,7 @@ Checklists.TemplateRepository = Ember.Object.create
           groups = Ember.A()
           groups.addObject(Checklists.TemplateRepository.groupFromJson(g)) for g in response.groups
           template.set('groups', groups)
+          template.set('isLoaded', true)
       @templates[key] = template
       template
   saveTemplate: (template) ->

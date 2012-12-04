@@ -99,6 +99,7 @@
       <div class="overlay"></div>
     </script>
     <script type="text/x-handlebars" data-template-name="edit_template">
+      {{#if isLoaded}}
         <div class="span6 offset3 centered-content">
           <div class="well centered-content">
             <div class="row-fluid">
@@ -128,6 +129,9 @@
               </div>
           </div>
         </div>
+      {{else}}
+        {{view Checklists.OverlayView}}
+      {{/if}}
     </script>
     <script type="text/x-handlebars" data-template-name="checklist">
       {{#if isLoaded}}
