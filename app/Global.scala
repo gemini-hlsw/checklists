@@ -1,4 +1,4 @@
-import models.{Site, RegisterJodaDateMidnightConversionHelpers}
+import models.{ChecklistTemplate, Site, RegisterJodaDateMidnightConversionHelpers}
 import play.api.{Application, GlobalSettings}
 
 object Global extends GlobalSettings {
@@ -9,6 +9,10 @@ object Global extends GlobalSettings {
     val sites = Site.findSites
     if (sites.isEmpty) {
       (Site(site = "GS", name = "Gemini South") :: Site(site = "GN", name = "Gemini North") :: Nil).map(Site.insertSite)
+    }
+    val templates = ChecklistTemplate.findTemplates
+    if (templates.isEmpty) {
+      (ChecklistTemplate(site = "GS", name = "Gemini South", groups = Nil) :: ChecklistTemplate(site = "GN", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
     }
   }
 }
