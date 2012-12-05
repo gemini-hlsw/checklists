@@ -103,7 +103,9 @@ Checklists.TemplateView = Ember.View.extend
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
     t = g for g in @get('controller.content.groups') when g.name is event.context
-    t.get('checks').insertAt(0, '')
+    nc = Checklists.TemplateCheck.create
+      title: ''
+    t.get('checks').insertAt(0, nc)
   deleteGroup: (event) ->
     name = event.context
     g = @get('controller.content.groups')
