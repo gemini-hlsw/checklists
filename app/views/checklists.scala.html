@@ -35,19 +35,6 @@
   </head>
 
   <body>
-    <script type="text/x-handlebars" data-template-name="application">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <a class="brand" href="#">Gemini Checklists</a>
-          {{outlet toolbar}}
-      </div>
-    </div>
-      <div class="content-fluid">
-        <div class="row-fluid">
-          {{outlet main}}
-        </div>
-      </div>
-    </script>
     <script type="text/x-handlebars" data-template-name="toolbar">
       <ul class="nav pull-right">
         <li class="active">
@@ -206,6 +193,7 @@
 
     <script src="@routes.Assets.at("javascripts/handlebars-1.0.rc.1.js")"></script>
     <script src="@routes.Assets.at("javascripts/ember-1.0.0-pre.2.js")"></script>
+    <script src="@routes.Assets.at("javascripts/templates.pre.js")"></script>
 
     <script src="@routes.Assets.at("checklists.js")"></script>
 
