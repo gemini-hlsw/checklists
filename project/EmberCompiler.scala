@@ -31,9 +31,8 @@ class EmberCompiler(ember: String, handlebars: String) {
   }
 
   private lazy val compiler = {
-    val ctx = Context.enter()
-                                ctx.setLanguageVersion(org.mozilla.javascript.Context.VERSION_1_7)
-                              println(ctx.getLanguageVersion)
+    val ctx = Context.enter
+    ctx.setLanguageVersion(org.mozilla.javascript.Context.VERSION_1_7)
     ctx.setOptimizationLevel(9)
     //ctx.setOptimizationLevel(-1)
     val global = new Global
