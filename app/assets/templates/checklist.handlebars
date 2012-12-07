@@ -1,0 +1,46 @@
+{{#if canDisplay}}
+  <div class="span6 offset3 centered-content">
+    <div class="well centered-content">
+      <div class="row-fluid">
+      <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+      <table class="table table-stripped table-bordered">
+        <thead>
+          <tr>
+            <th><h3>Systems functional checks</h3></th>
+            <th><h3>Status</h3></th>
+            <th><h3>Comment</h3></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each group in groups}}
+          <tr><td class="group-header" colspan="3"><h4>{{group.title}}</h4></td></tr>
+              {{#each item in group.checks}}
+                <tr>
+                  <td class="centered">{{item.description}}</td>
+                  <td class="centered centered-content">
+                    {{view Ember.Select
+                        class="input-small"
+                        contentBinding="Checklists.CheckValues"
+                        selectionBinding="item.status"}}
+                  </td>
+                  <td class="centered centered-content">{{view Ember.TextField name="description" valueBinding="item.comment"}}</td>
+                </tr>
+              {{/each}}
+          {{/each}}
+        </tbody>
+      </table>
+      </div>
+      <div class="row-fluid">
+        <button class="btn pull-left" {{action goToPrevious}}><< Prev</button>
+        <button class="btn pull-left" {{action goToNext}}>Next >></button>
+        <button class="btn btn-primary pull-right" {{action saveChecklist this}}>Save</button>
+      </div>
+    </div>
+  </div>
+{{else}}
+  {{#if isSaved}}
+    {{view Checklists.OverlayView}}
+  {{else}}
+    {{view Checklists.SavingOverlayView}}
+  {{/if}}
+{{/if}}

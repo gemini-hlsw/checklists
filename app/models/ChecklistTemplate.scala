@@ -18,7 +18,7 @@ case class Site(id: ObjectId = new ObjectId, site:String, name: String, date: Da
 object Site extends ModelCompanion[Site, ObjectId] {
   val dao = new SalatDAO[Site, ObjectId](collection = mongoCollection("sites")) {}
 
-  def findSites:Seq[Site] = dao.find(MongoDBObject()).toSeq
+  def findSites:Seq[Site] = dao.find(MongoDBObject()).map(_.copy(date = DateMidnight.now())).toSeq
 
   def insertSite(site:Site):Site = site.copy(id = dao.insert(site, WriteConcern.Normal).getOrElse(ObjectId.get())) // TBD Do proper validation of the error
 
