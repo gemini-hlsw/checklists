@@ -31,14 +31,17 @@ class EmberCompiler(ember: String, handlebars: String) {
   }
 
   private lazy val compiler = {
-    val ctx = Context.enter
+    val ctx = Context.enter()
+                                ctx.setLanguageVersion(org.mozilla.javascript.Context.VERSION_1_7)
+                              println(ctx.getLanguageVersion)
+    ctx.setOptimizationLevel(9)
     //ctx.setOptimizationLevel(-1)
     val global = new Global
     global.init(ctx)
     val scope = ctx.initStandardObjects(global)
 
     // set up global objects that emulate a browser context
-    ctx.evaluateString(scope,
+    /*ctx.evaluateString(scope,
       """
         // make window an alias for the global object
         var window = this,
@@ -83,11 +86,15 @@ class EmberCompiler(ember: String, handlebars: String) {
         }
       """,
       "browser.js",
-      1, null)
+      1, null)*/
     // load handlebars
     val handlebarsFile = findFile(handlebars).getOrElse(throw new Exception("handlebars: could not find " + handlebars))
 
     ctx.evaluateString(scope, Path(handlebarsFile).slurpString, handlebars, 1, null)
+    // load handlebars
+    val headlessEmberFile = findFile("headless-ember.js").getOrElse(throw new Exception("handlebars: could not find " + handlebars))
+
+    ctx.evaluateString(scope, Path(headlessEmberFile).slurpString, handlebars, 1, null)
     // load ember
     val emberFile = findFile(ember).getOrElse(throw new Exception("ember: could not find " + ember))
 

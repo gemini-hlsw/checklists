@@ -31,7 +31,7 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     "postgresql" % "postgresql" % "9.1-901.jdbc4",
-    "org.mozilla" % "rhino" % "1.7R4",
+    "rhino" % "js" % "1.7R2",
     "se.radley" %% "play-plugins-salat" % "1.1",
     "org.scalaz" %% "scalaz-core" % "6.0.4"
   )
