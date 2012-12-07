@@ -78,7 +78,7 @@ class EmberCompiler(ember: String, handlebars: String) {
 
         // our precompile function uses Ember to do the precompilation,
         // then converts the compiled function to its string representation
-        function precompile(string) {
+        function precompileEmberHandlebars(string) {
           return Ember.Handlebars.precompile(string).toString();
         }
       """,
@@ -92,8 +92,7 @@ class EmberCompiler(ember: String, handlebars: String) {
     val emberFile = findFile(ember).getOrElse(throw new Exception("ember: could not find " + ember))
 
     ctx.evaluateString(scope, Path(emberFile).slurpString, ember, 1, null)
-    val precompileFunction = scope.get("precompile", scope).asInstanceOf[Function]
-          println(precompileFunction)
+    val precompileFunction = scope.get("precompileEmberHandlebars", scope).asInstanceOf[Function]
 
     Context.exit
 
