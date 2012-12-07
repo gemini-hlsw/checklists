@@ -43,6 +43,15 @@ Checklists.OverlayView = Ember.View.extend
   didInsertElement: ->
     this._super()
     this.$('.overlay').spin('large', 'white')
+  willDestroyElement: ->
+    true
+
+# Displays an overlay with a spinning wheel and a message
+Checklists.SavingOverlayView = Ember.View.extend
+  templateName: 'saving_overlay'
+  didInsertElement: ->
+    this._super()
+    this.$('.overlay').spin('large', 'white')
 
 Checklists.SitesRepository = Ember.Object.create
   sites: []
@@ -198,6 +207,10 @@ Checklists.Checklist = Ember.ObjectController.extend
   date: ''
   groups: []
   isLoaded: false
+  isSaved: true
+  canDisplay: ( ->
+    @get('isLoaded') and @get('isSaved')
+  ).property('isLoaded', 'isSaved')
   longFormattedDate: ( ->
     d = moment(@get('date'), Checklists.urlDateFormat)
     if d? then d.format(Checklists.longDateFormat) else ''
@@ -252,6 +265,7 @@ Checklists.ChecklistRepository = Ember.Object.create
           checklist.set('isLoaded', true)
       checklist
   saveChecklist: (checklist) ->
+    checklist.set('isSaved', false)
     $.ajax
       url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
       type: 'POST'
@@ -262,7 +276,8 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups = Ember.A()
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
-        @checklistsCache["#{site}-#{date}"] = checklist
+        @checklistsCache["#{checklist.site}-#{checklist.date}"] = checklist
+        checklist.set('isSaved', true)
 
 Checklists.Router = Ember.Router.extend
   location : "hash"

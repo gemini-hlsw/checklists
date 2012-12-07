@@ -105,6 +105,10 @@
     <script type="text/x-handlebars" data-template-name="overlay">
       <div class="overlay"></div>
     </script>
+    <script type="text/x-handlebars" data-template-name="saving_overlay">
+      <div class="overlay"></div>
+      <div class="overlay-message"><h1>Saving...</h1></div>
+    </script>
     <script type="text/x-handlebars" data-template-name="edit_template">
       {{#if isLoaded}}
         <div class="span6 offset3 centered-content">
@@ -141,7 +145,7 @@
       {{/if}}
     </script>
     <script type="text/x-handlebars" data-template-name="checklist">
-      {{#if isLoaded}}
+      {{#if canDisplay}}
         <div class="span6 offset3 centered-content">
           <div class="well centered-content">
             <div class="row-fluid">
@@ -181,7 +185,11 @@
           </div>
         </div>
       {{else}}
-        {{view Checklists.OverlayView}}
+        {{#if isSaved}}
+          {{view Checklists.OverlayView}}
+        {{else}}
+          {{view Checklists.SavingOverlayView}}
+        {{/if}}
       {{/if}}
     </script>
 
