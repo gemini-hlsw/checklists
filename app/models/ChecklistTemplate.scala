@@ -13,24 +13,6 @@ import JsonFormatters._
 import scalaz._
 import Scalaz._
 
-case class Site(id: ObjectId = new ObjectId, site:String, name: String, date: DateMidnight = new DateMidnight())
-
-object Site extends ModelCompanion[Site, ObjectId] {
-  val dao = new SalatDAO[Site, ObjectId](collection = mongoCollection("sites")) {}
-
-  def findSites:Seq[Site] = dao.find(MongoDBObject()).map(_.copy(date = DateMidnight.now())).toSeq
-
-  def insertSite(site:Site):Site = site.copy(id = dao.insert(site, WriteConcern.Normal).getOrElse(ObjectId.get())) // TBD Do proper validation of the error
-
-  implicit object SiteFormat extends Writes[Site] {
-    def writes(s: Site) = JsObject(Seq(
-      "site" -> JsString(s.site),
-      "name" -> JsString(s.name),
-      "date" -> Json.toJson(s.date)
-    ))
-  }
-}
-
 case class CheckTemplate(title:String)
 
 object CheckTemplate {

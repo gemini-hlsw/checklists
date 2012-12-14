@@ -1,10 +1,30 @@
 package models
 
-/**
- * Created with IntelliJ IDEA.
- * User: cquiroz
- * Date: 12/10/12
- * Time: 11:24 AM
- * To change this template use File | Settings | File Templates.
- */
-case class Site(id: ObjectId = new ObjectId, site:String, name: String, date: DateMidnight = new DateMidnight())
+import com.novus.salat.dao.{SalatDAO, ModelCompanion}
+import com.mongodb.casbah.Imports._
+import se.radley.plugin.salat._
+import org.joda.time.DateMidnight
+import org.bson.types.ObjectId
+import play.api.libs.json.{Json, JsString, JsObject, Writes}
+import play.api.Play.current
+import mongoContext._
+import JsonFormatters._
+
+case class Site(id: ObjectId = new ObjectId, site: String, name: String, date: DateMidnight = new DateMidnight())
+
+object Site extends ModelCompanion[Site, ObjectId] {
+  val dao = new SalatDAO[Site, ObjectId](collection = mongoCollection("sites")) {}
+
+  def findSites: Seq[Site] = dao.find(MongoDBObject()).map(_.copy(date = DateMidnight.now())).toSeq
+
+  def insertSite(site: Site): Site = site.copy(id = dao.insert(site, WriteConcern.Normal).getOrElse(ObjectId.get()))  // TBD Do proper validation of the error
+
+  implicit object SiteFormat extends Writes[Site] {
+    def writes(s: Site) = JsObject(Seq(
+      "site" -> JsString(s.site),
+      "name" -> JsString(s.name),
+      "date" -> Json.toJson(s.date)
+    ))
+  }
+
+}
