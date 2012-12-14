@@ -19,6 +19,15 @@ Checklists.ApplicationView = Ember.View.extend
   templateName: 'application'
 
 ###
+# View of a resizable text area
+###
+Checklists.ResizableTextArea = Ember.TextArea.extend
+  didInsertElement: ->
+    this._super()
+    this.$().autosize
+      append: "\n"
+
+###
 # Model for the site with the server date
 ###
 Checklists.Site = Ember.Object.extend

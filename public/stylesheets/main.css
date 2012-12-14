@@ -78,3 +78,19 @@ td.centered {
     background-image: linear-gradient(#52575C, #3A3F44 70%, #3A3F44);
     background-repeat: no-repeat;
 }
+
+textarea {
+    border-radius: 5px;
+    border:1px solid #000;
+}
+
+textarea:focus {
+    border-color:#f00;
+}
+
+.textarea-animated {
+    vertical-align: top; 
+    transition: height 0.2s;
+    -webkit-transition: height 0.2s; 
+    -moz-transition: height 0.2s; 
+}
