@@ -190,6 +190,9 @@ Checklists.ToolbarController = Ember.ObjectController.extend
 ###
 Checklists.ToolbarTemplateView = Ember.View.extend
   templateName: 'toolbar_template'
+  showAbout: ->
+    alert("About")
+
 Checklists.ToolbarTemplateController = Ember.ObjectController.extend
   content: null
 
