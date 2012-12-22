@@ -3,6 +3,10 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+      <div class="row-fluid">
+        <button class="btn pull-left" {{action goToPrevious}}><< Prev</button>
+        <button class="btn pull-right" {{action goToNext}}>Next >></button>
+      </div>
       <table class="table table-stripped table-bordered">
         <thead>
           <tr>
