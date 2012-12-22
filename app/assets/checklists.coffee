@@ -177,7 +177,6 @@ Checklists.TemplateRepository = Ember.Object.create
       @templates[key] = template
       template
   saveTemplate: (template) ->
-    console.log(c.get('checks')) for c in template.get('groups')
     $.ajax
       url: "/api/v1.0/templates/#{template.site}",
       type: 'POST'
@@ -217,6 +216,7 @@ Checklists.Checklist = Ember.ObjectController.extend
   site: ''
   name: ''
   date: ''
+  closed: false
   groups: []
   isLoaded: false
   isSaved: true
@@ -265,6 +265,7 @@ Checklists.ChecklistRepository = Ember.Object.create
         site: site
         name: ''
         date: date
+        closed: false
         groups: []
       @checklistsCache["#{site}-#{date}"] = checklist
       $.ajax

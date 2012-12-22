@@ -92,18 +92,18 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   implicit object ChecklistFormat extends Format[Checklist] {
     def writes(c: Checklist) = JsObject(Seq(
-      "site" -> JsString(c.site),
-      "name" -> JsString(c.name),
+      "site"   -> JsString(c.site),
+      "name"   -> JsString(c.name),
       "closed" -> JsBoolean(c.closed),
-      "date" -> Json.toJson(c.date),
+      "date"   -> Json.toJson(c.date),
       "groups" -> Json.toJson(c.groups)
     ))
 
     def reads(json: JsValue) = Checklist(
-      site = (json \ "site").asOpt[String].getOrElse(""),
-      name = (json \ "name").asOpt[String].getOrElse(""),
+      site   = (json \ "site").asOpt[String].getOrElse(""),
+      name   = (json \ "name").asOpt[String].getOrElse(""),
       closed = (json \ "closed").asOpt[Boolean].getOrElse(false),
-      date = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
+      date   = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
       groups = (json \ "groups").as[Seq[CheckGroup]]
     )
   }
