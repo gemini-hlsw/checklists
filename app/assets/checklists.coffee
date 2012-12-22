@@ -291,6 +291,11 @@ Checklists.ChecklistRepository = Ember.Object.create
         checklist.set('groups', groups)
         @checklistsCache["#{checklist.site}-#{checklist.date}"] = checklist
         checklist.set('isSaved', true)
+      error: (response) =>
+        msg = response.responseText.msg
+        bootbox.alert("The checklist is already closed, cannot save!!")
+        checklist.set('closed', true)
+        checklist.set('isSaved', true)
 
 Checklists.Router = Ember.Router.extend
   location : "hash"
@@ -309,7 +314,7 @@ Checklists.Router = Ember.Router.extend
         Checklists.ChecklistRepository.saveChecklist(checklist)
       closeChecklist: (router) ->
         checklist =  router.get('checklistController').get('content')
-        checklist.closed = true
+        checklist.set('closed', true)
         Checklists.ChecklistRepository.saveChecklist(checklist)
       goToPrevious: (router) ->
         checklist =  router.get('checklistController').get('content')

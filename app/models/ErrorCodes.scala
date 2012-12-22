@@ -10,7 +10,7 @@ object ErrorCode {
 
   implicit object ErrorCodeWrites extends Writes[ErrorCode] {
     def writes(e: ErrorCode) = JsObject(Seq(
-      "error" -> JsString(e.message)
+      "msg" -> JsString(e.message)
     ))
   }
 }
