@@ -64,7 +64,8 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def findOrCreate(site:String, date:DateMidnight):Option[Checklist] = findChecklist(site, date).orElse(ChecklistTemplate.findTemplate(site).map(newFromTemplate(_, date)))
 
-  def findChecklist(site:String, date:DateMidnight):Option[Checklist] = dao.findOne(MongoDBObject("site" -> site, "date" -> date))
+  def findChecklist(site:String, date:DateMidnight):Option[Checklist] =
+    dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
   def mergeChecks(newChecks:Seq[Check], oldChecks:Seq[Check]):Seq[Check] = {
     for {
@@ -84,10 +85,16 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     cl.copy(groups = mergedGroups)
   }
 
-  def saveChecklist(t:Checklist):Checklist = {
-    val merged = findChecklist(t.site, t.date).map(mergeLists(t)).getOrElse(t)
-    dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
-    merged
+  def saveChecklist(t:Checklist):Either[ErrorCode, Checklist] = {
+    findOrCreate(t.site, t.date).map { cl =>
+      cl.closed match {
+        case false => {
+          val merged:Checklist = mergeLists(t)(cl)
+          dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
+          Right(merged)
+        }
+        case true => Left(ErrorCode.ChecklistClosed)
+    }}.getOrElse(Left(ErrorCode.NotFound))
   }
 
   implicit object ChecklistFormat extends Format[Checklist] {
