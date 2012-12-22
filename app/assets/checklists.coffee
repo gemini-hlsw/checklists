@@ -307,6 +307,10 @@ Checklists.Router = Ember.Router.extend
       saveChecklist: (router) ->
         checklist =  router.get('checklistController').get('content')
         Checklists.ChecklistRepository.saveChecklist(checklist)
+      closeChecklist: (router) ->
+        checklist =  router.get('checklistController').get('content')
+        checklist.closed = true
+        Checklists.ChecklistRepository.saveChecklist(checklist)
       goToPrevious: (router) ->
         checklist =  router.get('checklistController').get('content')
         # current date
