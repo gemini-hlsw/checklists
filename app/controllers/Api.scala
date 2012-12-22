@@ -29,11 +29,10 @@ object Api extends Controller {
 
   def saveCheckList(site:String, date:String) = Action { implicit request =>
     val result = request.body.asJson.map(_.as[Checklist]).map(Checklist.saveChecklist)
-    println(result)
     result match {
-      case Some(Right(c)) =>  Ok(Json.toJson(c)).as(JSON)
+      case Some(Right(c)) => Ok(Json.toJson(c)).as(JSON)
       case Some(Left(e))  => NotAcceptable(Json.toJson(e)).as(JSON)
-      case None  => BadRequest
+      case None           => BadRequest
     }
   }
 }
