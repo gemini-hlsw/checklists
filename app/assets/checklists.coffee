@@ -188,6 +188,8 @@ Checklists.TemplateRepository = Ember.Object.create
 Checklists.switchStyle = (name)->
   $('link[title=main]').each ->
     this.href = "/assets/stylesheets/bootstrap-#{name}.min.css"
+  if Modernizr.localstorage
+    localStorage.theme = name
 
 ###
 # View and controller for the toolbar
@@ -359,3 +361,8 @@ Checklists.Router = Ember.Router.extend
         Checklists.TemplateRepository.findTemplate(context)
 
 Checklists.initialize()
+
+if Modernizr.localstorage
+  if not localStorage.theme?
+    localStorage.theme = 'dark'
+  Checklists.switchStyle(localStorage.theme)
