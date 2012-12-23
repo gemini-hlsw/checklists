@@ -185,9 +185,13 @@ Checklists.TemplateRepository = Ember.Object.create
       success: (response) =>
         console.log(response)
 
+switchLink = (title, name, postfix) ->
+  $("link[name=#{title}]").each ->
+    this.href = "/assets/stylesheets/#{title}-#{name}#{postfix}.css"
+
 Checklists.switchStyle = (name)->
-  $('link[title=main]').each ->
-    this.href = "/assets/stylesheets/bootstrap-#{name}.min.css"
+  switchLink("bootstrap", name, ".min")
+  switchLink("checklist", name, "")
   if Modernizr.localstorage
     localStorage.theme = name
 
