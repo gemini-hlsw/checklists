@@ -185,11 +185,19 @@ Checklists.TemplateRepository = Ember.Object.create
       success: (response) =>
         console.log(response)
 
+Checklists.switchStyle = (name)->
+  $('link[title=main]').each ->
+    this.href = "/assets/stylesheets/bootstrap-#{name}.min.css"
+
 ###
 # View and controller for the toolbar
 ###
 Checklists.ToolbarView = Ember.View.extend
   templateName: 'toolbar'
+  switchToClear: ->
+    Checklists.switchStyle('clear')
+  switchToDark: ->
+    Checklists.switchStyle('dark')
 Checklists.ToolbarController = Ember.ObjectController.extend
   content: null
 

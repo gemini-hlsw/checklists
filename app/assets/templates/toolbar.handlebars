@@ -1,5 +1,17 @@
+<ul class="nav">
+  <li class="dropdown pull-left">
+     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      Theme
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+      <li><a tabindex="-1" href="#" {{action switchToClear target="view"}}>Clear</a></li>
+      <li><a tabindex="-1" href="#" {{action switchToDark target="view"}}>Dark</a></li>
+    </ul>
+  </li>
+</ul>
 <ul class="nav pull-right">
-  <li class="active">
+  <li class="pull-right">
     <button class="btn" {{action editTemplate this}}>Edit {{site}} Template</button>
   </li>
 </ul>
