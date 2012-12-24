@@ -1,6 +1,8 @@
-window.Checklists = Ember.Application.create()
+window.Checklists = Ember.Application.create
+  ready: () ->
+    this.get('router.toolbarController').set('content', Checklists.Toolbar.create())
 
-Ember.LOG_BINDINGS = true
+Ember.LOG_BINDINGS = false
 
 Checklists = window.Checklists
 ###
@@ -195,6 +197,9 @@ Checklists.switchStyle = (name)->
   if Modernizr.localstorage
     localStorage.theme = name
 
+Checklists.Toolbar = Ember.Object.extend
+  editTemplate: false
+
 ###
 # View and controller for the toolbar
 ###
@@ -312,15 +317,14 @@ Checklists.ChecklistRepository = Ember.Object.create
         checklist.set('isSaved', true)
 
 Checklists.Router = Ember.Router.extend
-  location : "hash"
-  enableLogging: true
+  enableLogging: false
   root: Ember.Route.extend
     index: Ember.Route.extend
       route: '/'
       siteChecklist: Ember.Router.transitionTo('checklist')
       connectOutlets: (router) ->
+        router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
-        router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate')
     checklist: Ember.Route.extend
       route: '/:site/:date'
       saveChecklist: (router) ->
@@ -342,17 +346,23 @@ Checklists.Router = Ember.Router.extend
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, site) ->
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
+        router.get('toolbarController').set('editTemplate', true)
+        router.get('toolbarController').set('site', site.site)
+        #router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
-        router.get('applicationController').connectOutlet('toolbar', 'toolbar', checklist)
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
       route: '/:site/template'
       connectOutlets: (router, context) ->
-        router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate', context)
+        console.log(context)
+        console.log(context.get('site'))
+        console.log(context.get('editTemplate'))
+        #router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate', context)
         template = Checklists.TemplateRepository.findTemplate(context)
+        router.get('toolbarController').set('editTemplate', true)
         router.get('templateController').set('content', template)
         router.get('applicationController').connectOutlet('main', 'template', template)
-        router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate')
+        router.get('applicationController').connectOutlet('toolbar', 'toolbar')
       saveTemplate: (router) ->
         template =  router.get('templateController').get('content')
         Checklists.TemplateRepository.saveTemplate(template)
