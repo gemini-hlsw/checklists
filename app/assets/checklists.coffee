@@ -324,6 +324,7 @@ Checklists.Router = Ember.Router.extend
       siteChecklist: Ember.Router.transitionTo('checklist')
       connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
+        router.get('toolbarController').set('editTemplate', false)
         router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
@@ -348,18 +349,15 @@ Checklists.Router = Ember.Router.extend
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
         router.get('toolbarController').set('editTemplate', true)
         router.get('toolbarController').set('site', site.site)
-        #router.get('applicationController').connectOutlet('toolbar', 'toolbar')
+        router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
       route: '/:site/template'
       connectOutlets: (router, context) ->
-        console.log(context)
-        console.log(context.get('site'))
-        console.log(context.get('editTemplate'))
         #router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate', context)
         template = Checklists.TemplateRepository.findTemplate(context)
-        router.get('toolbarController').set('editTemplate', true)
+        router.get('toolbarController').set('editTemplate', false)
         router.get('templateController').set('content', template)
         router.get('applicationController').connectOutlet('main', 'template', template)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
