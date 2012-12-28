@@ -35,4 +35,9 @@ object Api extends Controller {
       case None           => BadRequest
     }
   }
+
+  def checkListReport(site:String, year: Int, month: Int) = Action {
+    ChecklistReport.summarizePeriod(site, year, month).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
+  }
+
 }

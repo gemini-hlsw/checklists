@@ -9,6 +9,8 @@ import play.api.Play.current
 import mongoContext._
 import JsonFormatters._
 
+import scalaz._
+import Scalaz._
 
 case class Check(description:String, status: Option[String], comment: Option[String]) {
   def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment))
@@ -67,6 +69,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def findChecklist(site:String, date:DateMidnight):Option[Checklist] =
     dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
+  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq [Checklist] =
+    dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from), "date" -> MongoDBObject("$lte" -> to))).toList
+
   def mergeChecks(newChecks:Seq[Check], oldChecks:Seq[Check]):Seq[Check] = {
     for {
       nc <- newChecks
@@ -115,3 +120,46 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     )
   }
 }
+
+case class ChecklistReportSummary(checklists: Seq[Checklist]) {
+  lazy val grouped = for {
+    c <- checklists
+    g <- c.groups
+    ch <- g.checks.groupBy(_.status)
+  } yield (ch._1, ch._2.size)
+}
+
+object ChecklistReportSummary {
+   implicit object ChecklistReportSummaryWrites extends Writes[ChecklistReportSummary] {
+    override def writes(summary: ChecklistReportSummary) = JsObject(summary.grouped.map{
+        case (s, c) => s.getOrElse("none") -> JsNumber(c)
+      }
+    )
+  }
+}
+
+case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
+  def startDate:Option[DateMidnight] = checklists.headOption.map(_.date)
+  def untilDate:Option[DateMidnight] = checklists.lastOption.map(_.date)
+  def summary:ChecklistReportSummary = ChecklistReportSummary(checklists)
+}
+
+object ChecklistReport {
+  def summarizePeriod(site: String, year: Int, month:Int):Option[ChecklistReport] = {
+    val from = new DateMidnight(year, month, 1)
+    val to = new DateMidnight(year, month, 31)
+    val checklists = Checklist.findChecklistRange(site, from, to)
+    println(ChecklistReport(site, checklists).summary.grouped)
+    some(ChecklistReport(site, checklists))
+  }
+
+  implicit object ChecklistReportWrites extends Writes[ChecklistReport] {
+    override def writes(report: ChecklistReport) = JsObject(Seq(
+      "site"   -> JsString(report.site),
+      "from" -> Json.toJson(report.startDate),
+      "to" -> Json.toJson(report.untilDate),
+      "summary" -> Json.toJson(report.summary)
+    ))
+  }
+}
+
