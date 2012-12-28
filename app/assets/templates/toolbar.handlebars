@@ -46,8 +46,8 @@
     <h3 id="myModalLabel">About</h3>
   </div>
   <div class="modal-body">
-    <p>Gemini Checklists was written by the Software Group {{Checklists.aboutController}}</p>
-    {{view Ember.TextArea valueBinding="Checklists.about.description"}}
+    <p>Gemini Checklists was written by the Software Group</p>
+    {{view Checklists.ContentEditable valueBinding="Checklists.about.description"}}
     <p>Credits to Carlos Quiroz</p>
   </div>
   <div class="modal-footer">

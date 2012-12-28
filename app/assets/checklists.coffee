@@ -1,6 +1,10 @@
 window.Checklists = Ember.Application.create
   ready: () ->
     this.get('router.toolbarController').set('content', Checklists.Toolbar.create())
+    $.ajax
+      url: '/about'
+      success: (data) ->
+        Checklists.about.set('description', data)
 
 Ember.LOG_BINDINGS = false
 
@@ -24,7 +28,28 @@ Checklists.ApplicationView = Ember.View.extend
 # Data used on the about box
 ###
 Checklists.about = Ember.Object.create
-  description: "ABC"
+  description: 'ABC'
+
+###
+# View encapsulating a field inside a contenteditable element
+###
+Checklists.ContentEditable = Ember.View.extend
+  value: ''
+  tagName: "div"
+  contenteditable: "true"
+  attributeBindings: ["contenteditable"]
+  valueChanged: ( ->
+    this._updateElementValue()
+  ).observes('value')
+
+  didInsertElement: ->
+    this._updateElementValue()
+
+  _updateElementValue: ->
+    this.$().html(@get('value'))
+
+  _elementValueDidChange: () ->
+    @set('value', this.$().html())
 
 ###
 # View of a resizable text area
