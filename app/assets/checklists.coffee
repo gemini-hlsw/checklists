@@ -209,6 +209,8 @@ Checklists.ToolbarView = Ember.View.extend
     Checklists.switchStyle('clear')
   switchToDark: ->
     Checklists.switchStyle('dark')
+  voidAction: ->
+    false
 Checklists.ToolbarController = Ember.ObjectController.extend
   content: null
 

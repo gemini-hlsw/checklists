@@ -7,7 +7,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
       {{#each y in Checklists.ReportSets.years}}
-      <li class="dropdown-submenu"><a tabindex="-1" href="#">{{y.year}}</a>
+      <li class="dropdown-submenu"><a tabindex="-1" href="#" {{action voidAction target="view"}}>{{y.year}}</a>
         <ul class="dropdown-menu">
           {{#each m in y.months}}
             <li><a tabindex="-1" href="#" {{action switchToClear target="view"}}>{{m}}</a></li>
