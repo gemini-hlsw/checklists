@@ -366,7 +366,7 @@ Checklists.ChecklistRepository = Ember.Object.create
         checklist.set('isSaved', true)
 
 Checklists.Router = Ember.Router.extend
-  enableLogging: false
+  enableLogging: true
   root: Ember.Route.extend
     index: Ember.Route.extend
       route: '/'
@@ -420,23 +420,26 @@ Checklists.Router = Ember.Router.extend
           site: urlParams.site
           name: ''
         Checklists.TemplateRepository.findTemplate(context)
-    moveToMonthReport: Ember.Router.transitionTo('monthReport')
-    monthReport: Ember.Route.extend
-      route: '/:site/report/:year/:month'
-      connectOutlets: (router, context) ->
-        router.get('toolbarController').set('inReport', true)
-        report = Checklists.ReportRepository.loadReport(context.get('site'), context.get('year'), context.get('month'))
-        router.get('applicationController').connectOutlet('main', 'reports', report)
-        #router.get('applicationController').connectOutlet('toolbar', 'toolbar')
-      serialize: (router, context) ->
-        site: context.get('site')
-        month: context.get('month')
-        year: context.get('year')
-      deserialize: (router, urlParams) ->
-        context = Ember.Object.create
-          site: urlParams.site
-          month: urlParams.month
-          year: urlParams.year
+    moveToMonthReport: Ember.Router.transitionTo('report.monthReport')
+    report: Ember.Route.extend
+      route: '/report'
+      monthReport: Ember.Route.extend
+        route: '/:site/:year/:month'
+        connectOutlets: (router, context) ->
+          router.get('toolbarController').set('inReport', true)
+          report = Checklists.ReportRepository.loadReport(context.get('site'), context.get('year'), context.get('month'))
+          router.get('applicationController').connectOutlet('main', 'reports', report)
+          #router.get('applicationController').connectOutlet('toolbar', 'toolbar')
+        serialize: (router, context) ->
+          site: context.get('site')
+          month: context.get('month')
+          year: context.get('year')
+        deserialize: (router, urlParams) ->
+          console.log(urlParams)
+          context = Ember.Object.create
+            site: urlParams.site
+            month: urlParams.month
+            year: urlParams.year
 
 Checklists.initialize()
 
