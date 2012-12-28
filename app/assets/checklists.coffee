@@ -223,6 +223,13 @@ Checklists.ToolbarTemplateView = Ember.View.extend
 Checklists.ToolbarTemplateController = Ember.ObjectController.extend
   content: null
 
+Checklists.ReportSets =  Ember.ObjectController.create
+  content:
+    years: Ember.A([
+      {year: 2012, months: Ember.A(moment.months)},
+      {year: 2013, months: Ember.A(moment.months)}
+    ])
+
 ###
 # View and controller for a checklist
 ###
