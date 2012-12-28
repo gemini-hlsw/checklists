@@ -121,27 +121,30 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   }
 }
 
-case class ChecklistReportSummary(checklists: Seq[Checklist]) {
+case class ChecklistReportSummary(checklists: Checklist) {
   lazy val grouped = for {
-    c <- checklists
-    g <- c.groups
+    g <- checklists.groups
     ch <- g.checks.groupBy(_.status)
   } yield (ch._1, ch._2.size)
 }
 
 object ChecklistReportSummary {
    implicit object ChecklistReportSummaryWrites extends Writes[ChecklistReportSummary] {
-    override def writes(summary: ChecklistReportSummary) = JsObject(summary.grouped.map{
+    override def writes(summary: ChecklistReportSummary) = JsObject(Seq(
+      "status" -> JsObject(summary.grouped.map{
         case (s, c) => s.getOrElse("none") -> JsNumber(c)
-      }
-    )
+      }),
+      "closed" -> JsBoolean(summary.checklists.closed)
+    ))
   }
 }
 
 case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
   def startDate:Option[DateMidnight] = checklists.headOption.map(_.date)
   def untilDate:Option[DateMidnight] = checklists.lastOption.map(_.date)
-  def summary:ChecklistReportSummary = ChecklistReportSummary(checklists)
+  def summary:Seq[(DateMidnight, ChecklistReportSummary)] = for {
+      c <- checklists
+    } yield (c.date, ChecklistReportSummary(c))
 }
 
 object ChecklistReport {
@@ -158,7 +161,9 @@ object ChecklistReport {
       "site"   -> JsString(report.site),
       "from" -> Json.toJson(report.startDate),
       "to" -> Json.toJson(report.untilDate),
-      "summary" -> Json.toJson(report.summary)
+      "summary" -> JsObject(report.summary.map{
+          case (d, r) => JsonFormatters.fmt.print(d) -> Json.toJson(r)
+        })
     ))
   }
 }
