@@ -199,6 +199,7 @@ Checklists.switchStyle = (name)->
 
 Checklists.Toolbar = Ember.Object.extend
   inChecklist: false
+  inReport: false
 
 ###
 # View and controller for the toolbar
