@@ -10,7 +10,7 @@
       <li class="dropdown-submenu"><a tabindex="-1" href="#" {{action voidAction target="view"}}>{{y.year}}</a>
         <ul class="dropdown-menu">
           {{#each m in y.months}}
-            <li><a tabindex="-1" href="#" {{action switchToClear target="view"}}>{{m}}</a></li>
+            <li><a tabindex="-1" href="#" {{action showReport y.year m target="view"}}>{{m}}</a></li>
           {{/each}}
         </ul>
       </li>
