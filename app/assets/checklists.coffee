@@ -198,7 +198,7 @@ Checklists.switchStyle = (name)->
     localStorage.theme = name
 
 Checklists.Toolbar = Ember.Object.extend
-  editTemplate: false
+  inChecklist: false
 
 ###
 # View and controller for the toolbar
@@ -324,7 +324,7 @@ Checklists.Router = Ember.Router.extend
       siteChecklist: Ember.Router.transitionTo('checklist')
       connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
-        router.get('toolbarController').set('editTemplate', false)
+        router.get('toolbarController').set('inChecklist', false)
         router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
@@ -347,7 +347,7 @@ Checklists.Router = Ember.Router.extend
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, site) ->
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
-        router.get('toolbarController').set('editTemplate', true)
+        router.get('toolbarController').set('inChecklist', true)
         router.get('toolbarController').set('site', site.site)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
@@ -357,7 +357,7 @@ Checklists.Router = Ember.Router.extend
       connectOutlets: (router, context) ->
         #router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate', context)
         template = Checklists.TemplateRepository.findTemplate(context)
-        router.get('toolbarController').set('editTemplate', false)
+        router.get('toolbarController').set('inChecklist', false)
         router.get('templateController').set('content', template)
         router.get('applicationController').connectOutlet('main', 'template', template)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
