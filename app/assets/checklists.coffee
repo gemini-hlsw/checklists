@@ -21,6 +21,12 @@ Checklists.ApplicationView = Ember.View.extend
   templateName: 'application'
 
 ###
+# Data used on the about box
+###
+Checklists.about = Ember.Object.create
+  description: "ABC"
+
+###
 # View of a resizable text area
 ###
 Checklists.ResizableTextArea = Ember.TextArea.extend
@@ -227,8 +233,6 @@ Checklists.ToolbarController = Ember.ObjectController.extend
 ###
 Checklists.ToolbarTemplateView = Ember.View.extend
   templateName: 'toolbar_template'
-  showAbout: ->
-    alert("About")
 
 Checklists.ToolbarTemplateController = Ember.ObjectController.extend
   content: null
