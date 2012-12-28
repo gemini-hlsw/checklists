@@ -152,7 +152,6 @@ object ChecklistReport {
     val from = new DateMidnight(year, month, 1)
     val to = new DateMidnight(year, month, 31)
     val checklists = Checklist.findChecklistRange(site, from, to)
-    println(ChecklistReport(site, checklists).summary.grouped)
     some(ChecklistReport(site, checklists))
   }
 
