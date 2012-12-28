@@ -254,6 +254,9 @@ Checklists.MonthReport = Ember.ArrayController.extend
   to: ''
   year: 0
   month: 0
+  monthName: (->
+    c = moment.months[@get('month') - 1]
+  ).property('month')
   summary: null
   content: Ember.A()
 
