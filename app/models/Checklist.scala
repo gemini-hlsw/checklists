@@ -121,9 +121,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   }
 }
 
-case class ChecklistReportSummary(checklists: Checklist) {
+case class ChecklistReportSummary(checklist: Checklist) {
   lazy val grouped = for {
-    g <- checklists.groups
+    g <- checklist.groups
     ch <- g.checks.groupBy(_.status)
   } yield (ch._1, ch._2.size)
 }
@@ -131,10 +131,12 @@ case class ChecklistReportSummary(checklists: Checklist) {
 object ChecklistReportSummary {
    implicit object ChecklistReportSummaryWrites extends Writes[ChecklistReportSummary] {
     override def writes(summary: ChecklistReportSummary) = JsObject(Seq(
-      "status" -> JsObject(summary.grouped.map{
+      "status" -> JsObject(summary.grouped.map {
         case (s, c) => s.getOrElse("none") -> JsNumber(c)
       }),
-      "closed" -> JsBoolean(summary.checklists.closed)
+      "closed" -> JsBoolean(summary.checklist.closed),
+      "date" -> JsString(JsonFormatters.fmt.print(summary.checklist.date)),
+      "checklist" -> Json.toJson(summary.checklist)
     ))
   }
 }
@@ -142,9 +144,9 @@ object ChecklistReportSummary {
 case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
   def startDate:Option[DateMidnight] = checklists.headOption.map(_.date)
   def untilDate:Option[DateMidnight] = checklists.lastOption.map(_.date)
-  def summary:Seq[(DateMidnight, ChecklistReportSummary)] = for {
+  def summary:Seq[ChecklistReportSummary] = for {
       c <- checklists
-    } yield (c.date, ChecklistReportSummary(c))
+    } yield ChecklistReportSummary(c)
 }
 
 object ChecklistReport {
@@ -157,12 +159,10 @@ object ChecklistReport {
 
   implicit object ChecklistReportWrites extends Writes[ChecklistReport] {
     override def writes(report: ChecklistReport) = JsObject(Seq(
-      "site"   -> JsString(report.site),
-      "from" -> Json.toJson(report.startDate),
-      "to" -> Json.toJson(report.untilDate),
-      "summary" -> JsObject(report.summary.map{
-          case (d, r) => JsonFormatters.fmt.print(d) -> Json.toJson(r)
-        })
+      "site"       -> JsString(report.site),
+      "from"       -> Json.toJson(report.startDate),
+      "to"         -> Json.toJson(report.untilDate),
+      "summary"    -> Json.toJson(report.summary)
     ))
   }
 }

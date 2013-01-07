@@ -84,3 +84,20 @@ textarea:focus {
     -webkit-transition: height 0.2s; 
     -moz-transition: height 0.2s; 
 }
+
+/* Reports table */
+.report-table {
+    width: 100%;
+}
+
+.report-day-column {
+    width: 10%;
+}
+
+.report-result-column {
+    width: 10%;
+}
+
+.details-description-column {
+    width: 60%;
+}

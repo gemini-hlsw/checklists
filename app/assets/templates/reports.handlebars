@@ -3,7 +3,20 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>Report for {{site}} on {{monthName}}, {{year}}</h1>
-
+        <table class="report-table table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="report-day-column">Day</th>
+              <th class="report-result-column">State</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+          {{#each s in dailySummaries}}
+            {{view Checklists.DailySummaryRowView}}
+          {{/each}}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
