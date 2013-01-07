@@ -253,15 +253,6 @@ Checklists.ToolbarView = Ember.View.extend
 Checklists.ToolbarController = Ember.ObjectController.extend
   content: null
 
-###
-# View and controller for the toolbar
-###
-Checklists.ToolbarTemplateView = Ember.View.extend
-  templateName: 'toolbar_template'
-
-Checklists.ToolbarTemplateController = Ember.ObjectController.extend
-  content: null
-
 Checklists.ReportSets =  Ember.ObjectController.create
   content:
     years: Ember.A([
@@ -452,6 +443,7 @@ Checklists.ChecklistRepository = Ember.Object.create
 Checklists.Router = Ember.Router.extend
   enableLogging: true
   root: Ember.Route.extend
+    goToMain: Ember.Router.transitionTo('index')
     index: Ember.Route.extend
       route: '/'
       siteChecklist: Ember.Router.transitionTo('checklist')
