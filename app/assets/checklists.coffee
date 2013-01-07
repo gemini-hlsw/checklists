@@ -1,6 +1,5 @@
 window.Checklists = Ember.Application.create
   ready: () ->
-    this.get('router.toolbarController').set('content', Checklists.Toolbar.create())
     $.ajax
       url: '/about'
       success: (data) ->
@@ -28,7 +27,7 @@ Checklists.ApplicationView = Ember.View.extend
 # Data used on the about box
 ###
 Checklists.about = Ember.Object.create
-  description: 'ABC'
+  description: ''
 
 ###
 # View encapsulating a field inside a contenteditable element
@@ -228,10 +227,6 @@ Checklists.switchStyle = (name)->
   if Modernizr.localstorage
     localStorage.theme = name
 
-Checklists.Toolbar = Ember.Object.extend
-  inChecklist: false
-  inReport: false
-
 ###
 # View and controller for the toolbar
 ###
@@ -250,8 +245,13 @@ Checklists.ToolbarView = Ember.View.extend
       month: moment.months.indexOf(e.contexts[1]) + 1
     Checklists.get('router').send('moveToMonthReport', context)
       
-Checklists.ToolbarController = Ember.ObjectController.extend
-  content: null
+Checklists.ToolbarController = Ember.Controller.extend
+  inChecklist: false
+  inReport: false
+  showReports: ( ->
+    @get('inChecklist') or @get('inReport')
+  ).property('inChecklist', 'inReport')
+
 
 Checklists.ReportSets =  Ember.ObjectController.create
   content:
@@ -450,6 +450,7 @@ Checklists.Router = Ember.Router.extend
       connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('toolbarController').set('inChecklist', false)
+        router.get('toolbarController').set('inReport', false)
         router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
@@ -480,7 +481,6 @@ Checklists.Router = Ember.Router.extend
     template: Ember.Route.extend
       route: '/:site/template'
       connectOutlets: (router, context) ->
-        #router.get('applicationController').connectOutlet('toolbar', 'toolbarTemplate', context)
         template = Checklists.TemplateRepository.findTemplate(context)
         router.get('toolbarController').set('inChecklist', false)
         router.get('templateController').set('content', template)
@@ -504,6 +504,7 @@ Checklists.Router = Ember.Router.extend
         connectOutlets: (router, context) ->
           router.get('applicationController').connectOutlet('toolbar', 'toolbar')
           router.get('toolbarController').set('inReport', true)
+          router.get('toolbarController').set('inChecklist', false)
           report = Checklists.ReportRepository.loadReport(context.get('site'), context.get('year'), context.get('month'))
           router.get('applicationController').connectOutlet('main', 'reports', report)
         serialize: (router, context) ->
