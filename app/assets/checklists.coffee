@@ -326,7 +326,9 @@ Checklists.MonthReport = Ember.ArrayController.extend
   monthName: (->
     c = moment.months[@get('month') - 1]
   ).property('month')
-  dailySummaries: Ember.A()
+  containsReports: (->
+    @get('content').length > 0
+  ).property('@each.content')
   content: Ember.A()
 
 Checklists.ReportRepository = Ember.Object.create
@@ -347,7 +349,7 @@ Checklists.ReportRepository = Ember.Object.create
       success: (response) =>
         report.setProperties(response)
         report.set('isLoaded', true)
-        report.set('dailySummaries', Checklists.ReportRepository.buildSummary(s, response) for s in response.summary)
+        report.set('content', Checklists.ReportRepository.buildSummary(s, response) for s in response.summary)
     report
 
 ###

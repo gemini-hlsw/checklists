@@ -3,6 +3,7 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>Report for {{site}} on {{monthName}}, {{year}}</h1>
+        {{#if containsReports}}
         <table class="report-table table table-bordered table-striped">
           <thead>
             <tr>
@@ -12,11 +13,17 @@
             </tr>
           </thead>
           <tbody>
-          {{#each s in dailySummaries}}
+          {{#each s in content}}
             {{view Checklists.DailySummaryRowView}}
           {{/each}}
           </tbody>
         </table>
+        {{else}}
+            <div class="alert alert-block">
+              <h4>Note!</h4>
+              There are no checklists recorded for {{monthName}}, {{year}}
+            </div>
+        {{/if}}
       </div>
     </div>
   </div>
