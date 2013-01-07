@@ -69,8 +69,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def findChecklist(site:String, date:DateMidnight):Option[Checklist] =
     dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
-  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq [Checklist] =
-    dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from), "date" -> MongoDBObject("$lte" -> to))).toList
+  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq [Checklist] = {
+    dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
+  }
 
   def mergeChecks(newChecks:Seq[Check], oldChecks:Seq[Check]):Seq[Check] = {
     for {
@@ -152,7 +153,7 @@ case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
 object ChecklistReport {
   def summarizePeriod(site: String, year: Int, month:Int):Option[ChecklistReport] = {
     val from = new DateMidnight(year, month, 1)
-    val to = new DateMidnight(year, month, 31)
+    val to = new DateMidnight(year, month, from.dayOfMonth.getMaximumValue)
     val checklists = Checklist.findChecklistRange(site, from, to)
     some(ChecklistReport(site, checklists))
   }
