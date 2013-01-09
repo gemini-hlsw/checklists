@@ -74,9 +74,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
   }
 
-  def findDates():Seq[DateMidnight] = {
+  def findDates(site: String):Seq[DateMidnight] = {
     val fields = MongoDBObject("date" -> 1)
-    dao.find(MongoDBObject("site" -> "GS")).sort(orderBy = MongoDBObject("date" -> -1)).collect {
+    dao.find(MongoDBObject("site" -> site)).sort(orderBy = MongoDBObject("date" -> -1)).collect {
       case c:Checklist => c.date
     }.toList
   }
@@ -166,9 +166,9 @@ object ChecklistReport {
     some(ChecklistReport(site, checklists))
   }
 
-  def findAvailableMonths():Seq[(Int, Seq[String])] = {
+  def findAvailableMonths(site: String):Seq[(Int, Seq[String])] = {
     val r = for {
-      y <- Checklist.findDates.groupBy(_.getYear).toSeq
+      y <- Checklist.findDates(site).groupBy(_.getYear).toSeq
     } yield (y._1, y._2.groupBy(_.monthOfYear.getAsText).keys.toSeq)
     r.reverse.toSeq
   }

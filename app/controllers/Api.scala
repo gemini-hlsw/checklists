@@ -40,8 +40,8 @@ object Api extends Controller {
     ChecklistReport.summarizePeriod(site, year, month).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
   }
 
-  def availableMonths = Action {
-    val availability = ChecklistReport.findAvailableMonths().map {
+  def availableMonths(site: String) = Action {
+    val availability = ChecklistReport.findAvailableMonths(site).map {
       case (y, m) => JsObject(Seq("year" -> JsNumber(y), "months" -> Json.toJson(m)))
     }
     Ok(Json.toJson(availability)).as(JSON)
