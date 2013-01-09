@@ -4,7 +4,7 @@ import play.api.mvc.{Controller, Action}
 import models._
 import com.novus.salat._
 import mongoContext._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, JsNumber, JsString, JsObject}
 
 object Api extends Controller {
   def sites = Action {
@@ -38,6 +38,13 @@ object Api extends Controller {
 
   def checkListReport(site:String, year: Int, month: Int) = Action {
     ChecklistReport.summarizePeriod(site, year, month).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
+  }
+
+  def availableMonths = Action {
+    val availability = ChecklistReport.findAvailableMonths().map {
+      case (y, m) => y.toString -> Json.toJson(m)
+    }
+    Ok(Json.toJson(JsObject(availability.toSeq))).as(JSON)
   }
 
 }

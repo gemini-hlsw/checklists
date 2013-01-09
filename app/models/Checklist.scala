@@ -69,8 +69,15 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def findChecklist(site:String, date:DateMidnight):Option[Checklist] =
     dao.findOne(MongoDBObject("site" -> site, "date" -> date))
 
-  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq [Checklist] = {
+  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] = {
     dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
+  }
+
+  def findDates():Seq[DateMidnight] = {
+    val fields = MongoDBObject("date" -> 1)
+    dao.find(MongoDBObject("site" -> "GS")).collect {
+      case c:Checklist => c.date
+    }.toList
   }
 
   def mergeChecks(newChecks:Seq[Check], oldChecks:Seq[Check]):Seq[Check] = {
@@ -156,6 +163,13 @@ object ChecklistReport {
     val to = new DateMidnight(year, month, from.dayOfMonth.getMaximumValue)
     val checklists = Checklist.findChecklistRange(site, from, to)
     some(ChecklistReport(site, checklists))
+  }
+
+  def findAvailableMonths():Map[Int, Seq[Int]] = {
+    val r = for {
+      y <- Checklist.findDates.groupBy(_.getYear)
+    } yield (y._1, y._2.groupBy(_.getMonthOfYear).keys.toSeq)
+    r
   }
 
   implicit object ChecklistReportWrites extends Writes[ChecklistReport] {

@@ -3,16 +3,17 @@
 # ~~~~
 
 # Home page
-GET     /                                       controllers.Application.index
-GET     /about                                  controllers.Application.about
-
-GET     /api/v1.0/sites                         controllers.Api.sites
-GET     /api/v1.0/templates                     controllers.Api.templates
-GET     /api/v1.0/templates/:site               controllers.Api.template(site:String)
-POST    /api/v1.0/templates/:site               controllers.Api.saveTemplate(site:String)
-GET     /api/v1.0/checklist/:site/:date         controllers.Api.checkList(site:String, date:String)
-POST    /api/v1.0/checklist/:site/:date         controllers.Api.saveCheckList(site:String, date:String)
-GET     /api/v1.0/checklist/report/:site/:year/:month         controllers.Api.checkListReport(site:String, year:Int, month: Int)
+GET     /                                               controllers.Application.index
+GET     /about                                          controllers.Application.about
+        
+GET     /api/v1.0/sites                                 controllers.Api.sites
+GET     /api/v1.0/templates                             controllers.Api.templates
+GET     /api/v1.0/templates/:site                       controllers.Api.template(site:String)
+POST    /api/v1.0/templates/:site                       controllers.Api.saveTemplate(site:String)
+GET     /api/v1.0/checklist/:site/:date                 controllers.Api.checkList(site:String, date:String)
+POST    /api/v1.0/checklist/:site/:date                 controllers.Api.saveCheckList(site:String, date:String)
+GET     /api/v1.0/reports/months                        controllers.Api.availableMonths
+GET     /api/v1.0/checklist/report/:site/:year/:month   controllers.Api.checkListReport(site:String, year:Int, month: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                           controllers.Assets.at(path="/public", file)
+GET     /assets/*file                                   controllers.Assets.at(path="/public", file)
