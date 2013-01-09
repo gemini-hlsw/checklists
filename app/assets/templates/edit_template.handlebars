@@ -3,21 +3,21 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>{{name}} template</h1>
-        <button class="btn btn-success pull-right" {{action addGroup group.name target="view"}}><i class="icon-trash icon-large"></i>&nbsp;Add Group</button>
+        <button class="btn btn-success pull-right" {{action addGroup group.name target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
         <table class="table table-stripped table-bordered">
           <tbody>
             {{#each group in groups}}
               <tr class="group-header">
                   <td><h4>{{group.title}}</h4></td>
                   <td class="centered">
-                    <button class="btn btn-success pull-right" {{action addCheck group.name target="view"}}><i class="icon-plus icon-large"></i>&nbsp;Add check</button>
-                    <button class="btn btn-danger pull-right" {{action deleteGroup group.name target="view"}}><i class="icon-trash icon-large"></i>&nbsp;Delete</button>
+                    <button class="btn btn-success pull-right" {{action addCheck group.name target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                    <button class="btn btn-danger pull-right" {{action deleteGroup group.name target="view"}}><i class="icon-trash"></i>&nbsp;</button>
                   </td>
               </tr>
                 {{#each item in group.checks}}
                   <tr>
                     <td>{{view Ember.TextField class="input-xlarge" name="check" valueBinding="item.title"}}</td>
-                    <td class="centered"><button class="btn btn-danger pull-right" {{action deleteCheck item}}><i class="icon-trash icon-large"></i>&nbsp;Delete</button></td>
+                    <td class="centered"><button class="btn btn-danger pull-right" {{action deleteCheck item}}><i class="icon-trash"></i>&nbsp;</button></td>
                   </tr>
                 {{/each}}
             {{/each}}
@@ -25,6 +25,7 @@
         </table>
         <div class="row-fluid">
           <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
+          <button class="btn pull-right" {{action goToMain}}>Cancel</button>
         </div>
     </div>
   </div>

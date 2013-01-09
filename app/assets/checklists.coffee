@@ -1,9 +1,16 @@
 window.Checklists = Ember.Application.create
   ready: () ->
+    router = this.get('router')
     $.ajax
       url: '/about'
       success: (data) ->
         Checklists.about.set('description', data)
+
+    $.ajax
+      url: '/api/v1.0/reports/months'
+      success: (data) ->
+        reports = Ember.A(data)
+        router.get('reportsMenuController').set('content', reports)
 
 Ember.LOG_BINDINGS = false
 
@@ -251,14 +258,11 @@ Checklists.ToolbarController = Ember.Controller.extend
   showReports: ( ->
     @get('inChecklist') or @get('inReport')
   ).property('inChecklist', 'inReport')
+  availableReportsBinding: 'Checklists.router.reportsMenuController'
 
 
-Checklists.ReportSets =  Ember.ObjectController.create
-  content:
-    years: Ember.A([
-      {year: 2012, months: Ember.A(moment.months)},
-      {year: 2013, months: Ember.A(moment.months)}
-    ])
+Checklists.ReportsMenuController =  Ember.ArrayController.extend
+  content: ''
 
 ###
 # View and controller for showing reports

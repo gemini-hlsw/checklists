@@ -42,9 +42,9 @@ object Api extends Controller {
 
   def availableMonths = Action {
     val availability = ChecklistReport.findAvailableMonths().map {
-      case (y, m) => y.toString -> Json.toJson(m)
+      case (y, m) => JsObject(Seq("year" -> JsNumber(y), "months" -> Json.toJson(m)))
     }
-    Ok(Json.toJson(JsObject(availability.toSeq))).as(JSON)
+    Ok(Json.toJson(availability)).as(JSON)
   }
 
 }

@@ -8,6 +8,7 @@ import play.api.libs.json._
 import play.api.Play.current
 import mongoContext._
 import JsonFormatters._
+import scala.collection.immutable.TreeMap
 
 import scalaz._
 import Scalaz._
@@ -75,7 +76,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def findDates():Seq[DateMidnight] = {
     val fields = MongoDBObject("date" -> 1)
-    dao.find(MongoDBObject("site" -> "GS")).collect {
+    dao.find(MongoDBObject("site" -> "GS")).sort(orderBy = MongoDBObject("date" -> -1)).collect {
       case c:Checklist => c.date
     }.toList
   }
@@ -165,11 +166,11 @@ object ChecklistReport {
     some(ChecklistReport(site, checklists))
   }
 
-  def findAvailableMonths():Map[Int, Seq[Int]] = {
+  def findAvailableMonths():Seq[(Int, Seq[String])] = {
     val r = for {
-      y <- Checklist.findDates.groupBy(_.getYear)
-    } yield (y._1, y._2.groupBy(_.getMonthOfYear).keys.toSeq)
-    r
+      y <- Checklist.findDates.groupBy(_.getYear).toSeq
+    } yield (y._1, y._2.groupBy(_.monthOfYear.getAsText).keys.toSeq)
+    r.reverse.toSeq
   }
 
   implicit object ChecklistReportWrites extends Writes[ChecklistReport] {
@@ -181,4 +182,3 @@ object ChecklistReport {
     ))
   }
 }
-
