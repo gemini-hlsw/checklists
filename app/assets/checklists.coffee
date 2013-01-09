@@ -6,12 +6,6 @@ window.Checklists = Ember.Application.create
       success: (data) ->
         Checklists.about.set('description', data)
 
-    $.ajax
-      url: '/api/v1.0/reports/months'
-      success: (data) ->
-        reports = Ember.A(data)
-        router.get('reportsMenuController').set('content', reports)
-
 Ember.LOG_BINDINGS = false
 
 Checklists = window.Checklists
@@ -258,10 +252,9 @@ Checklists.ToolbarController = Ember.Controller.extend
   showReports: ( ->
     @get('inChecklist') or @get('inReport')
   ).property('inChecklist', 'inReport')
-  availableReportsBinding: 'Checklists.router.reportsMenuController'
+  availableReportsBinding: 'Checklists.router.reportsMenuController.content'
 
-
-Checklists.ReportsMenuController =  Ember.ArrayController.extend
+Checklists.ReportsMenuController =  Ember.ObjectController.extend
   content: ''
 
 ###
@@ -327,6 +320,14 @@ Checklists.MonthReport = Ember.ArrayController.extend
   content: Ember.A()
 
 Checklists.ReportRepository = Ember.Object.create
+  loadMenuSet: (site) ->
+    reports = Ember.Object.create
+      years: Ember.A()
+    $.ajax
+      url: "/api/v1.0/reports/months/#{site}"
+      success: (data) ->
+        reports.set('years', Ember.A(data))
+    reports
   buildSummary: (json) ->
     d = Checklists.DaySummary.create()
     d.setProperties(json)
@@ -476,6 +477,7 @@ Checklists.Router = Ember.Router.extend
         nextDay = moment(checklist.get('date'), Checklists.urlDateFormat).add('days', 1)
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, site) ->
+        router.get('reportsMenuController').set('content', Checklists.ReportRepository.loadMenuSet(site.site))
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
         router.get('toolbarController').set('inChecklist', true)
         router.get('toolbarController').set('site', site.site)

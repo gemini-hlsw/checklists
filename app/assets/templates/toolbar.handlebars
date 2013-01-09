@@ -6,7 +6,7 @@
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-      {{#each y in availableReports}}
+      {{#each y in availableReports.years}}
       <li class="dropdown-submenu"><a tabindex="-1" href="#" {{action voidAction target="view"}}>{{y.year}}</a>
         <ul class="dropdown-menu">
           {{#each m in y.months}}
