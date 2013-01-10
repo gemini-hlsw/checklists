@@ -447,6 +447,8 @@ Checklists.ChecklistRepository = Ember.Object.create
 
 Checklists.Router = Ember.Router.extend
   enableLogging: true
+  setupReportsController: (site) ->
+    this.get('reportsMenuController').set('content', Checklists.ReportRepository.loadMenuSet(site))
   root: Ember.Route.extend
     goToMain: Ember.Router.transitionTo('index')
     index: Ember.Route.extend
@@ -477,7 +479,7 @@ Checklists.Router = Ember.Router.extend
         nextDay = moment(checklist.get('date'), Checklists.urlDateFormat).add('days', 1)
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, site) ->
-        router.get('reportsMenuController').set('content', Checklists.ReportRepository.loadMenuSet(site.site))
+        router.setupReportsController(site.site)
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
         router.get('toolbarController').set('inChecklist', true)
         router.get('toolbarController').set('site', site.site)
@@ -508,6 +510,7 @@ Checklists.Router = Ember.Router.extend
       monthReport: Ember.Route.extend
         route: '/:site/:year/:month'
         connectOutlets: (router, context) ->
+          router.setupReportsController(context.get('site'))
           router.get('applicationController').connectOutlet('toolbar', 'toolbar')
           router.get('toolbarController').set('inReport', true)
           router.get('toolbarController').set('inChecklist', false)
