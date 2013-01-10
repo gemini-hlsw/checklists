@@ -170,6 +170,11 @@ Checklists.Template = Ember.Object.extend
   name: ''
   groups: []
   isLoaded: false
+  isSaved: true
+  canDisplay: ( ->
+    @get('isLoaded') and @get('isSaved')
+  ).property('isLoaded', 'isSaved')
+
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
 Checklists.TemplateGroup = Ember.Object.extend
@@ -199,6 +204,7 @@ Checklists.TemplateRepository = Ember.Object.create
       template = Checklists.Template.create
         site: key
         name: site.get('name')
+        isSaved: true
       $.ajax
         url: "/api/v1.0/templates/#{key}",
         success: (response) =>
@@ -210,13 +216,14 @@ Checklists.TemplateRepository = Ember.Object.create
       @templates[key] = template
       template
   saveTemplate: (template) ->
+    template.set('isSaved', false)
     $.ajax
       url: "/api/v1.0/templates/#{template.site}",
       type: 'POST'
       contentType: 'application/json'
       data: JSON.stringify(template)
       success: (response) =>
-        console.log(response)
+        template.set('isSaved', true)
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
