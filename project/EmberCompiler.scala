@@ -40,52 +40,6 @@ class EmberCompiler(ember: String, handlebars: String) {
     val scope = ctx.initStandardObjects(global)
 
     // set up global objects that emulate a browser context
-    /*ctx.evaluateString(scope,
-      """
-        // make window an alias for the global object
-        var window = this,
-          document = {
-            createElement: function(type) {
-              return {
-                firstChild: {}
-              };
-            },
-            getElementById: function(id) {
-              return [];
-            },
-            getElementsByTagName: function(tagName) {
-              return [];
-            }
-          },
-          location = {
-            protocol: 'file:',
-            hostname: 'localhost',
-            href: 'http://localhost:80',
-            port: '80'
-          },
-          console = {
-            log: function() {},
-            info: function() {},
-            warn: function() {},
-            error: function() {}
-          }
-
-        // make a dummy jquery object just to make ember happy
-        var jQuery = function() { return jQuery; };
-        jQuery.ready = function() { return jQuery; };
-        jQuery.inArray = function() { return jQuery; };
-        jQuery.jquery = "1.8.2";
-        jQuery.event = { fixHooks: {} }
-        var $ = jQuery;
-
-        // our precompile function uses Ember to do the precompilation,
-        // then converts the compiled function to its string representation
-        function precompileEmberHandlebars(string) {
-          return Ember.Handlebars.precompile(string).toString();
-        }
-      """,
-      "browser.js",
-      1, null)*/
     // load handlebars
     val handlebarsFile = findFile(handlebars).getOrElse(throw new Exception("handlebars: could not find " + handlebars))
 
