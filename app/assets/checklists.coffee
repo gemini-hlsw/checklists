@@ -162,6 +162,12 @@ Checklists.TemplateView = Ember.View.extend
     g = @get('controller.content.groups')
     g = (i for i in g when i.name isnt name)
     @set('controller.content.groups', g)
+  deleteCheck: (event) ->
+    t = g for g in @get('controller.content.groups') when g.name is event.contexts[1].get('name')
+    c = t.get('checks').find (e)->
+      e.get('pos') is event.context.get('pos')
+    t.get('checks').removeObject(c)
+
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
 
