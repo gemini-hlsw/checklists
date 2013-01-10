@@ -5,6 +5,10 @@ window.Checklists = Ember.Application.create
       url: '/about'
       success: (data) ->
         Checklists.about.set('description', data)
+    if Modernizr.localstorage
+      if not localStorage.theme?
+        localStorage.theme = 'dark'
+      router.get('preferencesController').set('theme', localStorage.theme)
 
 Ember.LOG_BINDINGS = false
 
@@ -248,10 +252,6 @@ Checklists.switchStyle = (name)->
 ###
 Checklists.ToolbarView = Ember.View.extend
   templateName: 'toolbar'
-  switchToClear: ->
-    Checklists.switchStyle('clear')
-  switchToDark: ->
-    Checklists.switchStyle('dark')
   voidAction: ->
     false
   showReport: (e) ->
@@ -362,6 +362,29 @@ Checklists.ReportRepository = Ember.Object.create
         report.set('isLoaded', true)
         report.set('content', Checklists.ReportRepository.buildSummary(s, response) for s in response.summary)
     report
+
+###
+ Store local preferences
+###
+Checklists.PreferencesController =  Ember.Controller.extend
+  theme: 'dark'
+  clearIcon: ( ->
+    if @get('theme') is 'clear' then 'icon-ok' else 'icon-'
+  ).property('theme')
+  darkIcon: ( ->
+    if @get('theme') is 'dark' then 'icon-ok' else 'icon-'
+  ).property('theme')
+  observer: ( ->
+    Checklists.switchStyle(@get('theme'))
+  ).observes('theme')
+
+Checklists.ThemesMenuView = Ember.View.extend
+  templateName: 'theme_menu'
+  tagName: 'li'
+  switchToClear: ->
+    @set('controller.theme', 'clear')
+  switchToDark: ->
+    @set('controller.theme', 'dark')
 
 ###
 # View and controller for a checklist
@@ -543,8 +566,3 @@ Checklists.Router = Ember.Router.extend
             year: urlParams.year
 
 Checklists.initialize()
-
-if Modernizr.localstorage
-  if not localStorage.theme?
-    localStorage.theme = 'dark'
-  Checklists.switchStyle(localStorage.theme)

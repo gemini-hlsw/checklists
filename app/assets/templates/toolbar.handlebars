@@ -18,16 +18,7 @@
     </ul>
   </li>
   {{/if}}
-  <li class="dropdown pull-left">
-     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i>
-      Theme
-      <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-      <li><a tabindex="-1" href="#" {{action switchToClear target="view"}}>Clear</a></li>
-      <li><a tabindex="-1" href="#" {{action switchToDark target="view"}}>Dark</a></li>
-    </ul>
-  </li>
+  {{view Checklists.ThemesMenuView controllerBinding="Checklists.router.preferencesController" classBinding="dropdown pull-left"}}
   <li class="">
      <a href="#about-modal" data-toggle="modal">About</a>
   </li>
