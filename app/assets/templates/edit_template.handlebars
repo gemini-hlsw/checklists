@@ -16,8 +16,8 @@
               </tr>
                 {{#each item in group.checks}}
                   <tr>
-                    <td>{{view Ember.TextField class="input-xlarge" name="check" valueBinding="item.title"}}</td>
-                    <td class="centered">{{item.pos}}<button class="btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i>&nbsp;</button></td>
+                    <td>{{view Checklists.TemplateField class="template-field input-xlarge" name="check" valueBinding="item.title"}}</td>
+                    <td class="centered">{{item.position}}<button class="btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i>&nbsp;</button></td>
                   </tr>
                 {{/each}}
             {{/each}}

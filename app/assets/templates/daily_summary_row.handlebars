@@ -1,31 +1,31 @@
+<tr>
+  <td class="centered report-day-column">{{s.day}}</td>
+{{#if s.closed}}
+  <td class="centered report-result-column"><span class="label label-success">Closed</span></td>
+{{else}}
+  <td class="centered report-result-column"><span class="label label-warning">Not closed</span></td>
+{{/if}}
+  <td class="report-status-column">
+    {{s.summaryText}}
+    <a class="pull-right details-trigger" href="#" {{action showDetails s target="view" href="true"}}>Show details <i class="icon-chevron-right"></i></a>
+    <div {{bindAttr id="s.detailsId"}} class="collapse">
+      <table class="table table-bordered table-stripped table-condensed">
+        <thead>
+          <tr>
+            <th class="details-description-column">Check</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each g in s.checklist.groups}}
+            {{#each c in g.checks}}
             <tr>
-              <td class="centered report-day-column">{{s.day}}</td>
-            {{#if s.closed}}
-              <td class="centered report-result-column"><span class="label label-success">Closed</span></td>
-            {{else}}
-              <td class="centered report-result-column"><span class="label label-warning">Not closed</span></td>
-            {{/if}}
-              <td class="report-status-column">
-                {{s.summaryText}}
-                <a class="pull-right details-trigger" href="#" {{action showDetails s target="view" href="true"}}>Show details <i class="icon-chevron-right"></i></a>
-                <div {{bindAttr id="s.detailsId"}} class="collapse">
-                  <table class="table table-bordered table-stripped table-condensed">
-                    <thead>
-                      <tr>
-                        <th class="details-description-column">Check</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {{#each g in s.checklist.groups}}
-                        {{#each c in g.checks}}
-                        <tr>
-                          <td class="centered details-description-column">{{c.description}}</td>
-                          <td class="centered">{{c.status}}</td>
-                        </tr>
-                        {{/each}}
-                      {{/each}}
-                  </table>
-                </div>
-              </td>
+              <td class="centered details-description-column">{{c.description}}</td>
+              <td class="centered">{{c.status}}</td>
             </tr>
+            {{/each}}
+          {{/each}}
+      </table>
+    </div>
+  </td>
+</tr>

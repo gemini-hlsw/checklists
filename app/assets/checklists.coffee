@@ -157,10 +157,7 @@ Checklists.TemplateView = Ember.View.extend
         @get('controller.content.groups').insertAt(0, group)
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
-    t = g for g in @get('controller.content.groups') when g.name is event.context
-    nc = Checklists.TemplateCheck.create
-      title: ''
-    t.get('checks').insertAt(0, nc)
+    @get('controller.content').addCheck(event.context)
   deleteGroup: (event) ->
     name = event.context
     g = @get('controller.content.groups')
@@ -184,10 +181,16 @@ Checklists.Template = Ember.Object.extend
   canDisplay: ( ->
     @get('isLoaded') and @get('isSaved')
   ).property('isLoaded', 'isSaved')
+  addCheck: (name) ->
+    t = g for g in @get('groups') when g.name is name
+    nc = Checklists.TemplateCheck.create
+      title: ''
+      position: t.get('checks').length
+    t.get('checks').pushObject(nc)
 
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
-  pos: 0
+  position: 0
 
 Checklists.TemplateGroup = Ember.Object.extend
   name: ''
@@ -199,7 +202,7 @@ Checklists.TemplateRepository = Ember.Object.create
   checkFromJson: (json, index) ->
     Checklists.TemplateCheck.create
       title: json.title
-      pos: index
+      position: index
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
       name: ''
