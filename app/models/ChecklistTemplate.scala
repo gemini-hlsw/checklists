@@ -30,20 +30,22 @@ object CheckTemplate {
 }
 
 
-case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate])
+case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate], position: Int = 0)
 
 object CheckTemplateGroup {
   implicit object ChecklistTemplateGroupFormat extends Format[CheckTemplateGroup] {
     def writes(g: CheckTemplateGroup) = JsObject(Seq(
       "name" -> JsString(g.name),
       "title" -> JsString(g.title),
-      "checks" -> Json.toJson(g.checks)
+      "checks" -> Json.toJson(g.checks),
+      "position" -> JsNumber(g.position)
     ))
 
     def reads(json: JsValue) = CheckTemplateGroup(
-      name = (json \ "name").asOpt[String].getOrElse(""),
-      title = (json \ "title").asOpt[String].getOrElse(""),
-      checks = (json \ "checks").as[Seq[CheckTemplate]]
+      name = ~(json \ "name").asOpt[String],
+      title = ~(json \ "title").asOpt[String],
+      checks = (json \ "checks").as[Seq[CheckTemplate]],
+      position = ~(json \ "position").asOpt[Int]
     )
   }
 }
