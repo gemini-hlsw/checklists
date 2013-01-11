@@ -167,6 +167,10 @@ Checklists.TemplateView = Ember.View.extend
     @get('controller.content').moveUp(event.contexts[0], event.contexts[1])
   moveDown: (event) ->
     @get('controller.content').moveDown(event.contexts[0], event.contexts[1])
+  moveGroupUp: (event) ->
+    @get('controller.content').moveGroupUp(event.context)
+  moveGroupDown: (event) ->
+    @get('controller.content').moveGroupDown(event.context)
   deleteGroup: (event) ->
     @get('controller.content').removeGroup(event.context)
 
@@ -216,6 +220,20 @@ Checklists.Template = Ember.Object.extend
       c = checks[position]
       checks.replace(position, 2, [r, c])
       g.normalizeCheckPositions()
+   moveGroupUp: (position) ->
+    if position > 0
+      groups = @get('groups')
+      r = groups[position - 1]
+      c = groups[position]
+      groups.replace(position - 1, 2, [c, r])
+      @normalizeGroupPositions()
+  moveGroupDown: (position) ->
+    groups = @get('groups')
+    if position < groups.length - 1
+      r = groups[position + 1]
+      c = groups[position]
+      groups.replace(position, 2, [r, c])
+      @normalizeGroupPositions()
   deleteCheck: (position, groupPosition) ->
     g = @findGroup(groupPosition)
     c = g.get('checks').find (e)->

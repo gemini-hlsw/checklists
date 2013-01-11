@@ -8,11 +8,15 @@
           <tbody>
             {{#each group in groups}}
               <tr class="group-header">
-                  <td><h4>{{view Checklists.TemplateField class="template-field input-xlarge" name="group" valueBinding="group.title"}}</h4></td>
+                  <td class="centered">
+                    <div>
+                      {{view Checklists.TemplateField class="template-field input-xlarge" name="group" valueBinding="group.title"}}
+                    </div>
+                  </td>
                   <td class="centered">
                     <div class="centered-box">
-                      <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                      <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                      <button class="btn centered" {{action moveGroupUp group.position target="view"}}><i class="icon-chevron-up"></i></button>
+                      <button class="btn centered" {{action moveGroupDown group.position target="view"}}><i class="icon-chevron-down"></i></button>
                     </div>
                   </td>
                   <td class="centered">
