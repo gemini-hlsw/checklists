@@ -162,11 +162,11 @@ Checklists.TemplateView = Ember.View.extend
   addCheck: (event) ->
     @get('controller.content').addCheck(event.context)
   deleteCheck: (event) ->
-    @get('controller.content').deleteCheck(event.context.get('position'), event.contexts[1].get('name'))
+    @get('controller.content').deleteCheck(event.contexts[0], event.contexts[1])
   moveUp: (event) ->
-    @get('controller.content').moveUp(event.context.get('position'), event.contexts[1].get('name'))
+    @get('controller.content').moveUp(event.contexts[0], event.contexts[1])
   moveDown: (event) ->
-    @get('controller.content').moveDown(event.context.get('position'), event.contexts[1].get('name'))
+    @get('controller.content').moveDown(event.contexts[0], event.contexts[1])
   deleteGroup: (event) ->
     @get('controller.content').removeGroup(event.context)
 
@@ -182,9 +182,9 @@ Checklists.Template = Ember.Object.extend
   canDisplay: ( ->
     @get('isLoaded') and @get('isSaved')
   ).property('isLoaded', 'isSaved')
-  findGroup: (name) ->
+  findGroup: (groupPosition) ->
     @get('groups').find (g) ->
-      g.name is name
+      g.get('position') is groupPosition
   addGroup: (name) ->
     group = Checklists.TemplateGroup.create
       name: name
@@ -200,28 +200,30 @@ Checklists.Template = Ember.Object.extend
       title: ''
       position: g.get('checks').length
     g.get('checks').pushObject(nc)
-  moveUp: (position, name) ->
+  moveUp: (position, groupPosition) ->
     if position > 0
-      g = @findGroup(name)
+      g = @findGroup(groupPosition)
       checks = g.get('checks')
       r = checks[position - 1]
       c = checks[position]
       checks.replace(position - 1, 2, [c, r])
       g.normalizeCheckPositions()
-  moveDown: (position, name) ->
-    g = @findGroup(name)
+  moveDown: (position, groupPosition) ->
+    g = @findGroup(groupPosition)
     checks = g.get('checks')
     if position < checks.length - 1
       r = checks[position + 1]
       c = checks[position]
       checks.replace(position, 2, [r, c])
       g.normalizeCheckPositions()
-  deleteCheck: (position, name) ->
-    g = @findGroup(name)
+  deleteCheck: (position, groupPosition) ->
+    g = @findGroup(groupPosition)
     c = g.get('checks').find (e)->
       e.get('position') is position
     g.get('checks').removeObject(c)
     g.normalizeCheckPositions()
+  normalizeGroupPositions: ->
+    e.set('position', i) for e, i in @get('groups')
 
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
@@ -231,6 +233,7 @@ Checklists.TemplateGroup = Ember.Object.extend
   name: ''
   title: ''
   checks: Ember.A()
+  position: 0
   normalizeCheckPositions: ->
     e.set('position', i) for e, i in @get('checks')
 
@@ -267,6 +270,7 @@ Checklists.TemplateRepository = Ember.Object.create
           groups.addObject(Checklists.TemplateRepository.groupFromJson(g)) for g in response.groups
           template.set('groups', groups)
           template.set('isLoaded', true)
+          template.normalizeGroupPositions()
       @templates[key] = template
       template
   saveTemplate: (template) ->

@@ -25,12 +25,12 @@
                     <td>{{view Checklists.TemplateField class="template-field input-xxlarge" name="check" valueBinding="item.title"}}</td>
                     <td class="centered">
                       <div class="centered-box">
-                        <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                        <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                        <button class="btn centered" {{action moveUp item.position group.position target="view"}}><i class="icon-chevron-up"></i></button>
+                        <button class="btn centered" {{action moveDown item.position group.position target="view"}}><i class="icon-chevron-down"></i></button>
                       </div>
                     </td>
                     <td class="centered">
-                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
+                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item.position group.position target="view"}}><i class="icon-trash"></i></button></td>
                   </tr>
                 {{/each}}
             {{/each}}
