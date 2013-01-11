@@ -143,6 +143,13 @@ Checklists.SiteSwitchController = Ember.ObjectController.extend
   content: null
 
 ###
+# View of a resizable text area
+###
+Checklists.TemplateField = Ember.TextField.extend
+  attributeBindings: ['autofocus']
+  autofocus: 'autofocus'
+
+###
 # View and controller to edit a template
 ###
 Checklists.TemplateView = Ember.View.extend
