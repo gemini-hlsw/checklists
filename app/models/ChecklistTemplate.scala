@@ -13,16 +13,18 @@ import JsonFormatters._
 import scalaz._
 import Scalaz._
 
-case class CheckTemplate(title:String)
+case class CheckTemplate(title: String, position: Int = 0)
 
 object CheckTemplate {
   implicit object CheckTemplateFormat extends Format[CheckTemplate] {
     def writes(c: CheckTemplate) = JsObject(Seq(
-      "title" -> JsString(c.title)
+      "title" -> JsString(c.title),
+      "position" -> JsNumber(c.position)
     ))
 
     def reads(json: JsValue) = CheckTemplate(
-      title = (json \ "title").asOpt[String].getOrElse("")
+      title    = ~(json \ "title").asOpt[String],
+      position = ~(json \ "position").asOpt[Int]
     )
   }
 }
