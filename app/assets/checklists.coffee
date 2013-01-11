@@ -203,13 +203,15 @@ Checklists.TemplateGroup = Ember.Object.extend
   name: ''
   title: ''
   checks: Ember.A()
+  normalizeCheckPositions: ->
+    e.set('position', i) for e, i in @get('checks')
 
 Checklists.TemplateRepository = Ember.Object.create
   templates: {}
   checkFromJson: (json, index) ->
     Checklists.TemplateCheck.create
       title: json.title
-      position: index
+      position: json.position
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
       name: ''
@@ -218,6 +220,8 @@ Checklists.TemplateRepository = Ember.Object.create
     group.setProperties(json)
     checks = Ember.A(Checklists.TemplateRepository.checkFromJson(c, i) for c, i in json.checks)
     group.set('checks', checks)
+    group.normalizeCheckPositions()
+    group
   findTemplate: (site) ->
     key = site.get('site')
     if @templates[key]?
