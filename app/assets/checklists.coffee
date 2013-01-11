@@ -157,11 +157,7 @@ Checklists.TemplateView = Ember.View.extend
   addGroup: () ->
     confirm = (result) =>
       if result?
-        group = Checklists.TemplateGroup.create
-          name: result
-          title: result
-          checks: Ember.A()
-        @get('controller.content.groups').insertAt(0, group)
+        @get('controller.content').addGroup(result)
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
     @get('controller.content').addCheck(event.context)
@@ -172,10 +168,7 @@ Checklists.TemplateView = Ember.View.extend
   moveDown: (event) ->
     @get('controller.content').moveDown(event.context.get('position'), event.contexts[1].get('name'))
   deleteGroup: (event) ->
-    name = event.context
-    g = @get('controller.content.groups')
-    g = (i for i in g when i.name isnt name)
-    @set('controller.content.groups', g)
+    @get('controller.content').removeGroup(event.context)
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
@@ -192,6 +185,15 @@ Checklists.Template = Ember.Object.extend
   findGroup: (name) ->
     @get('groups').find (g) ->
       g.name is name
+  addGroup: (name) ->
+    group = Checklists.TemplateGroup.create
+      name: name
+      title: name
+      checks: Ember.A()
+    @get('groups').insertAt(0, group)
+  removeGroup: (name) ->
+    g = @findGroup(name)
+    @get('groups').removeObject(g)
   addCheck: (name) ->
     g = @findGroup(name)
     nc = Checklists.TemplateCheck.create

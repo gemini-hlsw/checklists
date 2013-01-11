@@ -9,7 +9,12 @@
             {{#each group in groups}}
               <tr class="group-header">
                   <td><h4>{{view Checklists.TemplateField class="template-field input-xlarge" name="group" valueBinding="group.title"}}</h4></td>
-                  <td></td>
+                  <td class="centered">
+                    <div class="centered-box">
+                      <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
+                      <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                    </div>
+                  </td>
                   <td class="centered">
                     <button class="btn btn-success pull-right" {{action addCheck group.name target="view"}}><i class="icon-plus"></i>&nbsp;</button>
                     <button class="btn btn-danger pull-right" {{action deleteGroup group.name target="view"}}><i class="icon-trash"></i>&nbsp;</button>
@@ -18,7 +23,7 @@
                 {{#each item in group.checks}}
                   <tr>
                     <td>{{view Checklists.TemplateField class="template-field input-xxlarge" name="check" valueBinding="item.title"}}</td>
-                    <td class="centred">
+                    <td class="centered">
                       <div class="centered-box">
                         <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
                         <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
