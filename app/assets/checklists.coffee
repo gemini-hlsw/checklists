@@ -165,13 +165,15 @@ Checklists.TemplateView = Ember.View.extend
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
     @get('controller.content').addCheck(event.context)
+  deleteCheck: (event) ->
+    @get('controller.content').deleteCheck(event.context.get('position'), event.contexts[1].get('name'))
+  moveUp: (event) ->
+    @get('controller.content').moveUp(event.context.get('position'), event.contexts[1].get('name'))
   deleteGroup: (event) ->
     name = event.context
     g = @get('controller.content.groups')
     g = (i for i in g when i.name isnt name)
     @set('controller.content.groups', g)
-  deleteCheck: (event) ->
-    @get('controller.content').deleteCheck(event.context.get('position'), event.contexts[1].get('name'))
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
@@ -185,18 +187,21 @@ Checklists.Template = Ember.Object.extend
   canDisplay: ( ->
     @get('isLoaded') and @get('isSaved')
   ).property('isLoaded', 'isSaved')
+  findGroup: (name) ->
+    @get('groups').find (g) ->
+      g.name is name
   addCheck: (name) ->
-    t = g for g in @get('groups') when g.name is name
+    g = @findGroup(name)
     nc = Checklists.TemplateCheck.create
       title: ''
-      position: t.get('checks').length
-    t.get('checks').pushObject(nc)
-  deleteCheck: (position, group) ->
-    t = g for g in @get('groups') when g.name is group
-    c = t.get('checks').find (e)->
+      position: g.get('checks').length
+    g.get('checks').pushObject(nc)
+  deleteCheck: (position, name) ->
+    g = @findGroup(name)
+    c = g.get('checks').find (e)->
       e.get('position') is position
-    t.get('checks').removeObject(c)
-    t.normalizeCheckPositions()
+    g.get('checks').removeObject(c)
+    g.normalizeCheckPositions()
 
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
