@@ -196,6 +196,7 @@ Checklists.Template = Ember.Object.extend
     c = t.get('checks').find (e)->
       e.get('position') is position
     t.get('checks').removeObject(c)
+    t.normalizeCheckPositions()
 
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
