@@ -1,5 +1,5 @@
 {{#if canDisplay}}
-  <div class="span6 offset3 centered-content">
+  <div class="span8 offset2 centered-content">
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>{{name}} template</h1>
@@ -17,12 +17,15 @@
               </tr>
                 {{#each item in group.checks}}
                   <tr>
-                    <td>{{view Checklists.TemplateField class="template-field input-xlarge" name="check" valueBinding="item.title"}}</td>
+                    <td>{{view Checklists.TemplateField class="template-field input-xxlarge" name="check" valueBinding="item.title"}}</td>
                     <td>
-                      <button class="btn " {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                      <button class="btn " {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                      <div class="centered-box">
+                        <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
+                        <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                      </div>
                     </td>
-                    <td class="centered"><button class="btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i>&nbsp;</button></td>
+                    <td class="centered">
+                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
                   </tr>
                 {{/each}}
             {{/each}}

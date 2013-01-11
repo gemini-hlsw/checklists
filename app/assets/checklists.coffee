@@ -197,14 +197,14 @@ Checklists.Template = Ember.Object.extend
       position: g.get('checks').length
     g.get('checks').pushObject(nc)
   moveUp: (position, name) ->
-    g = @findGroup(name)
-    checks = g.get('checks')
-    r = checks[position - 1]
-    c = checks[position]
-    console.log(r + " " + c)
-    checks.replace(position - 1, 2, [c, r])
-    g.normalizeCheckPositions()
-
+    if position > 0
+      g = @findGroup(name)
+      checks = g.get('checks')
+      r = checks[position - 1]
+      c = checks[position]
+      console.log(r + " " + c)
+      checks.replace(position - 1, 2, [c, r])
+      g.normalizeCheckPositions()
   deleteCheck: (position, name) ->
     g = @findGroup(name)
     c = g.get('checks').find (e)->
