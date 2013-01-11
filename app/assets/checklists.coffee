@@ -171,10 +171,7 @@ Checklists.TemplateView = Ember.View.extend
     g = (i for i in g when i.name isnt name)
     @set('controller.content.groups', g)
   deleteCheck: (event) ->
-    t = g for g in @get('controller.content.groups') when g.name is event.contexts[1].get('name')
-    c = t.get('checks').find (e)->
-      e.get('pos') is event.context.get('pos')
-    t.get('checks').removeObject(c)
+    @get('controller.content').deleteCheck(event.context.get('position'), event.contexts[1].get('name'))
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
@@ -194,6 +191,11 @@ Checklists.Template = Ember.Object.extend
       title: ''
       position: t.get('checks').length
     t.get('checks').pushObject(nc)
+  deleteCheck: (position, group) ->
+    t = g for g in @get('groups') when g.name is group
+    c = t.get('checks').find (e)->
+      e.get('position') is position
+    t.get('checks').removeObject(c)
 
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
