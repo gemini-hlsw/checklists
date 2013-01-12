@@ -1,5 +1,5 @@
 <tr>
-  <td class="centered report-day-column">{{s.day}}</td>
+  <td class="centered report-day-column"><a href="#" {{action goToDay s}}>{{s.day}}</a></td>
 {{#if s.closed}}
   <td class="centered report-result-column"><span class="label label-success">Closed</span></td>
 {{else}}

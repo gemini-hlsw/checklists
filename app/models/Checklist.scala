@@ -145,6 +145,7 @@ object ChecklistReportSummary {
       }),
       "closed" -> JsBoolean(summary.checklist.closed),
       "date" -> JsString(JsonFormatters.fmt.print(summary.checklist.date)),
+      "site" -> JsString(summary.checklist.site),
       "checklist" -> Json.toJson(summary.checklist)
     ))
   }

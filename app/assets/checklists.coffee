@@ -364,6 +364,7 @@ Checklists.DaySummary = Ember.Object.extend
   status: ''
   checklist: ''
   date: ''
+  site: ''
   day: (->
     moment(@get('date'), Checklists.urlDateFormat).date()
   ).property('date')
@@ -553,6 +554,7 @@ Checklists.Router = Ember.Router.extend
     this.get('reportsMenuController').set('content', Checklists.ReportRepository.loadMenuSet(site))
   root: Ember.Route.extend
     goToMain: Ember.Router.transitionTo('index')
+    goToDay: Ember.Router.transitionTo('checklist')
     index: Ember.Route.extend
       route: '/'
       siteChecklist: Ember.Router.transitionTo('checklist')
