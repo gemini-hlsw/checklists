@@ -9,6 +9,7 @@ observatory operations
 
 - Checklists can be closed. A closed checklist cannot be edited anymore
 - Added Report showing a monthly summary
+- Elements on the template can be moved up and down
 - Show About box with change log
 - Support themes
 - A nicer multiline input for checklist comments
