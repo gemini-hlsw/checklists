@@ -154,25 +154,25 @@ Checklists.TemplateField = Ember.TextField.extend
 ###
 Checklists.TemplateView = Ember.View.extend
   templateName: 'edit_template'
-  addGroup: () ->
+  addGroup:  ->
     confirm = (result) =>
       if result?
         @get('controller.content').addGroup(result)
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
-    @get('controller.content').addCheck(event.context)
+    @get('controller.content').addCheck(event.context.get('position'))
   deleteCheck: (event) ->
-    @get('controller.content').deleteCheck(event.contexts[0], event.contexts[1])
+    @get('controller.content').deleteCheck(event.contexts[0].get('position'), event.contexts[1].get('position'))
   moveUp: (event) ->
-    @get('controller.content').moveUp(event.contexts[0], event.contexts[1])
+    @get('controller.content').moveUp(event.contexts[0].get('position'), event.contexts[1].get('position'))
   moveDown: (event) ->
-    @get('controller.content').moveDown(event.contexts[0], event.contexts[1])
+    @get('controller.content').moveDown(event.contexts[0].get('position'), event.contexts[1].get('position'))
   moveGroupUp: (event) ->
-    @get('controller.content').moveGroupUp(event.context)
+    @get('controller.content').moveGroupUp(event.context.get('position'))
   moveGroupDown: (event) ->
-    @get('controller.content').moveGroupDown(event.context)
+    @get('controller.content').moveGroupDown(event.context.get('position'))
   deleteGroup: (event) ->
-    @get('controller.content').removeGroup(event.context)
+    @get('controller.content').removeGroup(event.context.get('position'))
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
@@ -195,9 +195,11 @@ Checklists.Template = Ember.Object.extend
       title: name
       checks: Ember.A()
     @get('groups').insertAt(0, group)
+    @normalizeGroupPositions()
   removeGroup: (name) ->
     g = @findGroup(name)
     @get('groups').removeObject(g)
+    @normalizeGroupPositions()
   addCheck: (name) ->
     g = @findGroup(name)
     nc = Checklists.TemplateCheck.create

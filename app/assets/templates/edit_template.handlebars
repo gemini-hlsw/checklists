@@ -3,7 +3,7 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>{{name}} template</h1>
-        <button class="btn btn-success pull-right" {{action addGroup group.position target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+        <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
         <table class="table table-stripped table-bordered">
           <tbody>
             {{#each group in groups}}
@@ -15,13 +15,13 @@
                   </td>
                   <td class="centered template-buttons-area">
                     <div class="centered-box">
-                      <button class="btn centered" {{action moveGroupUp group.position target="view"}}><i class="icon-chevron-up"></i></button>
-                      <button class="btn centered" {{action moveGroupDown group.position target="view"}}><i class="icon-chevron-down"></i></button>
+                      <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
+                      <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
                     </div>
                   </td>
                   <td class="centered template-buttons-area">
-                    <button class="btn btn-success pull-right" {{action addCheck group.position target="view"}}><i class="icon-plus"></i>&nbsp;</button>
-                    <button class="btn btn-danger pull-right" {{action deleteGroup group.position target="view"}}><i class="icon-trash"></i>&nbsp;</button>
+                    <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                    <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
                   </td>
               </tr>
                 {{#each item in group.checks}}
@@ -29,12 +29,12 @@
                     <td>{{view Checklists.TemplateField class="template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
                     <td class="centered">
                       <div class="centered-box">
-                        <button class="btn centered" {{action moveUp item.position group.position target="view"}}><i class="icon-chevron-up"></i></button>
-                        <button class="btn centered" {{action moveDown item.position group.position target="view"}}><i class="icon-chevron-down"></i></button>
+                        <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
+                        <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
                       </div>
                     </td>
                     <td class="centered">
-                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item.position group.position target="view"}}><i class="icon-trash"></i></button></td>
+                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
                   </tr>
                 {{/each}}
             {{/each}}
