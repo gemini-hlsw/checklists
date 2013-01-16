@@ -3,7 +3,7 @@
     <div class="well centered-content">
       <div class="row-fluid">
       <h1>{{name}} template</h1>
-        <button class="btn btn-success pull-right" {{action addGroup group.name target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+        <button class="btn btn-success pull-right" {{action addGroup group.position target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
         <table class="table table-stripped table-bordered">
           <tbody>
             {{#each group in groups}}
@@ -14,14 +14,14 @@
                     </div>
                   </td>
                   <td class="centered">
-                    <div class="centered-box">
+                    <div class="centered-box template-buttons-area">
                       <button class="btn centered" {{action moveGroupUp group.position target="view"}}><i class="icon-chevron-up"></i></button>
                       <button class="btn centered" {{action moveGroupDown group.position target="view"}}><i class="icon-chevron-down"></i></button>
                     </div>
                   </td>
                   <td class="centered">
-                    <button class="btn btn-success pull-right" {{action addCheck group.name target="view"}}><i class="icon-plus"></i>&nbsp;</button>
-                    <button class="btn btn-danger pull-right" {{action deleteGroup group.name target="view"}}><i class="icon-trash"></i>&nbsp;</button>
+                    <button class="btn btn-success pull-right" {{action addCheck group.position target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                    <button class="btn btn-danger pull-right" {{action deleteGroup group.position target="view"}}><i class="icon-trash"></i>&nbsp;</button>
                   </td>
               </tr>
                 {{#each item in group.checks}}
