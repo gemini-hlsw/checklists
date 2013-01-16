@@ -103,5 +103,9 @@ textarea:focus {
 }
 
 .template-buttons-area {
-    width: 200px;
+    width: 85px;
+}
+
+.input-adjusted {
+    width: 96%;
 }

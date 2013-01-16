@@ -13,20 +13,20 @@
                       {{view Checklists.TemplateField class="template-field input-xlarge" name="group" valueBinding="group.title"}}
                     </div>
                   </td>
-                  <td class="centered">
-                    <div class="centered-box template-buttons-area">
+                  <td class="centered template-buttons-area">
+                    <div class="centered-box">
                       <button class="btn centered" {{action moveGroupUp group.position target="view"}}><i class="icon-chevron-up"></i></button>
                       <button class="btn centered" {{action moveGroupDown group.position target="view"}}><i class="icon-chevron-down"></i></button>
                     </div>
                   </td>
-                  <td class="centered">
+                  <td class="centered template-buttons-area">
                     <button class="btn btn-success pull-right" {{action addCheck group.position target="view"}}><i class="icon-plus"></i>&nbsp;</button>
                     <button class="btn btn-danger pull-right" {{action deleteGroup group.position target="view"}}><i class="icon-trash"></i>&nbsp;</button>
                   </td>
               </tr>
                 {{#each item in group.checks}}
                   <tr>
-                    <td>{{view Checklists.TemplateField class="template-field input-xxlarge" name="check" valueBinding="item.title"}}</td>
+                    <td>{{view Checklists.TemplateField class="template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
                     <td class="centered">
                       <div class="centered-box">
                         <button class="btn centered" {{action moveUp item.position group.position target="view"}}><i class="icon-chevron-up"></i></button>
