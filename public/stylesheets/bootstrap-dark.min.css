@@ -913,7 +913,7 @@ div.subnav.subnav-fixed{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:
 .table tbody tr.success td{background-color:#468847;}
 .table tbody tr.error td{background-color:#b94a48;}
 .table tbody tr.info td{background-color:#3a87ad;}
-label,input,button,select,textarea,legend{color:#c8c8c8;}
+/*label,input,button,select,textarea,legend{color:#c8c8c8;}*/
 legend,label{text-shadow:-1px -1px 0 rgba(0, 0, 0, 0.3);}
 .input-prepend .add-on,.input-append .add-on{vertical-align:top;background-color:#52575c;border-top:1px solid #7a8288;border-left:1px solid #7a8288;border-bottom:1px solid #3a3f44;border-right:1px solid #3a3f44;text-shadow:none;}
 .input-append .btn,.input-prepend .btn{margin-top:-1px;padding:5px 14px;}
