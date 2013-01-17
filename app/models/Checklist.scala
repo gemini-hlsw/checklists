@@ -131,10 +131,15 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 }
 
 case class ChecklistReportSummary(checklist: Checklist) {
-  lazy val grouped = for {
-    g <- checklist.groups
-    ch <- g.checks.groupBy(_.status)
-  } yield (ch._1, ch._2.size)
+  val base = Map.empty[Option[String], Int]
+
+  lazy val grouped = {
+    val g = for {
+      g <- checklist.groups
+      ch <- g.checks.groupBy(_.status)
+    } yield (ch._1, ch._2.size)
+    g.foldLeft(base)((a, b) => a + (b._1 -> (b._2 + ~a.get(b._1))))
+  }
 }
 
 object ChecklistReportSummary {
@@ -142,7 +147,7 @@ object ChecklistReportSummary {
     override def writes(summary: ChecklistReportSummary) = JsObject(Seq(
       "status" -> JsObject(summary.grouped.map {
         case (s, c) => s.getOrElse("none") -> JsNumber(c)
-      }),
+      }.toList),
       "closed" -> JsBoolean(summary.checklist.closed),
       "date" -> JsString(JsonFormatters.fmt.print(summary.checklist.date)),
       "site" -> JsString(summary.checklist.site),

@@ -375,7 +375,7 @@ Checklists.DaySummary = Ember.Object.extend
   ).property('closed')
   summaryText: (->
     status = @get('status')
-    ["#{p}: #{status[p]}" for p of status].join(', ')
+    [" #{p}: #{status[p]}" for p of status].join(', ')
   ).property('@each.status')
   detailsId: ( ->
     date = @get('date')
