@@ -10,7 +10,7 @@
               <tr class="group-header">
                   <td class="centered">
                     <div>
-                      {{view Checklists.TemplateField class="template-field input-xlarge" name="group" valueBinding="group.title"}}
+                      {{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
                     </div>
                   </td>
                   <td class="centered template-buttons-area">
@@ -26,7 +26,7 @@
               </tr>
                 {{#each item in group.checks}}
                   <tr>
-                    <td>{{view Checklists.TemplateField class="template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
+                    <td>{{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
                     <td class="centered">
                       <div class="centered-box">
                         <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>

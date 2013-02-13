@@ -154,6 +154,13 @@ Checklists.TemplateField = Ember.TextField.extend
 ###
 Checklists.TemplateView = Ember.View.extend
   templateName: 'edit_template'
+  didInsertElement: ->
+    Mousetrap.bind ['ctrl+s', 'command+s'], ->
+      Checklists.get('router').send('saveTemplate')
+      false
+  willDestroyElement: ->
+    Mousetrap.unbind ['ctrl+s', 'command+s']
+
   addGroup:  ->
     confirm = (result) =>
       if result?
