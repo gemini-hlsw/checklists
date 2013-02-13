@@ -458,6 +458,13 @@ Checklists.ThemesMenuView = Ember.View.extend
 ###
 Checklists.ChecklistView = Ember.View.extend
   templateName: 'checklist'
+  didInsertElement: ->
+    Mousetrap.bind ['ctrl+s', 'command+s'], ->
+      Checklists.get('router').send('saveChecklist')
+      false
+  willDestroyElement: ->
+    Mousetrap.unbind ['ctrl+s', 'command+s']
+
 Checklists.ChecklistController = Ember.ObjectController.extend
   content: null
 
