@@ -5,6 +5,7 @@
 # Home page
 GET     /                                               controllers.Application.index
 GET     /about                                          controllers.Application.about
+GET     /test                                           controllers.Application.test
         
 GET     /api/v1.0/sites                                 controllers.Api.sites
 GET     /api/v1.0/templates                             controllers.Api.templates
