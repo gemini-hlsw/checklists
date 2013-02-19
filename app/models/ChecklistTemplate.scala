@@ -35,16 +35,16 @@ case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTempla
 object CheckTemplateGroup {
   implicit object ChecklistTemplateGroupFormat extends Format[CheckTemplateGroup] {
     def writes(g: CheckTemplateGroup) = JsObject(Seq(
-      "name" -> JsString(g.name),
-      "title" -> JsString(g.title),
-      "checks" -> Json.toJson(g.checks),
+      "name"     -> JsString(g.name),
+      "title"    -> JsString(g.title),
+      "checks"   -> Json.toJson(g.checks),
       "position" -> JsNumber(g.position)
     ))
 
     def reads(json: JsValue) = CheckTemplateGroup(
-      name = ~(json \ "name").asOpt[String],
-      title = ~(json \ "title").asOpt[String],
-      checks = (json \ "checks").as[Seq[CheckTemplate]],
+      name     = ~(json \ "name").asOpt[String],
+      title    = ~(json \ "title").asOpt[String],
+      checks   = (json \ "checks").as[Seq[CheckTemplate]],
       position = ~(json \ "position").asOpt[Int]
     )
   }
@@ -87,15 +87,19 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
-      "site" -> JsString(t.site),
-      "name" -> JsString(t.name),
-      "groups" -> Json.toJson(t.groups)
+      "site"        -> JsString(t.site),
+      "name"        -> JsString(t.name),
+      "groups"      -> Json.toJson(t.groups),
+      "engineers"   -> Json.toJson(t.engineers),
+      "technicians" -> Json.toJson(t.technicians)
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
-      site = (json \ "site").asOpt[String].getOrElse(""),
-      name = (json \ "name").asOpt[String].getOrElse(""),
-      groups = (json \ "groups").as[Seq[CheckTemplateGroup]]
+      site        = ~(json \ "site").asOpt[String],
+      name        = ~(json \ "name").asOpt[String],
+      groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
+      engineers   = (json \ "engineers").as[Seq[String]].toSet,
+      technicians = (json \ "technicians").as[Seq[String]].toSet
     )
   }
 }
