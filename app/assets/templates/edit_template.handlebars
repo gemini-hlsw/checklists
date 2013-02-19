@@ -5,7 +5,8 @@
       <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
         <div id="settings" class="collapse">
           <div class="well">
-            <h3>Settings</h3>
+            <label>Engineers names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
+            <label>Technician names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="technicians"}}
           </div>
         </div>
         <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
