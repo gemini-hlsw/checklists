@@ -52,6 +52,17 @@ object CheckTemplateGroup {
 
 case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty)
 
+case class TemplateSettings(site: String, engineers: Set[String])
+
+object TemplateSettings {
+  implicit object TemplateSettingsWrites extends Writes[TemplateSettings] {
+    def writes(t: TemplateSettings) = JsObject(Seq(
+      "site"      -> JsString(t.site),
+      "engineers" -> Json.toJson(t.engineers)
+    ))
+  }
+}
+
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
 
@@ -67,6 +78,10 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
 
   def updateEngineersNames(site: String, engineers: Seq[String]) {
     findTemplate(site).map(t => t.copy(engineers = t.engineers ++ engineers.toSet)).map(saveTemplate)
+  }
+
+  def loadSettings(site: String):Option[TemplateSettings] = {
+    findTemplate(site).map(t => TemplateSettings(t.site, t.engineers))
   }
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {

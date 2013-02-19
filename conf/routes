@@ -10,6 +10,7 @@ GET     /test                                           controllers.Application.
 GET     /api/v1.0/sites                                 controllers.Api.sites
 GET     /api/v1.0/templates                             controllers.Api.templates
 GET     /api/v1.0/templates/:site                       controllers.Api.template(site:String)
+GET     /api/v1.0/templates/:site/settings              controllers.Api.templateSettings(site:String)
 POST    /api/v1.0/templates/:site                       controllers.Api.saveTemplate(site:String)
 GET     /api/v1.0/checklist/:site/:date                 controllers.Api.checkList(site:String, date:String)
 POST    /api/v1.0/checklist/:site/:date                 controllers.Api.saveCheckList(site:String, date:String)
