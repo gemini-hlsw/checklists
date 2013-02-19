@@ -161,24 +161,25 @@ Checklists.Tags = Ember.Object.create
 Checklists.Select2Tags = Ember.View.extend
   tagName: 'input'
   classNames: ['ember-tags']
-  #defaultTemplate: Ember.Handlebars.compile('{{#if view.prompt}}<option value>{{view.prompt}}</option>{{/if}}{{#each view.content}}{{view Ember.SelectOption contentBinding="this"}}{{/each}}')
   defaultTemplate: ''
 
   attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value'],
   type: 'hidden'
   tags: []
   values: null
-  value: " "
+  value: null
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
       values = Ember.View.views[e.context.id].get('values')
       data = []
-      data.push({id: i, text:i}) for i in values
+      data.push({id: i, text:i}) for i in values when i.trim().length > 0
       cb(data)
   _change: (event, ref) ->
     Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
   didInsertElement: ->
-    this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).on('change', @_change)
+    data = []
+    data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0
+    this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data).on('change', @_change)
 
 ###
 # View and controller to edit a template
@@ -558,6 +559,7 @@ Checklists.ChecklistRepository = Ember.Object.create
     groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in json.groups
     checklist.set('groups', groups)
     checklist.set('isLoaded', true)
+    #checklist.set('engineers', ["A", "CQ"])
     checklist
   newChecklist: (site, date) ->
     Checklists.Checklist.create

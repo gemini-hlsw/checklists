@@ -105,6 +105,8 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
         case false => {
           val merged:Checklist = mergeLists(t)(cl)
           dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
+
+          ChecklistTemplate.updateEngineersNames(t.site, t.engineers)
           Right(merged)
         }
         case true => Left(ErrorCode.ChecklistClosed)
