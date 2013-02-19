@@ -12,6 +12,9 @@ window.Checklists = Ember.Application.create
 
 Ember.LOG_BINDINGS = false
 
+p = (msg) ->
+  console.log msg
+
 Checklists = window.Checklists
 ###
 # Utility functions
@@ -161,14 +164,21 @@ Checklists.Select2Tags = Ember.View.extend
   #defaultTemplate: Ember.Handlebars.compile('{{#if view.prompt}}<option value>{{view.prompt}}</option>{{/if}}{{#each view.content}}{{view Ember.SelectOption contentBinding="this"}}{{/each}}')
   defaultTemplate: ''
 
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags'],
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value'],
   type: 'hidden'
   tags: []
   values: null
+  value: " "
+  _initSelection: (e, cb) ->
+    if Ember.View.views[e.context.id]?
+      values = Ember.View.views[e.context.id].get('values')
+      data = []
+      data.push({id: i, text:i}) for i in values
+      cb(data)
   _change: (event, ref) ->
     Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
   didInsertElement: ->
-    this.$().select2({tags: @get('tags')}).on('change', @_change)
+    this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).on('change', @_change)
 
 ###
 # View and controller to edit a template
