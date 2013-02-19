@@ -8,6 +8,7 @@ observatory operations
 ###### Version 0.3
 
 - Added ctrl+s and command+s shortcuts to save a checklist or a template
+- Removed checklist top headers
 
 ###### Version 0.2
 
