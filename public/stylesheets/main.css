@@ -117,3 +117,25 @@ textarea:focus {
 .names-selectors {
     argin-left: auto !important;
 }
+
+/* Select2 CSS to fit better with bootstrap */
+.checklist-select2 input {
+    border-radius: 4px;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    line-height: 20px !important;
+}
+
+.select2-container-multi .select2-choices {
+    border-radius: 4px;
+}
+
+.select2-search-choice-close {
+    top: 6px !important;
+}
+
+
+.select2-search-choice-close {
+    top: 6px;
+}

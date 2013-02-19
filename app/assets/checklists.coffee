@@ -179,7 +179,7 @@ Checklists.Select2Tags = Ember.View.extend
   didInsertElement: ->
     data = []
     data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0
-    this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data).on('change', @_change)
+    this.$().select2({tags: @get('tags'), containerCssClass: @get('containerCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
 
 ###
 # View and controller to edit a template
