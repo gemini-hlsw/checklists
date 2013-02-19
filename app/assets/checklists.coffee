@@ -511,6 +511,7 @@ Checklists.ThemesMenuView = Ember.View.extend
 ###
 Checklists.ChecklistView = Ember.View.extend
   templateName: 'checklist'
+  settingsControllerBinding: 'Checklists.router.templateSettingsController'
   didInsertElement: ->
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveChecklist')
@@ -650,10 +651,13 @@ Checklists.Router = Ember.Router.extend
       connectOutlets: (router, site) ->
         router.setupReportsController(site.site)
         checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
+
         router.get('toolbarController').set('inChecklist', true)
         router.get('toolbarController').set('site', site.site)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
+
+        router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(site.site))
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
       route: '/:site/template'
