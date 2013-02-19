@@ -4,8 +4,8 @@
       <div class="row-fluid">
       <h1>{{name}} checklist for {{longFormattedDate}}</h1>
       <div class="row-fluid">
-        <button class="btn pull-left" {{action goToPrevious}}><< Prev</button>
-        <button class="btn pull-right" {{action goToNext}}>Next >></button>
+        <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
+        <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
       </div>
       <table class="table table-stripped table-bordered">
         <tbody>
@@ -29,8 +29,8 @@
       </div>
       <div class="centered-box row-fluid">
         <div class="center-box pull-left">
-          <button class="btn pull-left" {{action goToPrevious}}><< Prev</button>
-          <button class="btn pull-left" {{action goToNext}}>Next >></button>
+          <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
+          <button class="btn pull-left" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
         </div>
         <div class="center-box pull-right">
           {{#if closed}}
