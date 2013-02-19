@@ -296,8 +296,22 @@ Checklists.TemplateGroup = Ember.Object.extend
   normalizeCheckPositions: ->
     e.set('position', i) for e, i in @get('checks')
 
+Checklists.TemplateSettings = Ember.Object.extend
+  engineers: null
+
+Checklists.TemplateSettingsController = Ember.ObjectController.extend
+  content: null
+
 Checklists.TemplateRepository = Ember.Object.create
   templates: {}
+  findSettings: (site) ->
+    settings = Checklists.TemplateSettings.create
+      engineers: Ember.A()
+    $.ajax
+      url: "/api/v1.0/templates/#{site}/settings",
+      success: (response) =>
+        settings.setProperties response
+    settings
   checkFromJson: (json, index) ->
     Checklists.TemplateCheck.create
       title: json.title
