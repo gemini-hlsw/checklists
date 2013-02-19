@@ -57,7 +57,7 @@ object CheckGroup {
   }
 }
 
-case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup])
+case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty)
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
@@ -113,19 +113,23 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   implicit object ChecklistFormat extends Format[Checklist] {
     def writes(c: Checklist) = JsObject(Seq(
-      "site"   -> JsString(c.site),
-      "name"   -> JsString(c.name),
-      "closed" -> JsBoolean(c.closed),
-      "date"   -> Json.toJson(c.date),
-      "groups" -> Json.toJson(c.groups)
+      "site"        -> JsString(c.site),
+      "name"        -> JsString(c.name),
+      "closed"      -> JsBoolean(c.closed),
+      "date"        -> Json.toJson(c.date),
+      "groups"      -> Json.toJson(c.groups),
+      "engineers"   -> Json.toJson(c.engineers),
+      "technicians" -> Json.toJson(c.technicians)
     ))
 
     def reads(json: JsValue) = Checklist(
-      site   = (json \ "site").asOpt[String].getOrElse(""),
-      name   = (json \ "name").asOpt[String].getOrElse(""),
-      closed = (json \ "closed").asOpt[Boolean].getOrElse(false),
-      date   = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
-      groups = (json \ "groups").as[Seq[CheckGroup]]
+      site        = (json \ "site").asOpt[String].getOrElse(""),
+      name        = (json \ "name").asOpt[String].getOrElse(""),
+      closed      = (json \ "closed").asOpt[Boolean].getOrElse(false),
+      date        = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
+      groups      = (json \ "groups").as[Seq[CheckGroup]],
+      engineers   = (json \ "engineers").as[Seq[String]],
+      technicians = (json \ "technicians").as[Seq[String]]
     )
   }
 }
