@@ -157,17 +157,18 @@ Checklists.Tags = Ember.Object.create
 ###
 Checklists.Select2Tags = Ember.View.extend
   tagName: 'input'
-  classNames: ['ember-tags'],
+  classNames: ['ember-tags']
   #defaultTemplate: Ember.Handlebars.compile('{{#if view.prompt}}<option value>{{view.prompt}}</option>{{/if}}{{#each view.content}}{{view Ember.SelectOption contentBinding="this"}}{{/each}}')
   defaultTemplate: ''
 
   attributeBindings: ['type', 'tabindex', 'placeholder', 'tags'],
   type: 'hidden'
   tags: []
+  values: null
+  _change: (event, ref) ->
+    Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
   didInsertElement: ->
-    console.log this.$()
-    this.$().select2({tags: @get('tags')})
-
+    this.$().select2({tags: @get('tags')}).on('change', @_change)
 
 ###
 # View and controller to edit a template
@@ -503,6 +504,8 @@ Checklists.Checklist = Ember.ObjectController.extend
   groups: []
   isLoaded: false
   isSaved: true
+  engineers: []
+  technicians: []
   canDisplay: ( ->
     @get('isLoaded') and @get('isSaved')
   ).property('isLoaded', 'isSaved')
