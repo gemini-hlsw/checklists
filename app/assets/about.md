@@ -9,6 +9,7 @@ observatory operations
 
 - To each Checklist you can add Engineers names supervising the task and technician names performing the task.
 Names can be added and will remembered in future checklists and can be edited in the Template settings section.
+- Groups on the checklist page are by default collapsed for easier navigation
 - Added ctrl+s and command+s shortcuts to save a checklist or a template
 - Removed checklist top headers
 
