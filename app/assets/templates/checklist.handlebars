@@ -22,25 +22,35 @@
           </div>
         </div>
       </div>
-      <table class="table table-stripped table-bordered">
+      <div class="accordion" id="accordion">
         <tbody>
           {{#each group in groups}}
-            <tr><td class="group-header" colspan="3"><h4>{{group.title}}</h4></td></tr>
-              {{#each item in group.checks}}
-                <tr>
-                  <td class="centered">{{item.description}}</td>
-                  <td class="centered centered-content">
-                    {{view Ember.Select
-                        class="input-small"
-                        contentBinding="Checklists.CheckValues"
-                        selectionBinding="item.status"}}
-                  </td>
-                  <td class="centered centered-content">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
-                </tr>
-              {{/each}}
+            <div class="accordion-group checklist-accordion-group">
+              <div class="accordion-heading checklist-accordion-heading">
+                <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><i class="icon-caret-right"> {{group.title}}</i></a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner checklist-accordion-inner">
+                    <table class="table table-stripped table-bordered checklist-table ">
+                      <tbody>
+                  {{#each item in group.checks}}
+                        <tr>
+                          <td class="centered checklist-description-column">{{item.description}}</td>
+                          <td class="centered checklist-status-column centered-content">
+                            {{view Ember.Select
+                                class="input-small"
+                                contentBinding="Checklists.CheckValues"
+                                selectionBinding="item.status"}}
+                          </td>
+                          <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
+                        </tr>
+                  {{/each}}
+                      </tbody>
+                    </table>
+                </div> 
+              </div>
+            </div>
           {{/each}}
-        </tbody>
-      </table>
       </div>
       <div class="centered-box row-fluid">
         <div class="center-box pull-left">
