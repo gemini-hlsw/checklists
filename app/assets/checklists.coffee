@@ -301,6 +301,7 @@ Checklists.TemplateGroup = Ember.Object.extend
 
 Checklists.TemplateSettings = Ember.Object.extend
   engineers: null
+  technicians: null
 
 Checklists.TemplateSettingsController = Ember.ObjectController.extend
   content: null
@@ -310,6 +311,7 @@ Checklists.TemplateRepository = Ember.Object.create
   findSettings: (site) ->
     settings = Checklists.TemplateSettings.create
       engineers: Ember.A()
+      technicians: Ember.A()
     $.ajax
       url: "/api/v1.0/templates/#{site}/settings",
       success: (response) =>
