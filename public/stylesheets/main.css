@@ -109,3 +109,11 @@ textarea:focus {
 .input-adjusted {
     width: 96%;
 }
+
+.wide-label {
+    idth: 180px !important;
+}
+
+.names-selectors {
+    argin-left: auto !important;
+}

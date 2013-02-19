@@ -149,6 +149,26 @@ Checklists.TemplateField = Ember.TextField.extend
   attributeBindings: ['autofocus']
   autofocus: 'autofocus'
 
+Checklists.Tags = Ember.Object.create
+  tags: ['a', 'Carlos Quiroz', 'd']
+
+###
+# View of a resizable text area
+###
+Checklists.Select2Tags = Ember.View.extend
+  tagName: 'input'
+  classNames: ['ember-tags'],
+  #defaultTemplate: Ember.Handlebars.compile('{{#if view.prompt}}<option value>{{view.prompt}}</option>{{/if}}{{#each view.content}}{{view Ember.SelectOption contentBinding="this"}}{{/each}}')
+  defaultTemplate: ''
+
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags'],
+  type: 'hidden'
+  tags: []
+  didInsertElement: ->
+    console.log this.$()
+    this.$().select2({tags: @get('tags')})
+
+
 ###
 # View and controller to edit a template
 ###

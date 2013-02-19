@@ -7,10 +7,25 @@
         <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
         <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
       </div>
+      <div class="row-fluid">
+        <div class="well form-horizontal">
+          <div class="control-group">
+            <label class="control-label wide-label" for="supervisors">Eng supervising the activity</label>
+            <div class="controls names-selectors">
+              {{view Checklists.Select2Tags class="input-xlarge" placeholder="Enter the names" tagsBinding="Checklists.Tags.tags"}}
+            </div>
+          </div><div class="control-group wide-label">
+            <label class="control-label" for="technicians">Tech/Eng performing the checks</label>
+            <div class="controls names-selectors">
+              <input type="text" id="technicians" placeholder="Email">
+            </div>
+          </div>
+        </div>
+      </div>
       <table class="table table-stripped table-bordered">
         <tbody>
           {{#each group in groups}}
-          <tr><td class="group-header" colspan="3"><h4>{{group.title}}</h4></td></tr>
+            <tr><td class="group-header" colspan="3"><h4>{{group.title}}</h4></td></tr>
               {{#each item in group.checks}}
                 <tr>
                   <td class="centered">{{item.description}}</td>
