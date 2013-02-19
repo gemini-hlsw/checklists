@@ -517,6 +517,8 @@ Checklists.ThemesMenuView = Ember.View.extend
 Checklists.ChecklistView = Ember.View.extend
   templateName: 'checklist'
   settingsControllerBinding: 'Checklists.router.templateSettingsController'
+  toggleGroup: (event) ->
+    event.context.set('collapsed', not event.context.get('collapsed'))
   didInsertElement: ->
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveChecklist')
@@ -558,6 +560,7 @@ Checklists.ChecksGroup = Ember.Object.extend
   name: ''
   title: ''
   checks: ''
+  collapsed: false # Move to controller
 
 Checklists.ChecklistRepository = Ember.Object.create
   checklistsCache: {}

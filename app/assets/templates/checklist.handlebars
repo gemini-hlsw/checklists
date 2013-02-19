@@ -27,9 +27,9 @@
           {{#each group in groups}}
             <div class="accordion-group checklist-accordion-group">
               <div class="accordion-heading checklist-accordion-heading">
-                <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><i class="icon-caret-right"> {{group.title}}</i></a>
+                <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}><i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}> {{group.title}}</i></a>
               </div>
-              <div id="collapseOne" class="accordion-body collapse in">
+              <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
                 <div class="accordion-inner checklist-accordion-inner">
                     <table class="table table-stripped table-bordered checklist-table ">
                       <tbody>
