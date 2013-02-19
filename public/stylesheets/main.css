@@ -118,18 +118,12 @@ textarea:focus {
     argin-left: auto !important;
 }
 
-.checklist-accordion-group {
-    border: 1px solid black;
-}
-
 .checklist-accordion-inner {
-    border-top: 1px solid rgb(80,80,80);
     padding: 0px;
 }
 
 .checklist-accordion-toggle {
     font-size: larger;
-    background: rgb(64,64,64);
 }
 
 .checklist-accordion-heading {
