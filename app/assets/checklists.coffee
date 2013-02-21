@@ -175,6 +175,13 @@ Checklists.Select2Tags = Ember.View.extend
   tagsUpdater: (->
     this.$().select2({tags: @get('tags')})
   ).observes('tags')
+  valuesUpdater: (->
+    data = []
+    data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0
+    val = this.$().select2("val")
+    if val.length isnt data.length
+      this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data)
+  ).observes('values')
 
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
