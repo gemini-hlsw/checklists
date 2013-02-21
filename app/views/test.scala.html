@@ -40,24 +40,32 @@
     <script type="text/x-handlebars" data-template-name="application">
     <div class="content-fluid">
       <div class="row-fluid">
-      App
         {{outlet}}
       </div>
     </div>
     </script>
+
     <script type="text/x-handlebars" data-template-name="index">
-    <h2 > Index Content: </h2>
+    <h2 > Content: </h2>
     <button {{action "load" target="controller"}}>Load</button>
-    <ul>
-        {{#each parent in content}}
-        <li> {{parent.id}} </li>
-        <ul>
-          {{#each c in parent.children}}
-             <li>{{c.position}}</li>
-          {{/each}}
-        </ul>
-        {{/each}}
-   </ul>
+    {{#each parent in content}}
+              <table class="table table-stripped table-bordered checklist-table ">
+                <tbody>
+                  {{#each item in parent.children}}
+                    <tr>
+                      <td class="centered checklist-description-column">{{item.position}}</td>
+                      <td class="centered checklist-status-column centered-content">
+                        {{view Ember.Select
+                            class="input-small"
+                            contentBinding="App.CheckValues"
+                            selectionBinding="item.position"}}
+                      </td>
+                      <td class="centered centered-content checklist-comment-column">{{view Ember.TextArea class="textarea-animated" name="description" valueBinding="item.position"}}</td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+    {{/each}}
 </script>
     <!-- JS Files
     ================================================== -->

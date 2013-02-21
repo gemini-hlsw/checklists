@@ -1,5 +1,7 @@
 App = Ember.Application.create({});
 
+App.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok']
+
 var parentsCount = 10;
 var childrenCount = 10;
 

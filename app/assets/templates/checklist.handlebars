@@ -1,4 +1,3 @@
-{{#if canDisplay}}
   <div class="span8 offset2 centered-content">
     <div class="well centered-content">
       <div class="row-fluid">
@@ -33,18 +32,18 @@
                 <div class="accordion-inner checklist-accordion-inner">
                     <table class="table table-stripped table-bordered checklist-table ">
                       <tbody>
-                  {{#each item in group.checks}}
-                        <tr>
-                          <td class="centered checklist-description-column">{{item.description}}</td>
-                          <td class="centered checklist-status-column centered-content">
-                            {{view Ember.Select
-                                class="input-small"
-                                contentBinding="Checklists.CheckValues"
-                                selectionBinding="item.status"}}
-                          </td>
-                          <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
-                        </tr>
-                  {{/each}}
+                        {{#each item in group.checks}}
+                          <tr>
+                            <td class="centered checklist-description-column">{{item.description}}</td>
+                            <td class="centered checklist-status-column centered-content">
+                              {{view Ember.Select
+                                  class="input-small"
+                                  contentBinding="Checklists.CheckValues"
+                                  selectionBinding="item.status"}}
+                            </td>
+                            <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
+                          </tr>
+                        {{/each}}
                       </tbody>
                     </table>
                 </div> 
@@ -68,10 +67,10 @@
       </div>
     </div>
   </div>
-{{else}}
-  {{#if isSaved}}
-    {{view Checklists.OverlayView}}
-  {{else}}
-    {{view Checklists.SavingOverlayView}}
+  {{#if needsOverlay}}
+    {{#if isSaved}}
+      {{view Checklists.OverlayView}}
+    {{else}}
+      {{view Checklists.SavingOverlayView}}
+    {{/if}}
   {{/if}}
-{{/if}}

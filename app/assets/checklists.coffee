@@ -225,8 +225,8 @@ Checklists.Template = Ember.Object.extend
   groups: []
   isLoaded: false
   isSaved: true
-  canDisplay: ( ->
-    @get('isLoaded') and @get('isSaved')
+  needsOverlay: ( ->
+    not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')
   findGroup: (groupPosition) ->
     @get('groups').find (g) ->
@@ -539,6 +539,9 @@ Checklists.Checklist = Ember.ObjectController.extend
   isSaved: true
   engineers: []
   technicians: []
+  needsOverlay: ( ->
+    not @get('isLoaded') or not @get('isSaved')
+  ).property('isLoaded', 'isSaved')
   canDisplay: ( ->
     @get('isLoaded') and @get('isSaved')
   ).property('isLoaded', 'isSaved')
@@ -582,7 +585,6 @@ Checklists.ChecklistRepository = Ember.Object.create
     groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in json.groups
     checklist.set('groups', groups)
     checklist.set('isLoaded', true)
-    #checklist.set('engineers', ["A", "CQ"])
     checklist
   newChecklist: (site, date) ->
     Checklists.Checklist.create
