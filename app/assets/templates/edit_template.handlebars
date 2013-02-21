@@ -13,7 +13,7 @@
       <div id="settings" class="collapse">
         <div class="well">
           <label>Engineers names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
-          <label>Technician names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="technicians"}}
+          <label>Technician names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="hide mousetrap" tagsBinding="technicians"}}
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>

@@ -165,7 +165,7 @@ Checklists.Select2Tags = Ember.View.extend
   classNames: ['ember-tags']
   defaultTemplate: ''
 
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value'],
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value', 'dropdownCssClass'],
   type: 'hidden'
   tags: []
   values: null
