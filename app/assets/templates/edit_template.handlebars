@@ -1,59 +1,60 @@
-{{#if canDisplay}}
-  <div class="span8 offset2 centered-content">
-    <div class="well centered-content">
-      <div class="row-fluid">
-      <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
-        <div id="settings" class="collapse">
-          <div class="well">
-            <label>Engineers names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
-            <label>Technician names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="technicians"}}
-          </div>
-        </div>
-        <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
-        
-        <table class="table table-stripped table-bordered">
-          <tbody>
-            {{#each group in groups}}
-              <tr class="group-header">
+<div class="span8 offset2 centered-content">
+  <div class="well centered-content">
+    <div class="row-fluid">
+      {{#if needsOverlay}}
+        {{#if isSaved}}
+          <h1>Loading...</h1>
+        {{else}}
+          <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
+        {{/if}}
+      {{else}}
+        <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
+      {{/if}}
+      <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+      
+      <table class="table table-stripped table-bordered">
+        <tbody>
+          {{#each group in groups}}
+            <tr class="group-header">
+                <td class="centered">
+                  <div>
+                    {{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
+                  </div>
+                </td>
+                <td class="centered template-buttons-area">
+                  <div class="centered-box">
+                    <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
+                    <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
+                  </div>
+                </td>
+                <td class="centered template-buttons-area">
+                  <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                  <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
+                </td>
+            </tr>
+              {{#each item in group.checks}}
+                <tr>
+                  <td>{{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
                   <td class="centered">
-                    <div>
-                      {{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
-                    </div>
-                  </td>
-                  <td class="centered template-buttons-area">
                     <div class="centered-box">
-                      <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
-                      <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
+                      <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
+                      <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
                     </div>
                   </td>
-                  <td class="centered template-buttons-area">
-                    <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
-                    <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
-                  </td>
-              </tr>
-                {{#each item in group.checks}}
-                  <tr>
-                    <td>{{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
-                    <td class="centered">
-                      <div class="centered-box">
-                        <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                        <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
-                      </div>
-                    </td>
-                    <td class="centered">
-                      <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
-                  </tr>
-                {{/each}}
-            {{/each}}
-          </tbody>
-        </table>
-        <div class="row-fluid">
-          <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
-          <button class="btn pull-right" {{action goToMain}}>Cancel</button>
-        </div>
-    </div>
+                  <td class="centered">
+                    <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
+                </tr>
+              {{/each}}
+          {{/each}}
+        </tbody>
+      </table>
+      <div class="row-fluid">
+        <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
+        <button class="btn pull-right" {{action goToMain}}>Cancel</button>
+      </div>
   </div>
-{{else}}
+</div>
+{{#if needsOverlay}}
   {{#if isSaved}}
     {{view Checklists.OverlayView}}
   {{else}}

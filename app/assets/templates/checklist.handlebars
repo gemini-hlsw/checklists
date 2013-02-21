@@ -1,76 +1,76 @@
-  <div class="span8 offset2 centered-content">
-    <div class="well centered-content">
-      <div class="row-fluid">
-      <h1>{{name}} checklist for {{longFormattedDate}}</h1>
-      <div class="row-fluid">
-        <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
-        <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
-      </div>
-      <div class="row-fluid">
-        <div class="well form-horizontal">
-          <div class="control-group">
-            <label class="control-label wide-label" for="supervisors">Eng supervising the activity</label>
-            <div class="controls names-selectors">
-              {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.engineers"}}
-            </div>
-          </div><div class="control-group wide-label">
-            <label class="control-label" for="technicians">Tech/Eng performing the checks</label>
-            <div class="controls names-selectors">
-              {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2 mousetrap" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.technicians"}}
-            </div>
+<div class="span8 offset2 centered-content">
+  <div class="well centered-content">
+    <div class="row-fluid">
+    <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+    <div class="row-fluid">
+      <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
+      <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
+    </div>
+    <div class="row-fluid">
+      <div class="well form-horizontal">
+        <div class="control-group">
+          <label class="control-label wide-label" for="supervisors">Eng supervising the activity</label>
+          <div class="controls names-selectors">
+            {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.engineers"}}
+          </div>
+        </div><div class="control-group wide-label">
+          <label class="control-label" for="technicians">Tech/Eng performing the checks</label>
+          <div class="controls names-selectors">
+            {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2 mousetrap" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.technicians"}}
           </div>
         </div>
       </div>
-      <div class="accordion" id="accordion">
-        <tbody>
-          {{#each group in groups}}
-            <div class="accordion-group checklist-accordion-group">
-              <div class="accordion-heading checklist-accordion-heading">
-                <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}><i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}> {{group.title}}</i></a>
-              </div>
-              <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
-                <div class="accordion-inner checklist-accordion-inner">
-                    <table class="table table-stripped table-bordered checklist-table ">
-                      <tbody>
-                        {{#each item in group.checks}}
-                          <tr>
-                            <td class="centered checklist-description-column">{{item.description}}</td>
-                            <td class="centered checklist-status-column centered-content">
-                              {{view Ember.Select
-                                  class="input-small"
-                                  contentBinding="Checklists.CheckValues"
-                                  selectionBinding="item.status"}}
-                            </td>
-                            <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
-                          </tr>
-                        {{/each}}
-                      </tbody>
-                    </table>
-                </div> 
-              </div>
+    </div>
+    <div class="accordion" id="accordion">
+      <tbody>
+        {{#each group in groups}}
+          <div class="accordion-group checklist-accordion-group">
+            <div class="accordion-heading checklist-accordion-heading">
+              <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}><i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}> {{group.title}}</i></a>
             </div>
-          {{/each}}
+            <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
+              <div class="accordion-inner checklist-accordion-inner">
+                  <table class="table table-stripped table-bordered checklist-table ">
+                    <tbody>
+                      {{#each item in group.checks}}
+                        <tr>
+                          <td class="centered checklist-description-column">{{item.description}}</td>
+                          <td class="centered checklist-status-column centered-content">
+                            {{view Ember.Select
+                                class="input-small"
+                                contentBinding="Checklists.CheckValues"
+                                selectionBinding="item.status"}}
+                          </td>
+                          <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
+                        </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+              </div> 
+            </div>
+          </div>
+        {{/each}}
+    </div>
+    <div class="centered-box row-fluid">
+      <div class="center-box pull-left">
+        <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
+        <button class="btn pull-left" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
       </div>
-      <div class="centered-box row-fluid">
-        <div class="center-box pull-left">
-          <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
-          <button class="btn pull-left" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
-        </div>
-        <div class="center-box pull-right">
-          {{#if closed}}
-            <div class="pull-right alert alert-info">Day closed</div>
-          {{else}}
-            <button class="btn btn-primary pull-right" {{action saveChecklist this}}>Save</button>
-            <button class="btn btn-warning pull-right" {{action closeChecklist this}}>Save &amp; Close</button>
-          {{/if}}
-        </div>
+      <div class="center-box pull-right">
+        {{#if closed}}
+          <div class="pull-right alert alert-info">Day closed</div>
+        {{else}}
+          <button class="btn btn-primary pull-right" {{action saveChecklist this}}>Save</button>
+          <button class="btn btn-warning pull-right" {{action closeChecklist this}}>Save &amp; Close</button>
+        {{/if}}
       </div>
     </div>
   </div>
-  {{#if needsOverlay}}
-    {{#if isSaved}}
-      {{view Checklists.OverlayView}}
-    {{else}}
-      {{view Checklists.SavingOverlayView}}
-    {{/if}}
+</div>
+{{#if needsOverlay}}
+  {{#if isSaved}}
+    {{view Checklists.OverlayView}}
+  {{else}}
+    {{view Checklists.SavingOverlayView}}
   {{/if}}
+{{/if}}
