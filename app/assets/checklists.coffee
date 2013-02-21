@@ -172,6 +172,9 @@ Checklists.Select2Tags = Ember.View.extend
   value: null
   dropdownCssClass: ''
   containerCssClass: ''
+  tagsUpdater: (->
+    this.$().select2({tags: @get('tags')})
+  ).observes('tags')
 
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
