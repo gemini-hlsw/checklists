@@ -93,7 +93,7 @@ Checklists.OverlayView = Ember.View.extend
     this._super()
     this.$('.overlay').spin('large', 'white')
   willDestroyElement: ->
-    true
+    this.$('.overlay').spin(false)
 
 # Displays an overlay with a spinning wheel and a message
 Checklists.SavingOverlayView = Ember.View.extend
@@ -101,6 +101,8 @@ Checklists.SavingOverlayView = Ember.View.extend
   didInsertElement: ->
     this._super()
     this.$('.overlay').spin('large', 'white')
+  willDestroyElement: ->
+    this.$('.overlay').spin(false)
 
 Checklists.SitesRepository = Ember.Object.create
   sites: []
