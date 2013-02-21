@@ -1,7 +1,15 @@
 <div class="span8 offset2 centered-content">
   <div class="well centered-content">
     <div class="row-fluid">
-    <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+      {{#if needsOverlay}}
+        {{#if isSaved}}
+          <h1>Loading...</h1>
+        {{else}}
+          <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+        {{/if}}
+      {{else}}
+        <h1>{{name}} checklist for {{longFormattedDate}}</h1>
+      {{/if}}
     <div class="row-fluid">
       <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
       <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
