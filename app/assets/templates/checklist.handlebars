@@ -47,10 +47,7 @@
                         <tr>
                           <td class="centered checklist-description-column">{{item.description}}</td>
                           <td class="centered checklist-status-column centered-content">
-                            {{view Ember.Select
-                                class="input-small"
-                                contentBinding="Checklists.CheckValues"
-                                selectionBinding="item.status"}}
+                            {{view Checklists.Select2 class="input-small" containerCssClass="checklist-select2" placeholder="Status" valuesBinding="item.status" optionsBinding="Checklists.CheckValues"}}
                           </td>
                           <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
                         </tr>

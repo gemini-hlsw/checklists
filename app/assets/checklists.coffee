@@ -183,20 +183,40 @@ Checklists.Select2Tags = Ember.View.extend
       this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data)
   ).observes('values')
 
+Checklists.Select2 = Ember.View.extend
+  tagName: 'input'
+  classNames: ['ember-tags']
+  defaultTemplate: ''
+
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass'],
+  type: 'hidden'
+  values: null
+  options: null
+  value: null
+  dropdownCssClass: ''
+  containerCssClass: ''
+  valuesUpdater: (->
+    data = []
+    data.push({id: k, text:i}) for i,k in @get('options') when i.trim().length > 0
+    val = this.$().select2("val")
+    if val.length isnt data.length
+      this.$().select2({data: data, initSelection: @_initSelection}).select2("val", data)
+  ).observes('values')
+
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
       view = Ember.View.views[e.context.id]
-      values = if view.get('values')? then view.get('values') else []
+      values = if view.get('values')? then view.get('options') else []
       data = []
-      data.push({id: i, text:i}) for i in values when i.trim().length > 0
+      data.push({id: k, text:i}) for i,k in values when i.trim().length > 0
       cb(data)
   _change: (event, ref) ->
-    Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
+    true
+    #Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
   didInsertElement: ->
     data = []
-    (data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0) if @get('values')?
-    tags = if @get('tags')? then @get('tags') else []
-    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
+    (data.push({id: k, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('values')?
+    this.$().select2({data: data, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
 
 ###
 # View and controller to edit a template
