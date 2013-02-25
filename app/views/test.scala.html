@@ -45,27 +45,42 @@
     </div>
     </script>
 
+    <script type="text/x-handlebars" data-template-name="row_pos">
+      position: {{view.parentView.position}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="row_st">
+      status:
+            {{view Ember.Select
+              class="input-small"
+              contentBinding="view.parentView.choices"
+              selectionBinding="view.parentView.status"}} -> {{view.parentView.status}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="row_com">
+      comment:
+        {{view Ember.TextArea class="textarea-animated" name="description" valueBinding="view.parentView.comment"}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="row1">
+        <li>pos: {{position}}</li>
+        <li>
+          {{view Ember.Select
+              class="input-small"
+              contentBinding="App.CheckValues"
+              selectionBinding="status"}}
+              {{status}}
+        </li>
+        <li>{{view Ember.TextArea class="textarea-animated" name="description" valueBinding="comment"}}</li>
+    </script>
+
     <script type="text/x-handlebars" data-template-name="index">
     <h2 > Content: </h2>
     <button {{action "load" target="controller"}}>Load</button>
     {{#each parent in content}}
-              <table class="table table-stripped table-bordered checklist-table ">
-                <tbody>
-                  {{#each item in parent.children}}
-                    <tr>
-                      <td class="centered checklist-description-column">{{item.position}}</td>
-                      <td class="centered checklist-status-column centered-content">
-                        {{view Ember.Select
-                            class="input-small"
-                            contentBinding="App.CheckValues"
-                            selectionBinding="item.position"}}
-                      </td>
-                      <td class="centered centered-content checklist-comment-column">{{view Ember.TextArea class="textarea-animated" name="description" valueBinding="item.position"}}</td>
-                    </tr>
-                  {{/each}}
-                </tbody>
-              </table>
+      {{view App.RowsView contentBinding="parent.children"}}
     {{/each}}
+
 </script>
     <!-- JS Files
     ================================================== -->
