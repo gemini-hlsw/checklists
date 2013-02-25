@@ -13,7 +13,7 @@ import JsonFormatters._
 import scalaz._
 import Scalaz._
 
-case class CheckTemplate(title: String, position: Int = 0)
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[StatusChoice] = Seq.empty)
 
 object CheckTemplate {
   implicit object CheckTemplateFormat extends Format[CheckTemplate] {
@@ -29,6 +29,21 @@ object CheckTemplate {
   }
 }
 
+case class StatusChoice(name: String)
+
+object StatusChoice {
+  val defaultChoices = Seq(StatusChoice("", "done", "not done", "NA", "Ok", "pending", "not Ok"))
+
+  implicit object StatusChoiceFormat extends Format[StatusChoice] {
+    def writes(c: StatusChoice) = JsObject(Seq(
+      "choice" -> JsString(c.name)
+    ))
+
+    def reads(json: JsValue) = Choice(
+      name = ~(json \ "name").asOpt[String]
+    )
+  }
+}
 
 case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate], position: Int = 0)
 
