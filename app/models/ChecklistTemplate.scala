@@ -32,14 +32,14 @@ object CheckTemplate {
 case class StatusChoice(name: String)
 
 object StatusChoice {
-  val defaultChoices = Seq(StatusChoice("", "done", "not done", "NA", "Ok", "pending", "not Ok"))
+  val defaultChoices = Seq(StatusChoice(""), StatusChoice("done"), StatusChoice("not done"), StatusChoice("NA"), StatusChoice("Ok"), StatusChoice("pending"), StatusChoice("not Ok"))
 
   implicit object StatusChoiceFormat extends Format[StatusChoice] {
     def writes(c: StatusChoice) = JsObject(Seq(
       "choice" -> JsString(c.name)
     ))
 
-    def reads(json: JsValue) = Choice(
+    def reads(json: JsValue) = StatusChoiceFormatChoice(
       name = ~(json \ "name").asOpt[String]
     )
   }
