@@ -39,7 +39,7 @@ object StatusChoice {
       "choice" -> JsString(c.name)
     ))
 
-    def reads(json: JsValue) = StatusChoiceFormatChoice(
+    def reads(json: JsValue) = StatusChoice(
       name = ~(json \ "name").asOpt[String]
     )
   }
