@@ -18,7 +18,7 @@
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
-                            {{view Checklists.Select2Checks class="input-medium" containerCssClass="checklist-select2" placeholder="Status" valueBinding="item.choices" optionsBinding="Checklists.CheckValues"}}
+                            {{!view Checklists.Select2Checks class="input-medium" containerCssClass="checklist-select2" placeholder="Status" valueBinding="item.choices" optionsBinding="Checklists.CheckValues"}}
       <table class="table table-stripped table-bordered">
         <tbody>
           {{#each group in groups}}
@@ -39,24 +39,40 @@
                   <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
                 </td>
             </tr>
-              {{#each item in group.checks}}
-                <tr>
-                  <td class="centered">
-                    <div class="centered-box">
-                      {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}
-                      <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i>&nbsp;</button>
-                    </div>
-                  </td>
-                  <td class="centered">
-                    <div class="centered-box">
-                      <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                      <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
-                    </div>
-                  </td>
-                  <td class="centered">
-                    <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
-                </tr>
-              {{/each}}
+            {{#each item in group.checks}}
+              <tr>
+                <td class="centered">
+                  <div class="centered-box">
+                    {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}
+                    <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i>&nbsp;</button>
+                  </div>
+                  <div class="well collapse in">
+                    <table class="table table-striped table-hover">
+                      <tbody>
+                        {{#each c in item.choices}}
+                          <tr>
+                            <td>
+                              <label class="checkbox">
+                                {{view Ember.Checkbox checkedBinding="c.selected" classNames="checkbox"}}{{c.name}}
+                              </label>
+                            </small>
+                            </td>
+                          </tr>
+                        {{/each}}
+                      <tbody>
+                    </table>
+                  </div>
+                </td>
+                <td class="centered">
+                  <div class="centered-box">
+                    <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
+                    <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
+                  </div>
+                </td>
+                <td class="centered">
+                  <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
+              </tr>
+            {{/each}}
           {{/each}}
         </tbody>
       </table>

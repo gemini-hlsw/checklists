@@ -13,13 +13,20 @@ import JsonFormatters._
 import scalaz._
 import Scalaz._
 
-case class CheckTemplate(title: String, position: Int = 0, choices:Seq[StatusChoice] = Seq.empty)
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[(String, Boolean)] = Seq.empty) {
+  def hydrateChecks(defaultChoices:Set[String]):CheckTemplate = if (this.choices.isEmpty) {
+      copy(choices = defaultChoices.map(_ -> true).toSeq)
+    } else {
+      this
+    }
+}
 
 object CheckTemplate {
   implicit object CheckTemplateFormat extends Format[CheckTemplate] {
     def writes(c: CheckTemplate) = JsObject(Seq(
-      "title" -> JsString(c.title),
-      "position" -> JsNumber(c.position)
+      "title"    -> JsString(c.title),
+      "position" -> JsNumber(c.position),
+      "choices"  -> JsArray(c.choices.map(x => JsObject(Seq("name" -> JsString(x._1), "selected" -> JsBoolean(x._2)))))
     ))
 
     def reads(json: JsValue) = CheckTemplate(
@@ -45,7 +52,9 @@ object StatusChoice {
   }
 }
 
-case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate], position: Int = 0)
+case class CheckTemplateGroup(name:String, title:String, checks: Seq[CheckTemplate], position: Int = 0) {
+  def hydrateChecks(choices: Set[String]):CheckTemplateGroup = copy(checks = checks.map(_.hydrateChecks(choices)))
+}
 
 object CheckTemplateGroup {
   implicit object ChecklistTemplateGroupFormat extends Format[CheckTemplateGroup] {
@@ -82,8 +91,9 @@ object TemplateSettings {
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
 
-  def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).toSeq
-  def findTemplate(site: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("site" -> site))
+  def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
+  def findTemplate(site: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("site" -> site)).map(hydrateChecks)
+  def hydrateChecks(t: ChecklistTemplate):ChecklistTemplate = t.copy(groups = t.groups.map(_.hydrateChecks(t.choices)))
 
   def saveTemplate(t: ChecklistTemplate) = {
     val id = findTemplate(t.site).map(_.id).getOrElse(t.id)

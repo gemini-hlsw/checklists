@@ -273,7 +273,10 @@ Checklists.TemplateView = Ember.View.extend
       false
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
-
+  showChoices: (event) ->
+    p event
+    p this.$(event.context)
+    p this.$(event.context).siblings()
   addGroup:  ->
     confirm = (result) =>
       if result?
@@ -365,9 +368,14 @@ Checklists.Template = Ember.Object.extend
   normalizeGroupPositions: ->
     e.set('position', i) for e, i in @get('groups')
 
+Checklists.TemplateCheckChoice = Ember.Object.extend
+  name: ''
+  selected: false
+
 Checklists.TemplateCheck = Ember.Object.extend
   title: ''
   position: 0
+  choices: Ember.A()
 
 Checklists.TemplateGroup = Ember.Object.extend
   name: ''
@@ -395,10 +403,15 @@ Checklists.TemplateRepository = Ember.Object.create
       success: (response) =>
         settings.setProperties response
     settings
+  choiceFromJson: (json) ->
+    Checklists.TemplateCheckChoice.create
+      name: json.name
+      selected: json.selected
   checkFromJson: (json, index) ->
     Checklists.TemplateCheck.create
       title: json.title
       position: json.position
+      choices: Ember.A(Checklists.TemplateRepository.choiceFromJson(c) for c in json.choices)
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
       name: ''
