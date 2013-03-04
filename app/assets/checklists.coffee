@@ -305,9 +305,29 @@ Checklists.TemplateController = Ember.ObjectController.extend
   choicesChange: ( ->
     previous = @get('choicesPrevious')
     if (previous.length > 0)
-      @get('content').updatedChoices(previous)
+      @_updatedChoices()
     @set('choicesPrevious', @get('choices'))
   ).observes('content.choices.@each')
+  _updatedChoices: () ->
+    previous = @get('choicesPrevious')
+    current = @get('content.choices')
+    # This is n**2 but let's assume we won't have very long lists of choices
+    if (previous.length > current.length)
+      removed = previous.filter (i) ->
+        not current.contains(i)
+      @get('content').removeChoice(removed[0])
+      # This should be in the view layer
+      $.gritter.add
+        title: "'#{removed[0]}' removed!"
+        text: "The status choice '#{removed[0]}' has been removed from each of the checks"
+    if (previous.length < current.length)
+      added = current.filter (i) ->
+        not previous.contains(i)
+      @get('content').addChoice(added[0])
+      # This should be in the view layer
+      $.gritter.add
+        title: "'#{added[0]}' added!"
+        text: "The status choice '#{added[0]}' has not been added to existing checks but you can enable it"
 
 Checklists.Template = Ember.Object.extend
   site: ''
@@ -319,17 +339,6 @@ Checklists.Template = Ember.Object.extend
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')
-  updatedChoices: (previous) ->
-    current = @get('choices')
-    # This is n**2 but let's assume we won't have very long lists of choices
-    if (previous.length > current.length)
-      removed = previous.filter (i) ->
-        not current.contains(i)
-      @removeChoice(removed[0])
-    if (previous.length < current.length)
-      added = current.filter (i) ->
-        not previous.contains(i)
-      @addChoice(added[0])
   removeChoice: (choice) ->
     @get('groups').forEach (g) ->
       g.get('checks').forEach (c) ->
