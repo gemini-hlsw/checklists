@@ -820,8 +820,9 @@ Checklists.Router = Ember.Router.extend
         Checklists.TemplateRepository.saveTemplate(template)
       goBack: (router) ->
         site = router.get('templateController').get('content.site')
-        console.log(site)
-        router.transitionTo('checklist', {site: site, date: ''})
+        checklist = router.get('checklistController').get('content')
+        date = if checklist? then checklist.get('date') else moment().format(Checklists.urlDateFormat)
+        router.transitionTo('checklist', {site: site, date: date})
       serialize: (router, context) ->
         site: context.get('site')
       deserialize: (router, urlParams) ->

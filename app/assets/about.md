@@ -12,6 +12,7 @@ Names can be added directly on the checklist and will be remembered in the futur
 - Groups on the checklist page are by default collapsed for easier navigation
 - Added ctrl+s and command+s shortcuts to save a checklist or a template
 - Removed checklist top headers
+- Added back button to the template editor, let's you go back to the last edited checklist
 
 ###### Version 0.2
 
