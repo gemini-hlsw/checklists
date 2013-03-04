@@ -18,7 +18,6 @@
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
-                            {{!view Checklists.Select2Checks class="input-medium" containerCssClass="checklist-select2" placeholder="Status" valueBinding="item.choices" optionsBinding="Checklists.CheckValues"}}
       <table class="table table-stripped table-bordered">
         <tbody>
           {{#each group in groups}}
@@ -46,6 +45,7 @@
         </tbody>
       </table>
       <div class="row-fluid">
+        <button class="btn pull-left" {{action goBack}}><i class="icon-reply"></i>&nbsp;Back</button>
         <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
         <button class="btn pull-right" {{action goToMain}}>Cancel</button>
       </div>
