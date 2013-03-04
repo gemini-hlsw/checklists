@@ -368,6 +368,9 @@ Checklists.Template = Ember.Object.extend
   normalizeGroupPositions: ->
     e.set('position', i) for e, i in @get('groups')
 
+Checklists.ChoicesList = Ember.View.extend
+  templateName: 'choiceslist'
+
 Checklists.TemplateCheckChoice = Ember.Object.extend
   name: ''
   selected: false

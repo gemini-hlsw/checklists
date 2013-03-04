@@ -1,0 +1,16 @@
+<div class="well collapse in">
+  <table class="table table-striped table-hover">
+    <tbody>
+      {{#each c in choices}}
+        <tr>
+          <td>
+            <label class="checkbox">
+              {{view Ember.Checkbox checkedBinding="c.selected" classNames="checkbox"}}{{c.name}}
+            </label>
+          </small>
+          </td>
+        </tr>
+      {{/each}}
+    <tbody>
+  </table>
+</div>
