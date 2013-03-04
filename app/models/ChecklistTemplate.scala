@@ -32,7 +32,7 @@ object CheckTemplate {
 case class StatusChoice(name: String)
 
 object StatusChoice {
-  val defaultChoices = Seq(StatusChoice(""), StatusChoice("done"), StatusChoice("not done"), StatusChoice("NA"), StatusChoice("Ok"), StatusChoice("pending"), StatusChoice("not Ok"))
+  val defaultChoices = Set("", "done", "not done", "NA", "Ok", "pending", "not Ok")
 
   implicit object StatusChoiceFormat extends Format[StatusChoice] {
     def writes(c: StatusChoice) = JsObject(Seq(
@@ -65,7 +65,7 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = StatusChoice.defaultChoices)
 
 case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String])
 
@@ -106,7 +106,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       "name"        -> JsString(t.name),
       "groups"      -> Json.toJson(t.groups),
       "engineers"   -> Json.toJson(t.engineers),
-      "technicians" -> Json.toJson(t.technicians)
+      "technicians" -> Json.toJson(t.technicians),
+      "choices"     -> Json.toJson(t.choices)
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
@@ -114,7 +115,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       name        = ~(json \ "name").asOpt[String],
       groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
       engineers   = (json \ "engineers").as[Seq[String]].toSet,
-      technicians = (json \ "technicians").as[Seq[String]].toSet
+      technicians = (json \ "technicians").as[Seq[String]].toSet,
+      choices     = (json \ "choices").as[Seq[String]].toSet
     )
   }
 }
