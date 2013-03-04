@@ -18,6 +18,7 @@
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+                            {{view Checklists.Select2Checks class="input-medium" containerCssClass="checklist-select2" placeholder="Status" valueBinding="item.choices" optionsBinding="Checklists.CheckValues"}}
       <table class="table table-stripped table-bordered">
         <tbody>
           {{#each group in groups}}
@@ -40,7 +41,12 @@
             </tr>
               {{#each item in group.checks}}
                 <tr>
-                  <td>{{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}</td>
+                  <td class="centered">
+                    <div class="centered-box">
+                      {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}
+                      <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i>&nbsp;</button>
+                    </div>
+                  </td>
                   <td class="centered">
                     <div class="centered-box">
                       <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>

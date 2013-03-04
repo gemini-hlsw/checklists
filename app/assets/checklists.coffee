@@ -227,6 +227,42 @@ Checklists.Select2 = Ember.View.extend
     this.$().select2({data: data, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
 
 ###
+# View of a resizable text area
+###
+Checklists.Select2Checks = Ember.View.extend
+  tagName: 'input'
+  classNames: ['ember-tags']
+  defaultTemplate: ''
+
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass'],
+  type: 'hidden'
+  options: null
+  value: null
+  dropdownCssClass: ''
+  containerCssClass: ''
+  valuesUpdater: (->
+    data = []
+    data.push({id: i, text:i}) for i,k in @get('options') when i.trim().length > 0
+    val = this.$().select2("val")
+    if val.length isnt data.length
+      this.$().select2({data: data, initSelection: @_initSelection}).select2("val", data)
+  ).observes('values')
+  _format: (state) ->
+    console.log(state)
+    "<input type='checkbox'>&nbsp;" + state.text;
+  _initSelection: (e, cb) ->
+    if Ember.View.views[e.context.id]?
+      view = Ember.View.views[e.context.id]
+      data = if view.get('value')? then {id: view.get('value'), text: view.get('value')} else null
+      cb(data)
+  _change: (event, ref) ->
+    Ember.View.views[event.target.id].set('value', event.val) if Ember.View.views[event.target.id]
+  didInsertElement: ->
+    data = []
+    (data.push({id: i, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('options')?
+    this.$().select2({data: data, multiple: true, closeOnSelect: true, formatResult: @_format, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
+
+###
 # View and controller to edit a template
 ###
 Checklists.TemplateView = Ember.View.extend

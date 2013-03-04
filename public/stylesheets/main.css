@@ -106,8 +106,12 @@ textarea:focus {
     width: 85px;
 }
 
+.template-field {
+    margin-top: 10px;
+}
+
 .input-adjusted {
-    width: 96%;
+    width: 85%;
 }
 
 .wide-label {
