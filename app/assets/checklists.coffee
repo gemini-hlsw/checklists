@@ -202,14 +202,13 @@ Checklists.Select2 = Ember.View.extend
 
   attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass'],
   type: 'hidden'
-  values: null
   options: null
   value: null
   dropdownCssClass: ''
   containerCssClass: ''
   valuesUpdater: (->
     data = []
-    data.push({id: k, text:i}) for i,k in @get('options') when i.trim().length > 0
+    data.push({id: i, text:i}) for i,k in @get('options') when i.trim().length > 0
     val = this.$().select2("val")
     if val.length isnt data.length
       this.$().select2({data: data, initSelection: @_initSelection}).select2("val", data)
@@ -218,16 +217,13 @@ Checklists.Select2 = Ember.View.extend
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
       view = Ember.View.views[e.context.id]
-      values = if view.get('values')? then view.get('options') else []
-      data = []
-      data.push({id: k, text:i}) for i,k in values when i.trim().length > 0
+      data = if view.get('value')? then {id: view.get('value'), text: view.get('value')} else null
       cb(data)
   _change: (event, ref) ->
-    true
-    #Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
+    Ember.View.views[event.target.id].set('value', event.val) if Ember.View.views[event.target.id]
   didInsertElement: ->
     data = []
-    (data.push({id: k, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('values')?
+    (data.push({id: i, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('options')?
     this.$().select2({data: data, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
 
 ###
