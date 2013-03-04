@@ -372,6 +372,8 @@ Checklists.Template = Ember.Object.extend
 
 Checklists.ChoicesList = Ember.View.extend
   templateName: 'choiceslist'
+  checkAll: ->
+    @get('context').checkAll()
 
 Checklists.TemplateCheckChoice = Ember.Object.extend
   name: ''
@@ -381,6 +383,9 @@ Checklists.TemplateCheck = Ember.Object.extend
   title: ''
   position: 0
   choices: Ember.A()
+  checkAll: ->
+    @get('choices').forEach (i) ->
+      i.set('selected', true)
 
 Checklists.TemplateGroup = Ember.Object.extend
   name: ''
