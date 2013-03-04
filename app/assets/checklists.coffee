@@ -262,6 +262,12 @@ Checklists.Select2Checks = Ember.View.extend
     (data.push({id: i, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('options')?
     this.$().select2({data: data, multiple: true, closeOnSelect: true, formatResult: @_format, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
 
+Checklists.TemplateCheckView = Ember.View.extend
+  templateName: 'templatecheck'
+  choicesDisplayed: false
+  showChoices: ->
+    @set('choicesDisplayed', not @get('choicesDisplayed'))
+
 ###
 # View and controller to edit a template
 ###
@@ -273,10 +279,6 @@ Checklists.TemplateView = Ember.View.extend
       false
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
-  showChoices: (event) ->
-    p event
-    p this.$(event.context)
-    p this.$(event.context).siblings()
   addGroup:  ->
     confirm = (result) =>
       if result?

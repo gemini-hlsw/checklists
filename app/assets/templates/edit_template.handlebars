@@ -40,23 +40,7 @@
                 </td>
             </tr>
             {{#each item in group.checks}}
-              <tr>
-                <td class="centered">
-                  <div class="centered-box">
-                    {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="item.title"}}
-                    <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i>&nbsp;</button>
-                  </div>
-                  {{view Checklists.ChoicesList contextBinding="item"}}
-                </td>
-                <td class="centered">
-                  <div class="centered-box">
-                    <button class="btn centered" {{action moveUp item group target="view"}}><i class="icon-chevron-up"></i></button>
-                    <button class="btn centered" {{action moveDown item group target="view"}}><i class="icon-chevron-down"></i></button>
-                  </div>
-                </td>
-                <td class="centered">
-                  <button class="centered-box btn btn-danger pull-right" {{action deleteCheck item group target="view"}}><i class="icon-trash"></i></button></td>
-              </tr>
+              {{view Checklists.TemplateCheckView contextBinding="item"}}
             {{/each}}
           {{/each}}
         </tbody>
