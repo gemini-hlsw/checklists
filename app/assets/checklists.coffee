@@ -154,9 +154,6 @@ Checklists.TemplateField = Ember.TextField.extend
   attributeBindings: ['autofocus']
   autofocus: 'autofocus'
 
-Checklists.Tags = Ember.Object.create
-  tags: ['a', 'Carlos Quiroz', 'd']
-
 ###
 # View of a resizable text area
 ###
@@ -182,6 +179,21 @@ Checklists.Select2Tags = Ember.View.extend
     if val.length isnt data.length
       this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data)
   ).observes('values')
+
+  _initSelection: (e, cb) ->
+    if Ember.View.views[e.context.id]?
+      view = Ember.View.views[e.context.id]
+      values = if view.get('values')? then view.get('values') else []
+      data = []
+      data.push({id: i, text:i}) for i in values when i.trim().length > 0
+      cb(data)
+  _change: (event, ref) ->
+    Ember.View.views[event.target.id].set('values', event.val) if Ember.View.views[event.target.id]
+  didInsertElement: ->
+    data = []
+    (data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0) if @get('values')?
+    tags = if @get('tags')? then @get('tags') else []
+    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
 
 Checklists.Select2 = Ember.View.extend
   tagName: 'input'
