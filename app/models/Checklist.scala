@@ -13,19 +13,20 @@ import scala.collection.immutable.TreeMap
 import scalaz._
 import Scalaz._
 
-case class Check(description:String, status: Option[String], comment: Option[String]) {
+case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices) {
   def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment))
 }
 
 object Check {
   def newFromTemplate(t: CheckTemplate):Check=
-    Check(t.title, None, None)
+    Check(t.title, None, None, t.choices.filter(_.selected).map(_.name))
 
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
       "description" -> JsString(c.description),
-      "status" -> JsString(c.status.getOrElse("")),
-      "comment" -> JsString(c.comment.getOrElse(""))
+      "status"      -> JsString(c.status.getOrElse("")),
+      "comment"     -> JsString(c.comment.getOrElse("")),
+      "choices"     -> Json.toJson(c.choices)
     ))
 
     def reads(json: JsValue) = Check(

@@ -15,7 +15,12 @@ import Scalaz._
 
 case class CheckChoice(name: String, selected: Boolean)
 
-case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = Seq.empty) {
+object CheckChoice {
+  val defaultChoices = Seq("done", "not done", "NA", "Ok", "pending", "not Ok")
+  val defaultCheckChoices = defaultChoices.map(CheckChoice(_, true))
+}
+
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = CheckChoice.defaultCheckChoices) {
   def hydrateChecks(defaultChoices:Set[String]):CheckTemplate = if (this.choices.isEmpty) {
       copy(choices = defaultChoices.map(CheckChoice(_, true)).toSeq)
     } else {
@@ -28,29 +33,13 @@ object CheckTemplate {
     def writes(c: CheckTemplate) = JsObject(Seq(
       "title"    -> JsString(c.title),
       "position" -> JsNumber(c.position),
-      "choices"  -> JsArray(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected)))))
+      "choices"  -> Json.toJson(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected)))))
     ))
 
     def reads(json: JsValue) = CheckTemplate(
       title    = ~(json \ "title").asOpt[String],
       position = ~(json \ "position").asOpt[Int],
       choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean]))
-    )
-  }
-}
-
-case class StatusChoice(name: String)
-
-object StatusChoice {
-  val defaultChoices = Set("done", "not done", "NA", "Ok", "pending", "not Ok")
-
-  implicit object StatusChoiceFormat extends Format[StatusChoice] {
-    def writes(c: StatusChoice) = JsObject(Seq(
-      "choice" -> JsString(c.name)
-    ))
-
-    def reads(json: JsValue) = StatusChoice(
-      name = ~(json \ "name").asOpt[String]
     )
   }
 }
@@ -77,7 +66,7 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = StatusChoice.defaultChoices)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
 case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String])
 
