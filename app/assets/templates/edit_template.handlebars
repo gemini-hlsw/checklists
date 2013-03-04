@@ -18,32 +18,36 @@
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
-      <table class="table table-stripped table-bordered">
-        <tbody>
           {{#each group in groups}}
-            <tr class="group-header">
-                <td class="centered">
-                  <div>
-                    {{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
-                  </div>
-                </td>
-                <td class="centered template-buttons-area">
-                  <div class="centered-box">
-                    <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
-                    <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
-                  </div>
-                </td>
-                <td class="centered template-buttons-area">
-                  <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
-                  <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
-                </td>
-            </tr>
-            {{#each item in group.checks}}
-              {{view Checklists.TemplateCheckView contextBinding="item"}}
-            {{/each}}
+            <div class="accordion-group checklist-accordion-group">
+              <div class="accordion-heading checklist-accordion-heading">
+                <table class="table table-bordered group-header  checklist-accordion-toggle">
+                  <tbody>
+                    <tr>
+                      <td class="centered">
+                        <div class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
+                          <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;&nbsp;&nbsp;{{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
+                        </div>
+                      </td>
+                      <td class="centered template-buttons-area">
+                        <div class="centered-box">
+                          <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
+                          <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
+                        </div>
+                      </td>
+                      <td class="centered template-buttons-area">
+                        <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                        <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              {{#each item in group.checks}}
+                {{view Checklists.TemplateCheckView contextBinding="item"}}
+              {{/each}}
+            </div>
           {{/each}}
-        </tbody>
-      </table>
       <div class="row-fluid">
         <button class="btn pull-left" {{action goBack}}><i class="icon-reply"></i>&nbsp;Back</button>
         <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>

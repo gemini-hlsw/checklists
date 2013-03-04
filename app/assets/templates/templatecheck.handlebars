@@ -1,19 +1,27 @@
-<tr>
-  <td class="centered">
-    <div class="centered-box">
-      {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="title"}}
-      <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i></button>
-    </div>
-    {{#if view.choicesDisplayed}}
-      {{view Checklists.ChoicesList contextBinding="this"}}
-    {{/if}}
-  </td>
-  <td class="centered">
-    <div class="centered-box">
-      <button class="btn centered" {{action moveUp this group target="view.parentView"}}><i class="icon-chevron-up"></i></button>
-      <button class="btn centered" {{action moveDown this group target="view.parentView"}}><i class="icon-chevron-down"></i></button>
-    </div>
-  </td>
-  <td class="centered">
-    <button class="centered-box btn btn-danger pull-right" {{action deleteCheck this group target="view.parentView"}}><i class="icon-trash"></i></button></td>
-</tr>
+            <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
+              <div class="accordion-inner checklist-accordion-inner">
+<table class="table table-bordered table-condensed">
+  <tbody>
+    <tr>
+      <td class="centered">
+        <div class="centered-box">
+          {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="title"}}
+          <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i></button>
+        </div>
+        {{#if view.choicesDisplayed}}
+          {{view Checklists.ChoicesList contextBinding="this"}}
+        {{/if}}
+      </td>
+      <td class="centered">
+        <div class="centered-box">
+          <button class="btn centered" {{action moveUp this group target="view.parentView"}}><i class="icon-chevron-up"></i></button>
+          <button class="btn centered" {{action moveDown this group target="view.parentView"}}><i class="icon-chevron-down"></i></button>
+        </div>
+      </td>
+      <td class="centered">
+        <button class="centered-box btn btn-danger pull-right" {{action deleteCheck this group target="view.parentView"}}><i class="icon-trash"></i></button></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>

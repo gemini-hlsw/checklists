@@ -279,6 +279,8 @@ Checklists.TemplateView = Ember.View.extend
       false
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
+  toggleGroup: (event) ->
+    event.context.set('collapsed', not event.context.get('collapsed'))
   addGroup:  ->
     confirm = (result) =>
       if result?
@@ -384,7 +386,7 @@ Checklists.Template = Ember.Object.extend
       c = checks[position]
       checks.replace(position, 2, [r, c])
       g.normalizeCheckPositions()
-   moveGroupUp: (position) ->
+  moveGroupUp: (position) ->
     if position > 0
       groups = @get('groups')
       r = groups[position - 1]
@@ -434,6 +436,7 @@ Checklists.TemplateGroup = Ember.Object.extend
   title: ''
   checks: Ember.A()
   position: 0
+  collapsed: false # Move to controller
   normalizeCheckPositions: ->
     e.set('position', i) for e, i in @get('checks')
 
