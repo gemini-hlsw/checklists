@@ -18,13 +18,15 @@
         </div>
       </div>
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+      </div>
+      <div class="row-fluid">
           {{#each group in groups}}
             <div class="accordion-group checklist-accordion-group">
-              <div class="accordion-heading checklist-accordion-heading">
-                <table class="table table-bordered group-header  checklist-accordion-toggle">
+              <div class="checklist-accordion-heading">
+                <table class="table-condensed group-header  checklist-accordion-toggle">
                   <tbody>
                     <tr>
-                      <td class="centered">
+                      <td class="centered checklist-template-name-column">
                         <div class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
                           <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;&nbsp;&nbsp;{{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
                         </div>

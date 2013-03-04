@@ -104,6 +104,11 @@ textarea:focus {
 
 .template-buttons-area {
     width: 85px;
+    min-width: 85px;
+}
+
+.checklist-template-name-column {
+    width: 100%;
 }
 
 .template-field {
@@ -166,7 +171,6 @@ textarea:focus {
 .select2-search-choice-close {
     top: 6px !important;
 }
-
 
 .select2-search-choice-close {
     top: 6px;
