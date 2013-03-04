@@ -285,7 +285,7 @@ Checklists.TemplateView = Ember.View.extend
         @get('controller.content').addGroup(result)
     bootbox.prompt("Enter the group name:", "Cancel", "OK", confirm, "New Group")
   addCheck: (event) ->
-    @get('controller.content').addCheck(event.context.get('position'))
+    @get('controller.content').addCheck(_updateElementValuent.context.get('position'))
   deleteCheck: (event) ->
     @get('controller.content').deleteCheck(event.contexts[0].get('position'), event.contexts[1].get('position'))
   moveUp: (event) ->
@@ -301,6 +301,13 @@ Checklists.TemplateView = Ember.View.extend
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
+  choicesPrevious: Ember.A([])
+  choicesChange: ( ->
+    previous = @get('choicesPrevious')
+    if (previous.length > 0)
+      @get('content').updatedChoices(previous)
+    @set('choicesPrevious', @get('choices'))
+  ).observes('content.choices.@each')
 
 Checklists.Template = Ember.Object.extend
   site: ''
@@ -312,6 +319,21 @@ Checklists.Template = Ember.Object.extend
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')
+  updatedChoices: (previous) ->
+    current = @get('choices')
+    # This is n**2 but let's assume we won't have very long lists of choices
+    if (previous.length > current.length)
+      removed = previous.filter (i) ->
+        not current.contains(i)
+      @removeChoice(removed[0])
+    if (previous.length < current.length)
+      added = current.filter (i) ->
+        not previous.contains(i)
+      p "addedd " + addedd
+  removeChoice: (choice) ->
+    @get('groups').forEach (g) ->
+      g.get('checks').forEach (c) ->
+        c.get('choices').removeObjects(c.get('choices').filterProperty('name', choice))
   findGroup: (groupPosition) ->
     @get('groups').find (g) ->
       g.get('position') is groupPosition
