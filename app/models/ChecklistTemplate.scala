@@ -13,9 +13,11 @@ import JsonFormatters._
 import scalaz._
 import Scalaz._
 
-case class CheckTemplate(title: String, position: Int = 0, choices:Seq[(String, Boolean)] = Seq.empty) {
+case class CheckChoice(name: String, selected: Boolean)
+
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = Seq.empty) {
   def hydrateChecks(defaultChoices:Set[String]):CheckTemplate = if (this.choices.isEmpty) {
-      copy(choices = defaultChoices.map(_ -> true).toSeq)
+      copy(choices = defaultChoices.map(CheckChoice(_, true)).toSeq)
     } else {
       this
     }
@@ -26,12 +28,13 @@ object CheckTemplate {
     def writes(c: CheckTemplate) = JsObject(Seq(
       "title"    -> JsString(c.title),
       "position" -> JsNumber(c.position),
-      "choices"  -> JsArray(c.choices.map(x => JsObject(Seq("name" -> JsString(x._1), "selected" -> JsBoolean(x._2)))))
+      "choices"  -> JsArray(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected)))))
     ))
 
     def reads(json: JsValue) = CheckTemplate(
       title    = ~(json \ "title").asOpt[String],
-      position = ~(json \ "position").asOpt[Int]
+      position = ~(json \ "position").asOpt[Int],
+      choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean]))
     )
   }
 }
@@ -39,7 +42,7 @@ object CheckTemplate {
 case class StatusChoice(name: String)
 
 object StatusChoice {
-  val defaultChoices = Set("", "done", "not done", "NA", "Ok", "pending", "not Ok")
+  val defaultChoices = Set("done", "not done", "NA", "Ok", "pending", "not Ok")
 
   implicit object StatusChoiceFormat extends Format[StatusChoice] {
     def writes(c: StatusChoice) = JsObject(Seq(
