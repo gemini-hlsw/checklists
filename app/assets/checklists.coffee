@@ -306,6 +306,7 @@ Checklists.Template = Ember.Object.extend
   site: ''
   name: ''
   groups: []
+  choices: []
   isLoaded: false
   isSaved: true
   needsOverlay: ( ->
@@ -330,6 +331,7 @@ Checklists.Template = Ember.Object.extend
     nc = Checklists.TemplateCheck.create
       title: ''
       position: g.get('checks').length
+      choices: Ember.A(Checklists.TemplateRepository.choiceFromJson({name: c, selected: true} ) for c in @get('choices'))
     g.get('checks').pushObject(nc)
   moveUp: (position, groupPosition) ->
     if position > 0
