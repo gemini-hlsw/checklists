@@ -494,6 +494,8 @@ Checklists.TemplateRepository = Ember.Object.create
       data: JSON.stringify(template)
       success: (response) =>
         template.set('isSaved', true)
+        # Clean the cache so new checklists use the new template
+        Checklists.ChecklistRepository.cleanCache()
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
@@ -701,6 +703,8 @@ Checklists.ChecksGroup = Ember.Object.extend
 
 Checklists.ChecklistRepository = Ember.Object.create
   checklistsCache: {}
+  cleanCache: ->
+    @get('checklistsCache').set({})
   checkFromJson: (json) ->
     check = Checklists.Check.create()
     check.setProperties(json)
@@ -728,11 +732,11 @@ Checklists.ChecklistRepository = Ember.Object.create
       closed: false
       groups: []
   findOne: (site, date) ->
-    if @checklistsCache["#{site}-#{date}"]?
-      @checklistsCache["#{site}-#{date}"]
+    if @get('checklistsCache')["#{site}-#{date}"]?
+      @get('checklistsCache')["#{site}-#{date}"]
     else
       checklist = @newChecklist(site, date)
-      @checklistsCache["#{site}-#{date}"] = checklist
+      @get('checklistsCache')["#{site}-#{date}"] = checklist
       $.ajax
         url: "/api/v1.0/checklist/#{site}/#{date}",
         success: (response) =>
@@ -750,7 +754,7 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups = Ember.A()
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
-        @checklistsCache["#{checklist.site}-#{checklist.date}"] = checklist
+        @get('checklistsCache')["#{checklist.site}-#{checklist.date}"] = checklist
         checklist.set('isSaved', true)
       error: (response) =>
         msg = response.responseText.msg
