@@ -329,11 +329,15 @@ Checklists.Template = Ember.Object.extend
     if (previous.length < current.length)
       added = current.filter (i) ->
         not previous.contains(i)
-      p "addedd " + addedd
+      @addChoice(added[0])
   removeChoice: (choice) ->
     @get('groups').forEach (g) ->
       g.get('checks').forEach (c) ->
         c.get('choices').removeObjects(c.get('choices').filterProperty('name', choice))
+  addChoice: (choice) ->
+    @get('groups').forEach (g) ->
+      g.get('checks').forEach (c) ->
+        c.get('choices').pushObject({name: choice, selected: false})
   findGroup: (groupPosition) ->
     @get('groups').find (g) ->
       g.get('position') is groupPosition
