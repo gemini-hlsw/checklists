@@ -189,3 +189,7 @@ textarea:focus {
 .navbar-text {
     border-left: none
 }
+
+.icon-centered {
+    margin-top: 5px;
+}

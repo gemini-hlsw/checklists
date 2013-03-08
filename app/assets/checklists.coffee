@@ -125,15 +125,13 @@ Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok
 
 Checklists.DatePicker = Ember.View.extend
   templateName: 'datepicker'
-  classNames: ['input-append date datepicker']
+  classNames: ['input-prepend date datepicker']
   tagName: 'div'
   attributeBindings: ['date', 'data-date', 'inputFormat', 'format']
   format:'dd/mm/yyyy'
   inputFormat: Checklists.urlDateFormat
   'data-date': ''
   _dateChanged: (e, self) =>
-    p e.date
-    p moment(e.date).format(self.get('inputFormat'))
     site = Checklists.get('router').get('checklistController').get('site')
     date = moment(e.date).format(self.get('inputFormat'))
     Checklists.get('router').send('goToDay', {site: site, date: date})
@@ -146,6 +144,8 @@ Checklists.DatePicker = Ember.View.extend
     $('.date').datepicker
       format: @get('format')
       autoclose: true
+      todayHighlight: true
+      todayBtn: 'linked'
     $('.date').datepicker('update', @_toDate()).on 'changeDate', (e) =>
         @_dateChanged(e, this)
 
