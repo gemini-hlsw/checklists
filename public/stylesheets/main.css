@@ -175,3 +175,17 @@ textarea:focus {
 .select2-search-choice-close {
     top: 6px;
 }
+
+.inline {
+    display: inline-block;
+}
+
+.date-goto {
+    line-height: 20px;
+    text-shadow: 0 1px 0 #ffffff;
+    padding: 10px 15px 10px;
+}
+
+.navbar-text {
+    border-left: none
+}

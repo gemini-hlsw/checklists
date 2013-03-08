@@ -125,19 +125,29 @@ Checklists.CheckValues = ['', 'done', 'not done', 'NA', 'Ok', 'pending', 'not Ok
 
 Checklists.DatePicker = Ember.View.extend
   templateName: 'datepicker'
-  classNames: ['input-append date']
+  classNames: ['input-append date datepicker']
   tagName: 'div'
-  attributeBindings: ['data', 'data-date', 'inputFormat', 'format']
+  attributeBindings: ['date', 'data-date', 'inputFormat', 'format']
   format:'dd/mm/yyyy'
   inputFormat: Checklists.urlDateFormat
-  'data-date': (->
-    c = moment(@get('data'), @get('inputFormat'))
-    c.format(Checklists.calendarFormattedDate)
-  ).property('data'),
-  dataBinding: null,
+  'data-date': ''
+  _dateChanged: (e, self) =>
+    p e.date
+    p moment(e.date).format(self.get('inputFormat'))
+    site = Checklists.get('router').get('checklistController').get('site')
+    date = moment(e.date).format(self.get('inputFormat'))
+    Checklists.get('router').send('goToDay', {site: site, date: date})
+  _toDate: ->
+    moment(@get('date'), @get('inputFormat')).toDate()
+  formattedDate: ( ->
+      @_toDate()
+    ).property('date')
   didInsertElement: ->
     $('.date').datepicker
       format: @get('format')
+      autoclose: true
+    $('.date').datepicker('update', @_toDate()).on 'changeDate', (e) =>
+        @_dateChanged(e, this)
 
 ###
 # View and controller for the calendar
@@ -513,7 +523,7 @@ Checklists.TemplateRepository = Ember.Object.create
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
-    this.href = "/assets/stylesheets/#{title}-#{name}#{postfix}.css"
+    this.href = "1/assets/stylesheets/#{title}-#{name}#{postfix}.css"
 
 Checklists.switchStyle = (name)->
   switchLink("bootstrap", name, ".min")
@@ -542,6 +552,7 @@ Checklists.ToolbarController = Ember.Controller.extend
     @get('inChecklist') or @get('inReport')
   ).property('inChecklist', 'inReport')
   availableReportsBinding: 'Checklists.router.reportsMenuController.content'
+  checklistDateBinding: 'Checklists.router.checklistController.date'
 
 Checklists.ReportsMenuController =  Ember.ObjectController.extend
   content: ''

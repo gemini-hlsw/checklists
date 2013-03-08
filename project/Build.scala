@@ -30,7 +30,6 @@ object ApplicationBuild extends Build {
   val appVersion = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
-    "postgresql" % "postgresql" % "9.1-901.jdbc4",
     "org.mozilla" % "rhino" % "1.7R4",
     "se.radley" %% "play-plugins-salat" % "1.1",
     "org.scalaz" %% "scalaz-core" % "6.0.4"
@@ -43,7 +42,8 @@ object ApplicationBuild extends Build {
     routesImport += "se.radley.plugin.salat.Binders._",
     templatesImport += "org.bson.types.ObjectId",
 
-    resourceGenerators in Compile <+= EmberCompiler(ember = "ember-1.0.0-pre.2.for-rhino.js", handlebars = "handlebars-1.0.rc.1.js")
+    resourceGenerators in Compile <+= EmberCompiler(ember = "ember-1.0.0-pre.2.for-rhino.js", handlebars = "handlebars-1.0.rc.1.js"),
+    coffeescriptOptions := Seq("native", "/opt/local/bin/coffee -p")
   )
 
 }

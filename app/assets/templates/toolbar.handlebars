@@ -18,13 +18,16 @@
     </ul>
   </li>
   {{/if}}
-  {{view Checklists.ThemesMenuView controllerBinding="Checklists.router.preferencesController" classBinding="dropdown pull-left"}}
+  {{view Checklists.ThemesMenuView controllerBinding="Checklists.router.preferencesController" class="dropdown pull-left"}}
   <li class="">
      <a href="#about-modal" data-toggle="modal">About</a>
   </li>
 </ul>
 {{#if inChecklist}}
 <ul class="nav pull-right">
+  <li>
+    {{view Checklists.DatePicker class="inline" dateBinding="checklistDate"}}
+  </li>
   <li class="pull-right">
     <button class="btn" {{action editTemplate this}}>Edit {{site}} Template</button>
   </li>
