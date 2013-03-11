@@ -272,6 +272,9 @@ Checklists.Select2Checks = Ember.View.extend
     (data.push({id: i, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('options')?
     this.$().select2({data: data, multiple: true, closeOnSelect: true, formatResult: @_format, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
 
+Checklists.ChoicesCheckbox =  Ember.Checkbox.extend
+  attributeBindings: ['disabled']
+
 Checklists.TemplateCheckView = Ember.View.extend
   templateName: 'templatecheck'
   choicesDisplayed: false
