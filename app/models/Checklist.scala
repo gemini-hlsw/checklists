@@ -24,8 +24,8 @@ object Check {
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
       "description" -> JsString(c.description),
-      "status"      -> JsString(c.status.getOrElse("")),
-      "comment"     -> JsString(c.comment.getOrElse("")),
+      "status"      -> JsString(~c.status),
+      "comment"     -> JsString(~c.comment),
       "choices"     -> Json.toJson(c.choices)
     ))
 

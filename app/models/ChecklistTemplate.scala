@@ -20,7 +20,7 @@ object CheckChoice {
   val defaultCheckChoices = defaultChoices.map(CheckChoice(_, true))
 }
 
-case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = CheckChoice.defaultCheckChoices) {
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = CheckChoice.defaultCheckChoices, freeText: Boolean = false) {
   def hydrateChecks(defaultChoices:Set[String]):CheckTemplate = if (this.choices.isEmpty) {
       copy(choices = defaultChoices.map(CheckChoice(_, true)).toSeq)
     } else {
@@ -33,13 +33,15 @@ object CheckTemplate {
     def writes(c: CheckTemplate) = JsObject(Seq(
       "title"    -> JsString(c.title),
       "position" -> JsNumber(c.position),
-      "choices"  -> Json.toJson(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected)))))
+      "choices"  -> Json.toJson(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected))))),
+      "freeText" -> JsBoolean(c.freeText)
     ))
 
     def reads(json: JsValue) = CheckTemplate(
       title    = ~(json \ "title").asOpt[String],
       position = ~(json \ "position").asOpt[Int],
-      choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean]))
+      choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean])),
+      freeText = ~(json \ "freeText").asOpt[Boolean]
     )
   }
 }

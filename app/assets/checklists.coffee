@@ -436,6 +436,7 @@ Checklists.TemplateCheck = Ember.Object.extend
   title: ''
   position: 0
   choices: Ember.A()
+  freeText: false
   checkAll: ->
     @get('choices').forEach (i) ->
       i.set('selected', true)
@@ -478,6 +479,7 @@ Checklists.TemplateRepository = Ember.Object.create
     Checklists.TemplateCheck.create
       title: json.title
       position: json.position
+      freeText: json.freeText
       choices: Ember.A(Checklists.TemplateRepository.choiceFromJson(c) for c in json.choices)
   groupFromJson: (json) ->
     group = Checklists.TemplateGroup.create
