@@ -70,14 +70,15 @@ object CheckTemplateGroup {
 
 case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
-case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String])
+case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
 
 object TemplateSettings {
   implicit object TemplateSettingsWrites extends Writes[TemplateSettings] {
     def writes(t: TemplateSettings) = JsObject(Seq(
       "site"        -> JsString(t.site),
       "engineers"   -> Json.toJson(t.engineers),
-      "technicians" -> Json.toJson(t.technicians)
+      "technicians" -> Json.toJson(t.technicians),
+      "groups"      -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
     ))
   }
 }
@@ -101,7 +102,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 
   def loadSettings(site: String):Option[TemplateSettings] = {
-    findTemplate(site).map(t => TemplateSettings(t.site, t.engineers, t.technicians))
+    findTemplate(site).map(t => TemplateSettings(t.site, t.engineers, t.technicians, t.groups))
   }
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
