@@ -734,7 +734,7 @@ Checklists.ChecksGroup = Ember.Object.extend
 Checklists.ChecklistRepository = Ember.Object.create
   checklistsCache: {}
   cleanCache: ->
-    @get('checklistsCache').set({})
+    @set('checklistsCache', {})
   checkFromJson: (json) ->
     check = Checklists.Check.create()
     check.setProperties(json)
