@@ -46,7 +46,7 @@
                     <tbody>
                       {{#each item in group.checks}}
                         <tr>
-                          <td class="centered checklist-description-column">{{item.description}} '{{item.freeText}}'</td>
+                          <td class="centered checklist-description-column">{{item.description}}</td>
                           <td class="centered checklist-status-column centered-content">
                             {{#if item.freeText}}
                               {{view Checklists.ResizableTextArea class="textarea-animated" name="status" valueBinding="item.status"}}

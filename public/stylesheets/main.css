@@ -34,7 +34,7 @@ td.centered {
     background-color: #000;
     opacity: .5;
     filter: alpha(opacity = 50);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -44,13 +44,13 @@ td.centered {
 
 .overlay-message {
     text-align: center;
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
     height: 45%;
     z-index: 10;
-    margin-top: 55%;
+    margin-top: 40%;
 }
 
 .overlay-message > h1 {
