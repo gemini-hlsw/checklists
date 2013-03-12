@@ -13,26 +13,29 @@ import scala.collection.immutable.TreeMap
 import scalaz._
 import Scalaz._
 
-case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices) {
-  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment))
+case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices, freeText: Boolean = false) {
+  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment), this.choices, this.freeText)
 }
 
 object Check {
-  def newFromTemplate(t: CheckTemplate):Check=
-    Check(t.title, None, None, t.choices.filter(_.selected).map(_.name))
+  def newFromTemplate(t: CheckTemplate):Check =
+    Check(t.title, None, None, t.choices.filter(_.selected).map(_.name), t.freeText)
 
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
       "description" -> JsString(c.description),
       "status"      -> JsString(~c.status),
       "comment"     -> JsString(~c.comment),
-      "choices"     -> Json.toJson(c.choices)
+      "choices"     -> Json.toJson(c.choices),
+      "freeText"    -> Json.toJson(c.freeText)
     ))
 
     def reads(json: JsValue) = Check(
-      (json \ "description").asOpt[String].getOrElse(""),
+      ~(json \ "description").asOpt[String],
       (json \ "status").asOpt[String].filter(_.nonEmpty),
-      (json \ "comment").asOpt[String].filter(_.nonEmpty)
+      (json \ "comment").asOpt[String].filter(_.nonEmpty),
+      (json \ "choices").as[Seq[String]],
+      ~(json \ "freeText").asOpt[Boolean]
     )
   }
 }

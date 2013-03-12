@@ -724,6 +724,7 @@ Checklists.Check = Ember.Object.extend
   description: ''
   status: ''
   comment: ''
+  freeText: false
 
 Checklists.ChecksGroup = Ember.Object.extend
   name: ''
