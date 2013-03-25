@@ -78,7 +78,7 @@ object TemplateSettings {
       "site"        -> JsString(t.site),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),
-      "groups"     -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
+      "groups"      -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
     ))
   }
 }

@@ -579,8 +579,16 @@ Checklists.ToolbarView = Ember.View.extend
     Checklists.get('router').send('moveToMonthReport', context)
       
 Checklists.ToolbarController = Ember.Controller.extend
-  inChecklist: false
-  inReport: false
+  state: ''
+  inReport: ( ->
+    @get('state') is 'report'
+  ).property('state')
+  inChecklist: ( ->
+    @get('state') is 'checklist'
+  ).property('state')
+  inHome: ( ->
+    @get('state') is 'home'
+  ).property('state')
   showReports: ( ->
     @get('inChecklist') or @get('inReport')
   ).property('inChecklist', 'inReport')
@@ -837,8 +845,7 @@ Checklists.Router = Ember.Router.extend
         router.send('goToDay', {key: event.context.get('key'), date: moment().format(Checklists.urlDateFormat)})
       connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
-        router.get('toolbarController').set('inChecklist', false)
-        router.get('toolbarController').set('inReport', false)
+        router.get('toolbarController').set('state', 'home')
         router.get('applicationController').connectOutlet('main', 'templates', Checklists.TemplateRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:key/:date'
@@ -863,7 +870,7 @@ Checklists.Router = Ember.Router.extend
         router.setupReportsController(template.key)
         checklist = Checklists.ChecklistRepository.findOne(template.key, template.date)
 
-        router.get('toolbarController').set('inChecklist', true)
+        router.get('toolbarController').set('state', 'checklist')
         router.get('toolbarController').set('key', template.key)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
@@ -874,7 +881,7 @@ Checklists.Router = Ember.Router.extend
       route: '/:key/template'
       connectOutlets: (router, context) ->
         template = Checklists.TemplateRepository.findTemplate(context)
-        router.get('toolbarController').set('inChecklist', false)
+        router.get('toolbarController').set('state', 'template')
         router.get('templateController').set('content', template)
         router.get('applicationController').connectOutlet('main', 'template', template)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
@@ -901,8 +908,7 @@ Checklists.Router = Ember.Router.extend
         connectOutlets: (router, context) ->
           router.setupReportsController(context.get('key'))
           router.get('applicationController').connectOutlet('toolbar', 'toolbar')
-          router.get('toolbarController').set('inReport', true)
-          router.get('toolbarController').set('inChecklist', false)
+          router.get('toolbarController').set('state', 'report')
           report = Checklists.ReportRepository.loadReport(context.get('key'), context.get('year'), context.get('month'))
           router.get('applicationController').connectOutlet('main', 'reports', report)
         serialize: (router, context) ->
