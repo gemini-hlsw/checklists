@@ -68,7 +68,7 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, key: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, key: String = "", name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
 case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
 

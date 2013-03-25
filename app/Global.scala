@@ -1,4 +1,4 @@
-import models.{ChecklistTemplate, Site, RegisterJodaDateMidnightConversionHelpers}
+import models.{ChecklistTemplate, Site, RegisterJodaDateMidnightConversionHelpers, DatastoreVersion}
 import play.api.{Application, GlobalSettings}
 
 import scalaz._
@@ -17,8 +17,19 @@ object Global extends GlobalSettings {
     if (templates.isEmpty) {
       (ChecklistTemplate(site = "GS", key = "", name = "Gemini South", groups = Nil) :: ChecklistTemplate(site = "GN", key = "", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
     }
-    if (templates.size === 2) {
-      println("Upgrade the templates")
-    }
+    val version = DatastoreVersion.findLatest() | DatastoreVersion.store(1)
+    println("Store Version: " + version.version)
+    /*version.version match {
+      case 1 => {
+        if (templates.size === 2) {
+          //db.temp.update({}, {$set:{ "key": ""}}, false, true)
+          /*println("Upgrade the templates")
+          templates.foreach(_.match {
+            case _ =>
+          })*/
+        }
+        DatastoreVersion.store(version=2)
+      case _ =>
+    }*/
   }
 }
