@@ -19,3 +19,7 @@
 .checklist-accordion-group {
     border: 1px solid black;
 }
+
+.modal-footer .btn+.btn {
+    margin-bottom: 4px;
+}
