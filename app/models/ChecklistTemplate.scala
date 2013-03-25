@@ -68,8 +68,6 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
-
 case class TemplateSettings(key: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
 
 object TemplateSettings {
@@ -83,11 +81,15 @@ object TemplateSettings {
   }
 }
 
+case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0,engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
 
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
+
   def findTemplate(key: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("key" -> key)).map(hydrateChecks)
+
   def hydrateChecks(t: ChecklistTemplate):ChecklistTemplate = t.copy(groups = t.groups.map(_.hydrateChecks(t.choices)))
 
   def saveTemplate(t: ChecklistTemplate) = {
@@ -119,6 +121,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
       "key"         -> JsString(t.key),
       "name"        -> JsString(t.name),
+      "colPos"      -> JsNumber(t.colPos),
+      "rowPos"      -> JsNumber(t.rowPos),
       "groups"      -> Json.toJson(t.groups),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),

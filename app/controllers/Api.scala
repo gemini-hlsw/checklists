@@ -33,7 +33,7 @@ object Api extends Controller {
   }
 
   def templates = Action {
-    Ok(Json.toJson(ChecklistTemplate.findTemplates)).as(JSON)
+    Ok(Json.toJson(ChecklistTemplate.findTemplates.sortBy(t => (t.colPos, t.rowPos)))).as(JSON)
   }
 
   def template(key: String) = Action {

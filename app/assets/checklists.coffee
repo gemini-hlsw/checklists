@@ -331,6 +331,8 @@ Checklists.Template = Ember.Object.extend
   choices: []
   isLoaded: false
   isSaved: true
+  colPos: 0
+  rowPos: 0
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')
@@ -442,7 +444,13 @@ Checklists.TemplateSettingsController = Ember.ObjectController.extend
   content: null
 
 Checklists.TemplatesView = Ember.View.extend
+  columnCount: 2
   templateName: 'templates'
+  rows: ( ->
+    r = [0..@columnCount - 1]
+    r.map (i) =>
+      @get('context.content').filterProperty('rowPos', i)
+  ).property('content.@each')
 
 Checklists.TemplatesController = Ember.ArrayController.extend
   isLoaded: ( ->

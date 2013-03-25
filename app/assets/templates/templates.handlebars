@@ -2,11 +2,15 @@
   <div class="span8 offset2 centered-content">
     <div class="well centered-content">
       <h1>Checklists</h1>
-      <div class="btn-group btn-group-vertical">
-        {{#each template in content}}
-          <button class="span4 btn btn-large site-button" {{action todayChecklist template}}>{{template.name}}</button>
-        {{/each}}
-      </div>
+      {{#each r in view.rows}}
+        <div class="row-fluid">
+          {{#each template in r}}
+            <div class="pan4 offset">
+              <button class="span5 offset1 btn btn-large template-button centered-content" {{action todayChecklist template}}>{{template.name}}</button>
+            </div>
+          {{/each}}
+        </div>
+      {{/each}}
     </div>
   </div>
 {{else}}
