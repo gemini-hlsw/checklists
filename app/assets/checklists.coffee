@@ -132,9 +132,9 @@ Checklists.DatePicker = Ember.View.extend
   inputFormat: Checklists.urlDateFormat
   'data-date': ''
   _dateChanged: (e, self) =>
-    site = Checklists.get('router').get('checklistController').get('site')
+    key = Checklists.get('router').get('checklistController').get('key')
     date = moment(e.date).format(self.get('inputFormat'))
-    Checklists.get('router').send('goToDay', {site: site, date: date})
+    Checklists.get('router').send('goToDay', {key: key, date: date})
   _toDate: ->
     moment(@get('date'), @get('inputFormat')).toDate()
   formattedDate: ( ->
@@ -861,7 +861,7 @@ Checklists.Router = Ember.Router.extend
         checklist = Checklists.ChecklistRepository.findOne(template.key, template.date)
 
         router.get('toolbarController').set('inChecklist', true)
-        #router.get('toolbarController').set('site', site.site)
+        router.get('toolbarController').set('key', template.key)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
 
