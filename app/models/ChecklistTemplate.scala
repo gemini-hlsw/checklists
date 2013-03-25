@@ -91,7 +91,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   def hydrateChecks(t: ChecklistTemplate):ChecklistTemplate = t.copy(groups = t.groups.map(_.hydrateChecks(t.choices)))
 
   def saveTemplate(t: ChecklistTemplate) = {
-    val id = findTemplate(t.site).map(_.id).getOrElse(t.id)
+    val id = findTemplate(t.key).map(_.id).getOrElse(t.id)
     dao.removeById(id, WriteConcern.Normal)
     dao.save(t.copy(id = id))
     t.copy(id = id)

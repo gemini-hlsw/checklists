@@ -502,14 +502,14 @@ Checklists.TemplateRepository = Ember.Object.create
     group.set('checks', checks)
     group.normalizeCheckPositions()
     group
-  findTemplate: (site) ->
-    key = site.get('site')
+  findTemplate: (template) ->
+    key = template.get('key')
     if @templates[key]?
       @templates[key]
     else
       template = Checklists.Template.create
-        site: key
-        name: site.get('name')
+        key: key
+        name: template.get('name')
         isSaved: true
       $.ajax
         url: "/api/v1.0/templates/#{key}",
@@ -871,7 +871,7 @@ Checklists.Router = Ember.Router.extend
         router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(template.key))
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
-      route: '/:site/template'
+      route: '/:key/template'
       connectOutlets: (router, context) ->
         template = Checklists.TemplateRepository.findTemplate(context)
         router.get('toolbarController').set('inChecklist', false)
@@ -882,15 +882,15 @@ Checklists.Router = Ember.Router.extend
         template =  router.get('templateController').get('content')
         Checklists.TemplateRepository.saveTemplate(template)
       goBack: (router) ->
-        site = router.get('templateController').get('content.site')
+        site = router.get('templateController').get('content.key')
         checklist = router.get('checklistController').get('content')
         date = if checklist? then checklist.get('date') else moment().format(Checklists.urlDateFormat)
-        router.transitionTo('checklist', {site: site, date: date})
+        router.transitionTo('checklist', {key: key, date: date})
       serialize: (router, context) ->
-        site: context.get('site')
+        key: context.get('key')
       deserialize: (router, urlParams) ->
         context = Ember.Object.create
-          site: urlParams.site
+          key: urlParams.key
           name: ''
         Checklists.TemplateRepository.findTemplate(context)
     moveToMonthReport: Ember.Router.transitionTo('report.monthReport')

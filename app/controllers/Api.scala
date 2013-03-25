@@ -15,15 +15,15 @@ object Api extends Controller {
     Ok(Json.toJson(ChecklistTemplate.findTemplates)).as(JSON)
   }
 
-  def template(site: String) = Action {
-    Ok(Json.toJson(ChecklistTemplate.findTemplate(site))).as(JSON)
+  def template(key: String) = Action {
+    Ok(Json.toJson(ChecklistTemplate.findTemplate(key))).as(JSON)
   }
 
   def templateSettings(site: String) = Action {
     ChecklistTemplate.loadSettings(site).map(t => Ok(Json.toJson(t)).as(JSON)).getOrElse(NotFound)
   }
 
-  def saveTemplate(site: String) = Action { implicit request =>
+  def saveTemplate(key: String) = Action { implicit request =>
     request.body.asJson.map(_.as[ChecklistTemplate]).map(ChecklistTemplate.saveTemplate).map(t => Ok(Json.toJson(t)).as(JSON)).getOrElse(NotFound)
   }
 
