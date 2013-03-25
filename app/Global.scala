@@ -15,7 +15,7 @@ object Global extends GlobalSettings {
     }
     val templates = ChecklistTemplate.findTemplates
     if (templates.isEmpty) {
-      (ChecklistTemplate(site = "GS", key = "", name = "Gemini South", groups = Nil) :: ChecklistTemplate(site = "GN", key = "", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
+      (ChecklistTemplate(key = "GS", name = "Gemini South", groups = Nil) :: ChecklistTemplate(key = "GN", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
     }
     val version = DatastoreVersion.findLatest() | DatastoreVersion.store(1)
     println("Store Version: " + version.version)

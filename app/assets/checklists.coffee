@@ -325,7 +325,6 @@ Checklists.TemplateController = Ember.ObjectController.extend
         text: "The status choice '#{added[0]}' has not been added to existing checks but you can enable it"
 
 Checklists.Template = Ember.Object.extend
-  site: ''
   key: ''
   name: ''
   groups: []
@@ -707,7 +706,7 @@ Checklists.ReportRepository = Ember.Object.create
   buildSummary: (json) ->
     d = Checklists.DaySummary.create()
     d.setProperties(json)
-    d.set('checklist', Checklists.ChecklistRepository.checklistFillJson(Checklists.ChecklistRepository.newChecklist(json.checklist.site, json.date), json.checklist))
+    d.set('checklist', Checklists.ChecklistRepository.checklistFillJson(Checklists.ChecklistRepository.newChecklist(json.checklist.key, json.date), json.checklist))
     d
   loadReport: (key, year, month) ->
     report = Checklists.MonthReport.create
@@ -826,9 +825,9 @@ Checklists.ChecklistRepository = Ember.Object.create
     checklist.set('groups', groups)
     checklist.set('isLoaded', true)
     checklist
-  newChecklist: (site, date) ->
+  newChecklist: (key, date) ->
     Checklists.Checklist.create
-      site: site
+      key: key
       name: ''
       date: date
       closed: false
@@ -847,7 +846,7 @@ Checklists.ChecklistRepository = Ember.Object.create
   saveChecklist: (checklist) ->
     checklist.set('isSaved', false)
     $.ajax
-      url: "/api/v1.0/checklist/#{checklist.site}/#{checklist.date}",
+      url: "/api/v1.0/checklist/#{checklist.key}/#{checklist.date}",
       type: 'POST'
       contentType: 'application/json'
       data: JSON.stringify(checklist)
@@ -856,7 +855,7 @@ Checklists.ChecklistRepository = Ember.Object.create
         groups = Ember.A()
         groups.addObject(Checklists.ChecklistRepository.checklistGroupFromJson(g)) for g in response.groups
         checklist.set('groups', groups)
-        @get('checklistsCache')["#{checklist.site}-#{checklist.date}"] = checklist
+        @get('checklistsCache')["#{checklist.key}-#{checklist.date}"] = checklist
         checklist.set('isSaved', true)
       error: (response) =>
         msg = response.responseText.msg

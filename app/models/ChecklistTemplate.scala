@@ -68,14 +68,14 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, key: String = "", name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
-case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
+case class TemplateSettings(key: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
 
 object TemplateSettings {
   implicit object TemplateSettingsWrites extends Writes[TemplateSettings] {
     def writes(t: TemplateSettings) = JsObject(Seq(
-      "site"        -> JsString(t.site),
+      "key"         -> JsString(t.key),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),
       "groups"      -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
@@ -98,7 +98,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 
   private def newTemplate(p: TemplateCreationParams):ChecklistTemplate = {
-    val t = ChecklistTemplate(site = "", key = p.key, name = p.name, groups = Seq.empty)
+    val t = ChecklistTemplate(key = p.key, name = p.name, groups = Seq.empty)
     dao.insert(t)
     t
   }
@@ -111,13 +111,12 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     findTemplate(key).map(t => t.copy(engineers = t.engineers ++ engineers.toSet, technicians = t.technicians ++ technicians.toSet)).map(saveTemplate)
   }
 
-  def loadSettings(site: String):Option[TemplateSettings] = {
-    findTemplate(site).map(t => TemplateSettings(t.site, t.engineers, t.technicians, t.groups))
-  }
+  def loadSettings(key: String):Option[TemplateSettings] = {
+    findTemplate(key).map(t => TemplateSettings(t.key, t.engineers, t.technicians, t.groups))
+}
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
-      "site"        -> JsString(t.site),
       "key"         -> JsString(t.key),
       "name"        -> JsString(t.name),
       "groups"      -> Json.toJson(t.groups),
@@ -127,7 +126,6 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
-      site        = ~(json \ "site").asOpt[String],
       key         = ~(json \ "key").asOpt[String],
       name        = ~(json \ "name").asOpt[String],
       groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],

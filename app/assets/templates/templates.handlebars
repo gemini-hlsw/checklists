@@ -1,10 +1,10 @@
 {{#if isLoaded}}
-  <div class="span6 offset3 centered-content">
+  <div class="span8 offset2 centered-content">
     <div class="well centered-content">
       <h1>Checklists</h1>
       <div class="btn-group btn-group-vertical">
         {{#each template in content}}
-          <button class="btn btn-large site-button" {{action todayChecklist template}}>{{template.name}}</button>
+          <button class="span4 btn btn-large site-button" {{action todayChecklist template}}>{{template.name}}</button>
         {{/each}}
       </div>
     </div>
