@@ -8,6 +8,9 @@ import play.api.libs.json._
 import play.api.data._
 import play.api.data.Forms._
 
+import scalaz._
+import Scalaz._
+
 object Api extends Controller {
   def sites = Action {
     Ok(Json.toJson(Site.findSites)).as(JSON)
@@ -39,6 +42,11 @@ object Api extends Controller {
 
   def templateSettings(site: String) = Action {
     ChecklistTemplate.loadSettings(site).map(t => Ok(Json.toJson(t)).as(JSON)).getOrElse(NotFound)
+  }
+
+  def newTemplate(key: String) = Action { implicit request =>
+    request.body.asJson.map(_.as[TemplateCreationParams]).map(ChecklistTemplate.createNew).map(println)
+    Ok
   }
 
   def saveTemplate(key: String) = Action { implicit request =>

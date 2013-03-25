@@ -10,10 +10,10 @@ GET     /test                                           controllers.Application.
 GET     /api/v1.0/sites                                 controllers.Api.sites
 POST    /api/v1.0/validation/templatekey                controllers.Api.validateKey
 GET     /api/v1.0/templates                             controllers.Api.templates
-GET     /api/v1.0/templates                             controllers.Api.templates
 GET     /api/v1.0/templates/:key                        controllers.Api.template(key:String)
+POST    /api/v1.0/templates/:key                        controllers.Api.newTemplate(key:String)
+PUT     /api/v1.0/templates/:key                        controllers.Api.saveTemplate(key:String)
 GET     /api/v1.0/templates/:key/settings               controllers.Api.templateSettings(key:String)
-POST    /api/v1.0/templates/:key                        controllers.Api.saveTemplate(key:String)
 GET     /api/v1.0/checklist/:key/:date                  controllers.Api.checkList(key:String, date:String)
 POST    /api/v1.0/checklist/:key/:date                  controllers.Api.saveCheckList(key:String, date:String)
 GET     /api/v1.0/reports/months/:key                   controllers.Api.availableMonths(key:String)

@@ -38,21 +38,21 @@
   <div class="modal-body form-horizontal">
     <form id="template-create">
       <div class="control-group">
-        <label class="control-label" for="template-key">Key</label>
+        <label class="control-label" for="template-key">Key <span class="req">*</span></label>
         <div class="controls">
-          <input type="text" class="required" id="template-key" name="key" placeholder="Key (all capitals, no spaces)">
+          <input type="text" class="required" id="template-key" name="key" placeholder="Key (all capitals, no spaces)"><span class="help-block"></span> 
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="template-name">Name</label>
+        <label class="control-label" for="template-name">Name <span class="req">*</span></label>
         <div class="controls">
-          <input type="text" class="required" id="template-name" name="name" placeholder="Name">
+          <input type="text" class="required" id="template-name" name="name" placeholder="Name"><span class="help-block"></span> 
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button id="add-checklist-submit" class="btn btn-primary">Add</button>
+    <button id="add-checklist-submit" data-loading-text="Creating..." class="btn btn-primary">Add</button>
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>

@@ -97,8 +97,18 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     t.copy(id = id)
   }
 
-  def updateEngineersNames(site: String, engineers: Seq[String], technicians: Seq[String]) {
-    findTemplate(site).map(t => t.copy(engineers = t.engineers ++ engineers.toSet, technicians = t.technicians ++ technicians.toSet)).map(saveTemplate)
+  private def newTemplate(p: TemplateCreationParams):ChecklistTemplate = {
+    val t = ChecklistTemplate(site = "", key = p.key, name = p.name, groups = Seq.empty)
+    dao.insert(t)
+    t
+  }
+
+  def createNew(p: TemplateCreationParams):ValidationNEL[String, ChecklistTemplate] = {
+    findTemplate(p.key).map(_ => ("Template with key already exists").failNel).getOrElse(newTemplate(p).successNel)
+  }
+
+  def updateEngineersNames(key: String, engineers: Seq[String], technicians: Seq[String]) {
+    findTemplate(key).map(t => t.copy(engineers = t.engineers ++ engineers.toSet, technicians = t.technicians ++ technicians.toSet)).map(saveTemplate)
   }
 
   def loadSettings(site: String):Option[TemplateSettings] = {
@@ -124,6 +134,18 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       engineers   = (json \ "engineers").as[Seq[String]].toSet,
       technicians = (json \ "technicians").as[Seq[String]].toSet,
       choices     = (json \ "choices").as[Seq[String]].toSet
+    )
+  }
+}
+
+
+case class TemplateCreationParams(key: String, name: String)
+
+object TemplateCreationParams {
+  implicit object TemplateCreationParamsFormat extends Reads[TemplateCreationParams] {
+    def reads(json: JsValue) = TemplateCreationParams(
+      key         = ~(json \ "key").asOpt[String],
+      name        = ~(json \ "name").asOpt[String]
     )
   }
 }

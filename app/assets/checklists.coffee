@@ -546,13 +546,25 @@ Checklists.TemplateRepository = Ember.Object.create
     template.set('isSaved', false)
     $.ajax
       url: "/api/v1.0/templates/#{template.site}",
-      type: 'POST'
+      type: 'PUT'
       contentType: 'application/json'
       data: JSON.stringify(template)
       success: (response) =>
         template.set('isSaved', true)
         # Clean the cache so new checklists use the new template
         Checklists.ChecklistRepository.cleanCache()
+  createNewTemplate: (key, name, callback) ->
+    console.log("Create new " + key)
+    $.ajax
+      url: "/api/v1.0/templates/#{key}",
+      type: 'POST'
+      contentType: 'application/json'
+      data: JSON.stringify({key: key, name: name})
+      success: (response) =>
+        callback() if callback?
+        #template.set('isSaved', true)
+        # Clean the cache so new checklists use the new template
+        #Checklists.ChecklistRepository.cleanCache()
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
@@ -589,7 +601,10 @@ Checklists.ToolbarView = Ember.View.extend
       unhighlight: (element, errorClass, validClass) ->
         $(element).parents('.error').removeClass(errorClass).addClass(validClass)
       messages:
-        name: 'Required'
+        name: 'Name is required'
+        key:
+          required: 'Key is required'
+          regex: 'Key must be all capitals, no spaces'
       rules:
         key:
           required: true
@@ -599,18 +614,18 @@ Checklists.ToolbarView = Ember.View.extend
             type: 'POST'
         name:
           required: true
-      #errorPlacement: (error, element) ->
-      #  error.appendTo($('#dashboard-edit-name'))
-      #invalidHandler: (form, validator) ->
-      #  $('.dashboard-name-input').tooltip 'show'
-      #  Ember.run.later($('.dashboard-name-input'),
-      #    -> this.tooltip('hide'),
-      #    2000) 
+      errorPlacement: (error, element) =>
+        element.closest('.control-group').find('.help-block').html(error.text())
+      success: (label) =>
+        true
       this.$('#add-checklist-submit').on 'click', =>
         if val.form()
           val.resetForm()
-          this.$('input').val('').removeClass('error').removeClass('success')
-          this.$('#add-checklist-modal').modal('hide')
+          this.$('#add-checklist-submit').button('loading')
+          Checklists.TemplateRepository.createNewTemplate  this.$('#template-key').val(), this.$('#template-name').val(), =>
+            this.$('input').val('').removeClass('error').removeClass('success')
+            this.$('#add-checklist-submit').button('reset')
+            this.$('#add-checklist-modal').modal('hide')
   showReport: (e) ->
     context = Ember.Object.create
       key: e.contexts[0]
