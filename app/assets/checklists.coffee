@@ -571,6 +571,33 @@ Checklists.ToolbarView = Ember.View.extend
   templateName: 'toolbar'
   voidAction: ->
     false
+  addChecklist: ->
+    this.$('#add-checklist-modal').modal({})
+    this.$('#add-checklist-submit').on 'click', =>
+      val = $('#template-create').validate
+        errorClass:'error'
+        validClass:'success'
+        errorElement:'span'
+        highlight: (element, errorClass, validClass) ->
+          $(element).parents('.control-group').addClass(errorClass).removeClass(validClass)
+        unhighlight: (element, errorClass, validClass) ->
+          $(element).parents('.error').removeClass(errorClass).addClass(validClass)
+        messages:
+          name: 'Required'
+        rules:
+          templatekey:
+            required: true
+          templatename:
+            required: true
+        #errorPlacement: (error, element) ->
+        #  error.appendTo($('#dashboard-edit-name'))
+        #invalidHandler: (form, validator) ->
+        #  $('.dashboard-name-input').tooltip 'show'
+        #  Ember.run.later($('.dashboard-name-input'),
+        #    -> this.tooltip('hide'),
+        #    2000) 
+      if val.form()
+        this.$('#add-checklist-modal').modal('hide')
   showReport: (e) ->
     context = Ember.Object.create
       key: e.contexts[0]
