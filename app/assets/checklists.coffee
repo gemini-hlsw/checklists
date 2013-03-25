@@ -540,10 +540,11 @@ Checklists.TemplateRepository = Ember.Object.create
       data: JSON.stringify(template)
       success: (response) =>
         template.set('isSaved', true)
+        t = @templates.findProperty('key', key)
+        @templates.replace(@templates.indexOf(t), 1, [template])
         # Clean the cache so new checklists use the new template
         Checklists.ChecklistRepository.cleanCache()
   createNewTemplate: (key, name, callback) ->
-    console.log("Create new " + key)
     $.ajax
       url: "/api/v1.0/templates/#{key}",
       type: 'POST'
