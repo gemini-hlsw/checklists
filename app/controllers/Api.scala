@@ -4,11 +4,29 @@ import play.api.mvc.{Controller, Action}
 import models._
 import com.novus.salat._
 import mongoContext._
-import play.api.libs.json.{Json, JsNumber, JsString, JsObject}
+import play.api.libs.json._
+import play.api.data._
+import play.api.data.Forms._
 
 object Api extends Controller {
   def sites = Action {
     Ok(Json.toJson(Site.findSites)).as(JSON)
+  }
+
+  val keyValidationForm = Form(
+    single(
+      "key" -> text
+    )
+  )
+
+  def validateKey = Action { implicit request =>
+    keyValidationForm.bindFromRequest.fold(
+      formWithErrors =>
+        BadRequest,
+      key => {// binding success, you get the actual value 
+        ChecklistTemplate.findTemplate(key).map(t => Ok(JsString(key + " already exist"))).getOrElse(Ok(JsBoolean(true))).as(JSON)
+      }
+    )
   }
 
   def templates = Action {

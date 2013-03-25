@@ -8,15 +8,17 @@ GET     /about                                          controllers.Application.
 GET     /test                                           controllers.Application.test
         
 GET     /api/v1.0/sites                                 controllers.Api.sites
+POST    /api/v1.0/validation/templatekey                controllers.Api.validateKey
 GET     /api/v1.0/templates                             controllers.Api.templates
-GET     /api/v1.0/templates/:site                       controllers.Api.template(site:String)
-GET     /api/v1.0/templates/:site/settings              controllers.Api.templateSettings(site:String)
-POST    /api/v1.0/templates/:site                       controllers.Api.saveTemplate(site:String)
-GET     /api/v1.0/checklist/:site/:date                 controllers.Api.checkList(site:String, date:String)
-POST    /api/v1.0/checklist/:site/:date                 controllers.Api.saveCheckList(site:String, date:String)
-GET     /api/v1.0/reports/months/:site                  controllers.Api.availableMonths(site:String)
-GET     /api/v1.0/checklist/report/:site/:year/:month   controllers.Api.checkListReport(site:String, year:Int, month: Int)
+GET     /api/v1.0/templates                             controllers.Api.templates
+GET     /api/v1.0/templates/:key                        controllers.Api.template(key:String)
+GET     /api/v1.0/templates/:key/settings               controllers.Api.templateSettings(key:String)
+POST    /api/v1.0/templates/:key                        controllers.Api.saveTemplate(key:String)
+GET     /api/v1.0/checklist/:key/:date                  controllers.Api.checkList(key:String, date:String)
+POST    /api/v1.0/checklist/:key/:date                  controllers.Api.saveCheckList(key:String, date:String)
+GET     /api/v1.0/reports/months/:key                   controllers.Api.availableMonths(key:String)
+GET     /api/v1.0/checklist/report/:key/:year/:month    controllers.Api.checkListReport(key:String, year:Int, month: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /1/assets/*file                                   controllers.Assets.at(path="/public", file)
+GET     /1/assets/*file                                 controllers.Assets.at(path="/public", file)
 #GET     /1/assets/*file                                   controllers.VersionedAssets.at(file)
