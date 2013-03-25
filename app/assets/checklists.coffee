@@ -564,6 +564,16 @@ Checklists.switchStyle = (name)->
   if Modernizr.localstorage
     localStorage.theme = name
 
+$.validator.addMethod(
+  "regex",
+  (value, element, regexp) ->
+    re = new RegExp(regexp)
+    p value
+    p re.test(value)
+    p this.optional(element)
+    this.optional(element) or re.test(value)
+  "Please check your input.")
+
 ###
 # View and controller for the toolbar
 ###
@@ -587,6 +597,7 @@ Checklists.ToolbarView = Ember.View.extend
         rules:
           templatekey:
             required: true
+            regex: '^[A-Z]+$'
           templatename:
             required: true
         #errorPlacement: (error, element) ->
@@ -597,6 +608,9 @@ Checklists.ToolbarView = Ember.View.extend
         #    -> this.tooltip('hide'),
         #    2000) 
       if val.form()
+        val.resetForm()
+        this.$('#template-key').val('')
+        this.$('#template-name').val('')
         this.$('#add-checklist-modal').modal('hide')
   showReport: (e) ->
     context = Ember.Object.create
