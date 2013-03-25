@@ -140,8 +140,9 @@ Checklists.DatePicker = Ember.View.extend
 # View of a resizable text area
 ###
 Checklists.TemplateField = Ember.TextField.extend
-  attributeBindings: ['autofocus']
-  autofocus: 'autofocus'
+  didInsertElement: ->
+    if @get('context.newCheck')
+      this.$().focus()
 
 ###
 # View of a Select2 box with tags
@@ -363,6 +364,7 @@ Checklists.Template = Ember.Object.extend
     nc = Checklists.TemplateCheck.create
       title: ''
       position: g.get('checks').length
+      newCheck: true
       choices: Ember.A(Checklists.TemplateRepository.choiceFromJson({name: c, selected: true} ) for c in @get('choices'))
     g.get('checks').pushObject(nc)
   moveUp: (position, groupPosition) ->
