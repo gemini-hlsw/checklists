@@ -1,0 +1,14 @@
+{{#if isLoaded}}
+  <div class="span6 offset3 centered-content">
+    <div class="well centered-content">
+      <h1>Checklists</h1>
+      <div class="btn-group btn-group-vertical">
+        {{#each template in content}}
+          <button class="btn btn-large site-button" {{action siteChecklist template}}>{{template.name}}</button>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+{{else}}
+  {{view Checklists.OverlayView}}
+{{/if}}

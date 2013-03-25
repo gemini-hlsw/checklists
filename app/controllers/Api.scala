@@ -27,11 +27,11 @@ object Api extends Controller {
     request.body.asJson.map(_.as[ChecklistTemplate]).map(ChecklistTemplate.saveTemplate).map(t => Ok(Json.toJson(t)).as(JSON)).getOrElse(NotFound)
   }
 
-  def checkList(site:String, date:String) = Action {
-    Checklist.findOrCreate(site, JsonFormatters.fmt.parseDateTime(date).toDateMidnight).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
+  def checkList(key:String, date:String) = Action {
+    Checklist.findOrCreate(key, JsonFormatters.fmt.parseDateTime(date).toDateMidnight).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
   }
 
-  def saveCheckList(site:String, date:String) = Action { implicit request =>
+  def saveCheckList(key:String, date:String) = Action { implicit request =>
     val result = request.body.asJson.map(_.as[Checklist]).map(Checklist.saveChecklist)
     result match {
       case Some(Right(c)) => Ok(Json.toJson(c)).as(JSON)
@@ -40,12 +40,12 @@ object Api extends Controller {
     }
   }
 
-  def checkListReport(site:String, year: Int, month: Int) = Action {
-    ChecklistReport.summarizePeriod(site, year, month).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
+  def checkListReport(key:String, year: Int, month: Int) = Action {
+    ChecklistReport.summarizePeriod(key, year, month).map(c => Ok(Json.toJson(c)).as(JSON)).getOrElse(NotFound)
   }
 
-  def availableMonths(site: String) = Action {
-    val availability = ChecklistReport.findAvailableMonths(site).map {
+  def availableMonths(key: String) = Action {
+    val availability = ChecklistReport.findAvailableMonths(key).map {
       case (y, m) => JsObject(Seq("year" -> JsNumber(y), "months" -> Json.toJson(m)))
     }
     Ok(Json.toJson(availability)).as(JSON)

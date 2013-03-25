@@ -87,7 +87,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
 
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
-  def findTemplate(site: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("site" -> site)).map(hydrateChecks)
+  def findTemplate(key: String):Option[ChecklistTemplate] = dao.findOne(MongoDBObject("key" -> key)).map(hydrateChecks)
   def hydrateChecks(t: ChecklistTemplate):ChecklistTemplate = t.copy(groups = t.groups.map(_.hydrateChecks(t.choices)))
 
   def saveTemplate(t: ChecklistTemplate) = {

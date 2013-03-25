@@ -721,7 +721,7 @@ Checklists.ChecklistController = Ember.ObjectController.extend
   content: null
 
 Checklists.Checklist = Ember.ObjectController.extend
-  site: ''
+  key: ''
   name: ''
   date: ''
   closed: false
@@ -834,7 +834,7 @@ Checklists.Router = Ember.Router.extend
         router.get('toolbarController').set('inReport', false)
         router.get('applicationController').connectOutlet('main', 'templates', Checklists.TemplateRepository.findAll())
     checklist: Ember.Route.extend
-      route: '/:site/:date'
+      route: '/:key/:date'
       saveChecklist: (router) ->
         checklist =  router.get('checklistController').get('content')
         Checklists.ChecklistRepository.saveChecklist(checklist)
@@ -852,16 +852,16 @@ Checklists.Router = Ember.Router.extend
         # current date
         nextDay = moment(checklist.get('date'), Checklists.urlDateFormat).add('days', 1)
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
-      connectOutlets: (router, site) ->
-        router.setupReportsController(site.site)
-        checklist = Checklists.ChecklistRepository.findOne(site.site, site.date)
+      connectOutlets: (router, template) ->
+        #router.setupReportsController(site.site)
+        checklist = Checklists.ChecklistRepository.findOne(template.key, moment().format(Checklists.urlDateFormat))
 
         router.get('toolbarController').set('inChecklist', true)
-        router.get('toolbarController').set('site', site.site)
+        #router.get('toolbarController').set('site', site.site)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
 
-        router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(site.site))
+        #router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(site.site))
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
       route: '/:site/template'

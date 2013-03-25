@@ -61,26 +61,26 @@ object CheckGroup {
   }
 }
 
-case class Checklist(id: ObjectId = new ObjectId, site: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty)
+case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty)
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
-    Checklist(site = t.site, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
+    Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
 
-  def findOrCreate(site:String, date:DateMidnight):Option[Checklist] = findChecklist(site, date).orElse(ChecklistTemplate.findTemplate(site).map(newFromTemplate(_, date)))
+  def findOrCreate(key:String, date:DateMidnight):Option[Checklist] = findChecklist(key, date).orElse(ChecklistTemplate.findTemplate(key).map(newFromTemplate(_, date)))
 
-  def findChecklist(site:String, date:DateMidnight):Option[Checklist] =
-    dao.findOne(MongoDBObject("site" -> site, "date" -> date))
+  def findChecklist(key:String, date:DateMidnight):Option[Checklist] =
+    dao.findOne(MongoDBObject("key" -> key, "date" -> date))
 
-  def findChecklistRange(site:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] = {
-    dao.find(MongoDBObject("site" -> site, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
+  def findChecklistRange(key:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] = {
+    dao.find(MongoDBObject("key" -> key, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
   }
 
-  def findDates(site: String):Seq[DateMidnight] = {
+  def findDates(key: String):Seq[DateMidnight] = {
     val fields = MongoDBObject("date" -> 1)
-    dao.find(MongoDBObject("site" -> site)).sort(orderBy = MongoDBObject("date" -> -1)).collect {
+    dao.find(MongoDBObject("site" -> key)).sort(orderBy = MongoDBObject("date" -> -1)).collect {
       case c:Checklist => c.date
     }.toList
   }
@@ -104,13 +104,13 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   }
 
   def saveChecklist(t:Checklist):Either[ErrorCode, Checklist] = {
-    findOrCreate(t.site, t.date).map { cl =>
+    findOrCreate(t.key, t.date).map { cl =>
       cl.closed match {
         case false => {
           val merged:Checklist = mergeLists(t)(cl)
           dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
 
-          ChecklistTemplate.updateEngineersNames(t.site, t.engineers, t.technicians)
+          ChecklistTemplate.updateEngineersNames(t.key, t.engineers, t.technicians)
           Right(merged)
         }
         case true => Left(ErrorCode.ChecklistClosed)
@@ -119,7 +119,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   implicit object ChecklistFormat extends Format[Checklist] {
     def writes(c: Checklist) = JsObject(Seq(
-      "site"        -> JsString(c.site),
+      "key"        -> JsString(c.key),
       "name"        -> JsString(c.name),
       "closed"      -> JsBoolean(c.closed),
       "date"        -> Json.toJson(c.date),
@@ -129,7 +129,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     ))
 
     def reads(json: JsValue) = Checklist(
-      site        = (json \ "site").asOpt[String].getOrElse(""),
+      key        = (json \ "key").asOpt[String].getOrElse(""),
       name        = (json \ "name").asOpt[String].getOrElse(""),
       closed      = (json \ "closed").asOpt[Boolean].getOrElse(false),
       date        = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
@@ -160,13 +160,13 @@ object ChecklistReportSummary {
       }.toList),
       "closed" -> JsBoolean(summary.checklist.closed),
       "date" -> JsString(JsonFormatters.fmt.print(summary.checklist.date)),
-      "site" -> JsString(summary.checklist.site),
+      "key" -> JsString(summary.checklist.key),
       "checklist" -> Json.toJson(summary.checklist)
     ))
   }
 }
 
-case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
+case class ChecklistReport(key: String, checklists: Seq[Checklist]) {
   def startDate:Option[DateMidnight] = checklists.headOption.map(_.date)
   def untilDate:Option[DateMidnight] = checklists.lastOption.map(_.date)
   def summary:Seq[ChecklistReportSummary] = for {
@@ -175,23 +175,23 @@ case class ChecklistReport(site: String, checklists: Seq[Checklist]) {
 }
 
 object ChecklistReport {
-  def summarizePeriod(site: String, year: Int, month:Int):Option[ChecklistReport] = {
+  def summarizePeriod(key: String, year: Int, month:Int):Option[ChecklistReport] = {
     val from = new DateMidnight(year, month, 1)
     val to = new DateMidnight(year, month, from.dayOfMonth.getMaximumValue)
-    val checklists = Checklist.findChecklistRange(site, from, to)
-    some(ChecklistReport(site, checklists))
+    val checklists = Checklist.findChecklistRange(key, from, to)
+    some(ChecklistReport(key, checklists))
   }
 
-  def findAvailableMonths(site: String):Seq[(Int, Seq[String])] = {
+  def findAvailableMonths(key: String):Seq[(Int, Seq[String])] = {
     val r = for {
-      y <- Checklist.findDates(site).groupBy(_.getYear).toSeq
+      y <- Checklist.findDates(key).groupBy(_.getYear).toSeq
     } yield (y._1, y._2.groupBy(_.monthOfYear.getAsText).keys.toSeq)
     r.reverse.toSeq
   }
 
   implicit object ChecklistReportWrites extends Writes[ChecklistReport] {
     override def writes(report: ChecklistReport) = JsObject(Seq(
-      "site"       -> JsString(report.site),
+      "key"       -> JsString(report.key),
       "from"       -> Json.toJson(report.startDate),
       "to"         -> Json.toJson(report.untilDate),
       "summary"    -> Json.toJson(report.summary)
