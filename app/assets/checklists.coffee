@@ -348,6 +348,7 @@ Checklists.TemplateController = Ember.ObjectController.extend
 
 Checklists.Template = Ember.Object.extend
   site: ''
+  key: ''
   name: ''
   groups: []
   choices: []

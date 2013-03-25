@@ -68,7 +68,7 @@ object CheckTemplateGroup {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, site: String, key: String, name:String, groups: Seq[CheckTemplateGroup], engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
 case class TemplateSettings(site: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
 
@@ -78,7 +78,7 @@ object TemplateSettings {
       "site"        -> JsString(t.site),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),
-      "groups"      -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
+      "groups"     -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
     ))
   }
 }
@@ -108,6 +108,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
       "site"        -> JsString(t.site),
+      "key"         -> JsString(t.key),
       "name"        -> JsString(t.name),
       "groups"      -> Json.toJson(t.groups),
       "engineers"   -> Json.toJson(t.engineers),
@@ -117,6 +118,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
 
     def reads(json: JsValue) = ChecklistTemplate(
       site        = ~(json \ "site").asOpt[String],
+      key         = ~(json \ "key").asOpt[String],
       name        = ~(json \ "name").asOpt[String],
       groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
       engineers   = (json \ "engineers").as[Seq[String]].toSet,

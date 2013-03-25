@@ -1,6 +1,9 @@
 import models.{ChecklistTemplate, Site, RegisterJodaDateMidnightConversionHelpers}
 import play.api.{Application, GlobalSettings}
 
+import scalaz._
+import Scalaz._
+
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
     RegisterJodaDateMidnightConversionHelpers()
@@ -12,7 +15,10 @@ object Global extends GlobalSettings {
     }
     val templates = ChecklistTemplate.findTemplates
     if (templates.isEmpty) {
-      (ChecklistTemplate(site = "GS", name = "Gemini South", groups = Nil) :: ChecklistTemplate(site = "GN", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
+      (ChecklistTemplate(site = "GS", key = "", name = "Gemini South", groups = Nil) :: ChecklistTemplate(site = "GN", key = "", name = "Gemini North", groups = Nil) :: Nil).map(ChecklistTemplate.saveTemplate)
+    }
+    if (templates.size === 2) {
+      println("Upgrade the templates")
     }
   }
 }
