@@ -69,15 +69,6 @@ td.centered {
     color: black !important;
 }
 
-textarea {
-    border-radius: 5px;
-    border:1px solid #000;
-}
-
-textarea:focus {
-    border-color:#f00;
-}
-
 .textarea-animated {
     vertical-align: top; 
     transition: height 0.2s;
@@ -192,4 +183,12 @@ textarea:focus {
 
 .icon-centered {
     margin-top: 5px;
+}
+
+.input-prepend {
+    margin-bottom: 0px;
+}
+
+textarea {
+    color: rgb(82, 87, 92);
 }

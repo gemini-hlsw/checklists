@@ -73,18 +73,6 @@ Checklists.ResizableTextArea = Ember.TextArea.extend
 Checklists.Site = Ember.Object.extend
   site: ''
   name: ''
-  date: ''
-
-###
-# View and controller to see the sites
-###
-Checklists.SitesView = Ember.View.extend
-  templateName: 'sites'
-Checklists.SitesController = Ember.ArrayController.extend
-  content: []
-  isLoaded: ( ->
-    @get('content').length > 0
-  ).property('@each.content')
 
 # Displays an overlay with a spinning wheel
 Checklists.OverlayView = Ember.View.extend
@@ -110,7 +98,6 @@ Checklists.SitesRepository = Ember.Object.create
     Checklists.Site.create
       site: json.site
       name: json.name
-      date: json.date
   findAll: ->
     self = this
     if self.sites.length is 0
@@ -148,14 +135,6 @@ Checklists.DatePicker = Ember.View.extend
       todayBtn: 'linked'
     $('.date').datepicker('update', @_toDate()).on 'changeDate', (e) =>
         @_dateChanged(e, this)
-
-###
-# View and controller for the calendar
-###
-Checklists.SiteSwitchView = Ember.View.extend
-  templateName: 'site_switch'
-Checklists.SiteSwitchController = Ember.ObjectController.extend
-  content: null
 
 ###
 # View of a resizable text area
@@ -854,14 +833,14 @@ Checklists.ChecklistRepository = Ember.Object.create
       date: date
       closed: false
       groups: []
-  findOne: (site, date) ->
-    if @get('checklistsCache')["#{site}-#{date}"]?
-      @get('checklistsCache')["#{site}-#{date}"]
+  findOne: (key, date) ->
+    if @get('checklistsCache')["#{key}-#{date}"]?
+      @get('checklistsCache')["#{key}-#{date}"]
     else
-      checklist = @newChecklist(site, date)
-      @get('checklistsCache')["#{site}-#{date}"] = checklist
+      checklist = @newChecklist(key, date)
+      @get('checklistsCache')["#{key}-#{date}"] = checklist
       $.ajax
-        url: "/api/v1.0/checklist/#{site}/#{date}",
+        url: "/api/v1.0/checklist/#{key}/#{date}",
         success: (response) =>
           @checklistFillJson(checklist, response)
       checklist
