@@ -449,7 +449,7 @@ Checklists.TemplatesView = Ember.View.extend
   columnCount: 2
   templateName: 'templates'
   rows: ( ->
-    r = [0..@columnCount - 1]
+    r = [0..@get('context.content').length/2]
     r.map (i) =>
       @get('context.content').filterProperty('rowPos', i)
   ).property('content.@each')

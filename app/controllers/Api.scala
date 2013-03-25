@@ -45,8 +45,9 @@ object Api extends Controller {
   }
 
   def newTemplate(key: String) = Action { implicit request =>
-    request.body.asJson.map(_.as[TemplateCreationParams]).map(ChecklistTemplate.createNew).map(println)
-    Ok
+    request.body.asJson.map(_.as[TemplateCreationParams]).map(ChecklistTemplate.createNew).map(_.fold(
+      e => BadRequest,
+      t => Ok(Json.toJson(t)))).getOrElse(NotFound).as(JSON)
   }
 
   def saveTemplate(key: String) = Action { implicit request =>

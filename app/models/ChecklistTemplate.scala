@@ -84,6 +84,7 @@ object TemplateSettings {
 case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0,engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
+  val columnCount = 2
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
 
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
@@ -99,14 +100,20 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     t.copy(id = id)
   }
 
+  private def nextPosition(p: TemplateCreationParams):TemplateCreationParams = {
+    val count = dao.count(MongoDBObject())
+    val row = (count / columnCount)
+    p.copy(colPos = (count - (row * columnCount)).toInt, rowPos = row.toInt)
+  }
+
   private def newTemplate(p: TemplateCreationParams):ChecklistTemplate = {
-    val t = ChecklistTemplate(key = p.key, name = p.name, groups = Seq.empty)
+    val t = ChecklistTemplate(key = p.key, name = p.name, groups = Seq.empty, colPos = p.colPos, rowPos = p.rowPos)
     dao.insert(t)
     t
   }
 
   def createNew(p: TemplateCreationParams):ValidationNEL[String, ChecklistTemplate] = {
-    findTemplate(p.key).map(_ => ("Template with key already exists").failNel).getOrElse(newTemplate(p).successNel)
+    findTemplate(p.key).map(_ => ("Template with key already exists").failNel).getOrElse(newTemplate(nextPosition(p)).successNel)
   }
 
   def updateEngineersNames(key: String, engineers: Seq[String], technicians: Seq[String]) {
@@ -143,7 +150,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
 }
 
 
-case class TemplateCreationParams(key: String, name: String)
+case class TemplateCreationParams(key: String, name: String, colPos: Int = 0, rowPos: Int =0)
 
 object TemplateCreationParams {
   implicit object TemplateCreationParamsFormat extends Reads[TemplateCreationParams] {
