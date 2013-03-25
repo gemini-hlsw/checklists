@@ -1,0 +1,10 @@
+# Remove site
+db.checklists_templates.update({}, {$unset: {site: 1}}, {multi: true})
+# Add key
+db.checklists_templates.update({name: "Gemini South"}, {$set: {key: "GSEOD"}}, {multi: true})
+db.checklists_templates.update({name: "Gemini North"}, {$set: {key: "GNEOD"}}, {multi: true})
+# Add pos
+db.checklists_templates.update({key: "GSEOD"}, {$set: {colPos: 0, rowPos: 0}}, {multi: true})
+db.checklists_templates.update({key: "GNEOD"}, {$set: {colPos: 1, rowPos: 0}}, {multi: true})
+# Add key
+db.checklists.update({site: "GS"}, {$set: {key: "GSEOD"}, $unset: {site: 1}}, {multi: true})
