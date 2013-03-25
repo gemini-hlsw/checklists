@@ -165,7 +165,7 @@ Checklists.TemplateField = Ember.TextField.extend
   autofocus: 'autofocus'
 
 ###
-# View of a resizable text area
+# View of a Select2 box with tags
 ###
 Checklists.Select2Tags = Ember.View.extend
   tagName: 'input'
@@ -189,7 +189,6 @@ Checklists.Select2Tags = Ember.View.extend
     if val.length isnt data.length
       this.$().select2({tags: @get('tags'), initSelection: @_initSelection}).select2("val", data)
   ).observes('values')
-
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
       view = Ember.View.views[e.context.id]
@@ -474,12 +473,12 @@ Checklists.TemplatesController = Ember.ArrayController.extend
 
 Checklists.TemplateRepository = Ember.Object.create
   templates: Ember.A([])
-  findSettings: (site) ->
+  findSettings: (key) ->
     settings = Checklists.TemplateSettings.create
       engineers: Ember.A()
       technicians: Ember.A()
     $.ajax
-      url: "/api/v1.0/templates/#{site}/settings",
+      url: "/api/v1.0/templates/#{key}/settings",
       success: (response) =>
         settings.setProperties response
     settings
@@ -859,14 +858,14 @@ Checklists.Router = Ember.Router.extend
         router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, template) ->
         #router.setupReportsController(site.site)
-        checklist = Checklists.ChecklistRepository.findOne(template.key, moment().format(Checklists.urlDateFormat))
+        checklist = Checklists.ChecklistRepository.findOne(template.key, template.date)
 
         router.get('toolbarController').set('inChecklist', true)
         #router.get('toolbarController').set('site', site.site)
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('applicationController').connectOutlet('main', 'checklist', checklist)
 
-        #router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(site.site))
+        router.get('templateSettingsController').set('content', Checklists.TemplateRepository.findSettings(template.key))
     editTemplate: Ember.Router.transitionTo('template')
     template: Ember.Route.extend
       route: '/:site/template'
