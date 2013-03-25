@@ -544,8 +544,9 @@ Checklists.TemplateRepository = Ember.Object.create
     @templates
   saveTemplate: (template) ->
     template.set('isSaved', false)
+    key = template.get('key')
     $.ajax
-      url: "/api/v1.0/templates/#{template.site}",
+      url: "/api/v1.0/templates/#{key}",
       type: 'PUT'
       contentType: 'application/json'
       data: JSON.stringify(template)
@@ -562,9 +563,6 @@ Checklists.TemplateRepository = Ember.Object.create
       data: JSON.stringify({key: key, name: name})
       success: (response) =>
         callback() if callback?
-        #template.set('isSaved', true)
-        # Clean the cache so new checklists use the new template
-        #Checklists.ChecklistRepository.cleanCache()
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
