@@ -5,10 +5,10 @@
         {{#if isSaved}}
           <h1>Loading...</h1>
         {{else}}
-          <h1>{{site}} end of the day checks<br/>{{longFormattedDate}}</h1>
+          <h1>{{name}}<br/>{{longFormattedDate}}</h1>
         {{/if}}
       {{else}}
-        <h1>{{site}} end of the day checks<br/>{{longFormattedDate}}</h1>
+        <h1>{{name}}<br/>{{longFormattedDate}}</h1>
       {{/if}}
     <div class="row-fluid centered">
       <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
