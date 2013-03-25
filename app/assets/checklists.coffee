@@ -568,9 +568,6 @@ $.validator.addMethod(
   "regex",
   (value, element, regexp) ->
     re = new RegExp(regexp)
-    p value
-    p re.test(value)
-    p this.optional(element)
     this.optional(element) or re.test(value)
   "Please check your input.")
 
@@ -597,7 +594,7 @@ Checklists.ToolbarView = Ember.View.extend
         rules:
           templatekey:
             required: true
-            regex: '^[A-Z]+$'
+            regex: '^[A-Z][A-Z0-9]*$'
           templatename:
             required: true
         #errorPlacement: (error, element) ->
@@ -609,8 +606,7 @@ Checklists.ToolbarView = Ember.View.extend
         #    2000) 
       if val.form()
         val.resetForm()
-        this.$('#template-key').val('')
-        this.$('#template-name').val('')
+        this.$('input').val('').removeClass('error').removeClass('success')
         this.$('#add-checklist-modal').modal('hide')
   showReport: (e) ->
     context = Ember.Object.create
