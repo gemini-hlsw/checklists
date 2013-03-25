@@ -5,18 +5,49 @@
         {{#if isSaved}}
           <h1>Loading...</h1>
         {{else}}
-          <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
+          <h1>{{name}}<button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
         {{/if}}
       {{else}}
-        <h1>{{name}} template <button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
+        <h1>{{name}}<button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
       {{/if}}
+      </div>
+      <div class="row-fluid">
       <div id="settings" class="collapse">
-        <div class="well">
-          <label>Engineers names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
-          <label>Technician names</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="hide mousetrap" tagsBinding="technicians"}}
-          <label>Status Choices</label> {{view Checklists.Select2Tags class="input-xxlarge" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
+        <div class="well form-horizontal">
+          <div class="control-group">
+            <label class="control-label wide-label" for="template-engineers">Key</label>
+            <div class="controls">
+              <span class="text-left input-block-level uneditable-input">{{key}}</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label wide-label" for="template-engineers">Name</label>
+            <div class="controls">
+              {{view Ember.TextField class="input-block-level" placeholder="Enter name" valueBinding="name"}}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="template-engineers">Engineers names</label>
+            <div class="controls">
+              {{view Checklists.Select2Tags id="template-engineers" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="template-technicians">Technician names</label>
+            <div class="controls">
+              {{view Checklists.Select2Tags id="template-technicians" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="hide mousetrap" tagsBinding="technicians"}}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label for="template-choices"">Status Choices</label>
+            <div class="controls">
+              {{view Checklists.Select2Tags id="template-choices" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
+            </div>
+          </div>
         </div>
       </div>
+      </div>
+      <div class="row-fluid">
       <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
       </div>
       <div class="row-fluid">
