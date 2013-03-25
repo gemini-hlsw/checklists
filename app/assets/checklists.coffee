@@ -846,16 +846,16 @@ Checklists.Router = Ember.Router.extend
         checklist =  router.get('checklistController').get('content')
         checklist.set('closed', true)
         Checklists.ChecklistRepository.saveChecklist(checklist)
-      goToPrevious: (router) ->
+      goToPrevious: (router, event) ->
         checklist =  router.get('checklistController').get('content')
         # current date
         previousDay = moment(checklist.get('date'), Checklists.urlDateFormat).subtract('days', 1)
-        router.transitionTo('checklist', {site: checklist.get('site'), date: previousDay.format(Checklists.urlDateFormat)})
+        router.transitionTo('checklist', {key: checklist.get('key'), date: previousDay.format(Checklists.urlDateFormat)})
       goToNext: (router) ->
         checklist =  router.get('checklistController').get('content')
         # current date
         nextDay = moment(checklist.get('date'), Checklists.urlDateFormat).add('days', 1)
-        router.transitionTo('checklist', {site: checklist.get('site'), date: nextDay.format(Checklists.urlDateFormat)})
+        router.transitionTo('checklist', {key: checklist.get('key'), date: nextDay.format(Checklists.urlDateFormat)})
       connectOutlets: (router, template) ->
         #router.setupReportsController(site.site)
         checklist = Checklists.ChecklistRepository.findOne(template.key, template.date)
