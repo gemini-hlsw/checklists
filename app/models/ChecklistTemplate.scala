@@ -81,7 +81,7 @@ object TemplateSettings {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0,engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0, engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
 
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val columnCount = 2
