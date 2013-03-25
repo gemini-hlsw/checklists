@@ -464,8 +464,16 @@ Checklists.TemplateSettings = Ember.Object.extend
 Checklists.TemplateSettingsController = Ember.ObjectController.extend
   content: null
 
+Checklists.TemplatesView = Ember.View.extend
+  templateName: 'templates'
+
+Checklists.TemplatesController = Ember.ArrayController.extend
+  isLoaded: ( ->
+    @get('content').length > 0
+  ).property('content.@each')
+
 Checklists.TemplateRepository = Ember.Object.create
-  templates: {}
+  templates: []
   findSettings: (site) ->
     settings = Checklists.TemplateSettings.create
       engineers: Ember.A()
@@ -515,6 +523,22 @@ Checklists.TemplateRepository = Ember.Object.create
           template.normalizeGroupPositions()
       @templates[key] = template
       template
+  findAll: ->
+    $.ajax
+      url: "/api/v1.0/templates",
+      success: (response) =>
+        response.forEach (t) =>
+          template = Checklists.Template.create
+            isSaved: true
+          template.setProperties t
+          groups = Ember.A()
+          groups.addObject(Checklists.TemplateRepository.groupFromJson(g)) for g in t.groups
+          template.set('groups', groups)
+          template.set('isLoaded', true)
+          template.normalizeGroupPositions()
+          @templates.pushObject(template)
+        @templates.set('isLoaded', true)
+    @templates
   saveTemplate: (template) ->
     template.set('isSaved', false)
     $.ajax
@@ -808,7 +832,7 @@ Checklists.Router = Ember.Router.extend
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('toolbarController').set('inChecklist', false)
         router.get('toolbarController').set('inReport', false)
-        router.get('applicationController').connectOutlet('main', 'sites', Checklists.SitesRepository.findAll())
+        router.get('applicationController').connectOutlet('main', 'templates', Checklists.TemplateRepository.findAll())
     checklist: Ember.Route.extend
       route: '/:site/:date'
       saveChecklist: (router) ->
