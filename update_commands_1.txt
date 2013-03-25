@@ -8,3 +8,6 @@ db.checklists_templates.update({key: "GSEOD"}, {$set: {colPos: 0, rowPos: 0}}, {
 db.checklists_templates.update({key: "GNEOD"}, {$set: {colPos: 1, rowPos: 0}}, {multi: true})
 # Add key
 db.checklists.update({site: "GS"}, {$set: {key: "GSEOD"}, $unset: {site: 1}}, {multi: true})
+# Change name
+db.checklists_templates.update({key: "GSEOD"}, {$set: {name: "GS End of the day"}}, {multi: true})
+db.checklists_templates.update({key: "GNEOD"}, {$set: {name: "GN End of the day"}}, {multi: true})

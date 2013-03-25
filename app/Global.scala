@@ -19,17 +19,5 @@ object Global extends GlobalSettings {
     }
     val version = DatastoreVersion.findLatest() | DatastoreVersion.store(1)
     println("Store Version: " + version.version)
-    /*version.version match {
-      case 1 => {
-        if (templates.size === 2) {
-          //db.temp.update({}, {$set:{ "key": ""}}, false, true)
-          /*println("Upgrade the templates")
-          templates.foreach(_.match {
-            case _ =>
-          })*/
-        }
-        DatastoreVersion.store(version=2)
-      case _ =>
-    }*/
   }
 }
