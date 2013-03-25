@@ -74,13 +74,12 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def findChecklist(key:String, date:DateMidnight):Option[Checklist] =
     dao.findOne(MongoDBObject("key" -> key, "date" -> date))
 
-  def findChecklistRange(key:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] = {
+  def findChecklistRange(key:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] =
     dao.find(MongoDBObject("key" -> key, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList
-  }
 
   def findDates(key: String):Seq[DateMidnight] = {
     val fields = MongoDBObject("date" -> 1)
-    dao.find(MongoDBObject("site" -> key)).sort(orderBy = MongoDBObject("date" -> -1)).collect {
+    dao.find(MongoDBObject("key" -> key)).sort(orderBy = MongoDBObject("date" -> -1)).collect {
       case c:Checklist => c.date
     }.toList
   }
@@ -166,7 +165,7 @@ object ChecklistReportSummary {
   }
 }
 
-case class ChecklistReport(key: String, checklists: Seq[Checklist]) {
+case class ChecklistReport(key: String, name: String, checklists: Seq[Checklist]) {
   def startDate:Option[DateMidnight] = checklists.headOption.map(_.date)
   def untilDate:Option[DateMidnight] = checklists.lastOption.map(_.date)
   def summary:Seq[ChecklistReportSummary] = for {
@@ -179,7 +178,7 @@ object ChecklistReport {
     val from = new DateMidnight(year, month, 1)
     val to = new DateMidnight(year, month, from.dayOfMonth.getMaximumValue)
     val checklists = Checklist.findChecklistRange(key, from, to)
-    some(ChecklistReport(key, checklists))
+    some(ChecklistReport(key, ~checklists.headOption.map(_.name), checklists))
   }
 
   def findAvailableMonths(key: String):Seq[(Int, Seq[String])] = {
@@ -191,7 +190,8 @@ object ChecklistReport {
 
   implicit object ChecklistReportWrites extends Writes[ChecklistReport] {
     override def writes(report: ChecklistReport) = JsObject(Seq(
-      "key"       -> JsString(report.key),
+      "key"        -> JsString(report.key),
+      "name"       -> JsString(report.name),
       "from"       -> Json.toJson(report.startDate),
       "to"         -> Json.toJson(report.untilDate),
       "summary"    -> Json.toJson(report.summary)
