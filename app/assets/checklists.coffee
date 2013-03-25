@@ -942,7 +942,7 @@ Checklists.Router = Ember.Router.extend
         template =  router.get('templateController').get('content')
         Checklists.TemplateRepository.saveTemplate(template)
       goBack: (router) ->
-        site = router.get('templateController').get('content.key')
+        key = router.get('templateController').get('content.key')
         checklist = router.get('checklistController').get('content')
         date = if checklist? then checklist.get('date') else moment().format(Checklists.urlDateFormat)
         router.transitionTo('checklist', {key: key, date: date})
