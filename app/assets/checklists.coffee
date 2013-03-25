@@ -473,7 +473,7 @@ Checklists.TemplatesController = Ember.ArrayController.extend
   ).property('content.@each')
 
 Checklists.TemplateRepository = Ember.Object.create
-  templates: []
+  templates: Ember.A([])
   findSettings: (site) ->
     settings = Checklists.TemplateSettings.create
       engineers: Ember.A()
@@ -536,7 +536,11 @@ Checklists.TemplateRepository = Ember.Object.create
           template.set('groups', groups)
           template.set('isLoaded', true)
           template.normalizeGroupPositions()
-          @templates.pushObject(template)
+          previous = @templates.findProperty('key', t.key)
+          if previous
+            @templates.replace(@templates.indexOf(previous), 1, [template])
+          else
+            @templates.pushObject(template)
         @templates.set('isLoaded', true)
     @templates
   saveTemplate: (template) ->
@@ -827,7 +831,8 @@ Checklists.Router = Ember.Router.extend
     goToDay: Ember.Router.transitionTo('checklist')
     index: Ember.Route.extend
       route: '/'
-      siteChecklist: Ember.Router.transitionTo('checklist')
+      todayChecklist: (router, event) ->
+        router.send('goToDay', {key: event.context.get('key'), date: moment().format(Checklists.urlDateFormat)})
       connectOutlets: (router) ->
         router.get('applicationController').connectOutlet('toolbar', 'toolbar')
         router.get('toolbarController').set('inChecklist', false)

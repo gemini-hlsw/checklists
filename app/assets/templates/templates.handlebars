@@ -4,7 +4,7 @@
       <h1>Checklists</h1>
       <div class="btn-group btn-group-vertical">
         {{#each template in content}}
-          <button class="btn btn-large site-button" {{action siteChecklist template}}>{{template.name}}</button>
+          <button class="btn btn-large site-button" {{action todayChecklist template}}>{{template.name}}</button>
         {{/each}}
       </div>
     </div>
