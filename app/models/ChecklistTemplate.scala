@@ -132,6 +132,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
     def reads(json: JsValue) = ChecklistTemplate(
       key         = ~(json \ "key").asOpt[String],
       name        = ~(json \ "name").asOpt[String],
+      colPos      = ~(json \ "colPos").asOpt[Int],
+      rowPos      = ~(json \ "rowPos").asOpt[Int],
       groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
       engineers   = (json \ "engineers").as[Seq[String]].toSet,
       technicians = (json \ "technicians").as[Seq[String]].toSet,

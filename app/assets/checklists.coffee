@@ -497,6 +497,8 @@ Checklists.TemplateRepository = Ember.Object.create
         key: key
         name: template.get('name')
         isSaved: true
+        colPos: 0
+        rowPos: 0
       $.ajax
         url: "/api/v1.0/templates/#{key}",
         success: (response) =>
