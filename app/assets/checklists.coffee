@@ -452,7 +452,7 @@ Checklists.TemplatesView = Ember.View.extend
     r = [0..@get('context.content').length/2]
     r.map (i) =>
       @get('context.content').filterProperty('rowPos', i)
-  ).property('content.@each')
+  ).property('context.content.@each')
 
 Checklists.TemplatesController = Ember.ArrayController.extend
   isLoaded: ( ->
@@ -553,6 +553,10 @@ Checklists.TemplateRepository = Ember.Object.create
       contentType: 'application/json'
       data: JSON.stringify({key: key, name: name})
       success: (response) =>
+        template = Checklists.Template.create
+          isSaved: true
+        template.setProperties(response)
+        @templates.pushObject(template)
         callback() if callback?
 
 switchLink = (title, name, postfix) ->
