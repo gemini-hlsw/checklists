@@ -5,6 +5,10 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.4.1
+
+- Fixed bug when opening and closing the choices list on the template editor
+
 ###### Version 0.4
 
 - Added support to create checklists in general. Checklists require a key and a name. The key cannot be changed

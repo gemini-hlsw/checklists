@@ -1,5 +1,5 @@
 <div class="collapse in">
-  <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>{{view.parentView}}
+  <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
   <label class="input-mini pull-right checkbox inline">
     {{view Ember.Checkbox checkedBinding="freeText"}}
     Any text
