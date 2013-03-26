@@ -5,6 +5,10 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.4
+
+- Added support to create checklists in general. Checklists require a key and a name. The key cannot be changed
+
 ###### Version 0.3
 
 - To each Checklist you can add Engineers names supervising the task and Technician names performing the task.
