@@ -8,9 +8,7 @@
               {{view Checklists.TemplateField class="mousetrap template-field input-adjusted" name="check" valueBinding="title"}}
               <button class="btn btn-info centered" {{action showChoices target="view"}}><i class="icon-check"></i></button>
             </div>
-            {{#if view.choicesDisplayed}}
-              {{view Checklists.ChoicesList contextBinding="this"}}
-            {{/if}}
+            {{view Ember.ContainerView currentViewBinding="view.choicesView"}}
           </td>
           <td class="centered template-buttons-area">
             <div class="centered-box">

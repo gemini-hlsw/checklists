@@ -257,8 +257,15 @@ Checklists.ChoicesCheckbox =  Ember.Checkbox.extend
 Checklists.TemplateCheckView = Ember.View.extend
   templateName: 'templatecheck'
   choicesDisplayed: false
+  choicesView: null
   showChoices: ->
     @set('choicesDisplayed', not @get('choicesDisplayed'))
+    if @get('choicesDisplayed')
+      view = Checklists.ChoicesListView.create()
+      view.set('context', @get('context'))
+      @set('choicesView', view)
+    else
+      @set('choicesView', null)
 
 ###
 # View and controller to edit a template
@@ -406,7 +413,7 @@ Checklists.Template = Ember.Object.extend
   normalizeGroupPositions: ->
     e.set('position', i) for e, i in @get('groups')
 
-Checklists.ChoicesList = Ember.View.extend
+Checklists.ChoicesListView = Ember.View.extend
   templateName: 'choiceslist'
   checkAll: ->
     @get('context').checkAll()
