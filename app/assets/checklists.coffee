@@ -152,7 +152,7 @@ Checklists.Select2Tags = Ember.View.extend
   classNames: ['ember-tags']
   defaultTemplate: ''
 
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value', 'dropdownCssClass'],
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'tags', 'value', 'dropdownCssClass', 'containerCssClass']
   type: 'hidden'
   tags: []
   values: null
@@ -189,7 +189,7 @@ Checklists.Select2 = Ember.View.extend
   classNames: ['ember-tags']
   defaultTemplate: ''
 
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass'],
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass', 'containerCssClass']
   type: 'hidden'
   options: null
   value: null
@@ -223,7 +223,7 @@ Checklists.Select2Checks = Ember.View.extend
   classNames: ['ember-tags']
   defaultTemplate: ''
 
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass'],
+  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass', 'containerCssClass']
   type: 'hidden'
   options: null
   value: null
@@ -280,6 +280,7 @@ Checklists.TemplateView = Ember.View.extend
       errorClass:'error'
       validClass:'success'
       errorElement:'span'
+      ignore: '.select2-input'
       highlight: (element, errorClass, validClass) ->
         $(element).parents('.control-group').addClass(errorClass).removeClass(validClass)
       unhighlight: (element, errorClass, validClass) ->
