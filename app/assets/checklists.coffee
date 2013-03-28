@@ -276,6 +276,14 @@ Checklists.TemplateView = Ember.View.extend
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveTemplate')
       false
+    this.$('#template-form').validate
+      errorClass:'error'
+      validClass:'success'
+      errorElement:'span'
+      highlight: (element, errorClass, validClass) ->
+        $(element).parents('.control-group').addClass(errorClass).removeClass(validClass)
+      unhighlight: (element, errorClass, validClass) ->
+        $(element).parents('.error').removeClass(errorClass).addClass(validClass)
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
   toggleGroup: (event) ->
@@ -302,7 +310,12 @@ Checklists.TemplateView = Ember.View.extend
   deleteGroup: (event) ->
     @get('controller.content').removeGroup(event.context.get('position'))
   saveTemplate: (event) ->
-    console.log(event.context)
+    val = this.$('#template-form').validate()
+    if val.form()
+      Checklists.get('router').send('saveTemplate')
+    else
+      bootbox.alert("Some fields are not valid, review your settings")
+      val.focusInvalid()
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
