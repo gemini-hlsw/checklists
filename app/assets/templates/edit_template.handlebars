@@ -1,110 +1,112 @@
 <div class="span8 offset2 centered-content">
   <div class="well centered-content">
-    <div class="row-fluid">
-      {{#if needsOverlay}}
-        {{#if isSaved}}
-          <h1>Loading...</h1>
+    <form id="template-form">
+      <div class="row-fluid">
+        {{#if needsOverlay}}
+          {{#if isSaved}}
+            <h1>Loading...</h1>
+          {{else}}
+            <h1>{{name}}<button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
+          {{/if}}
         {{else}}
           <h1>{{name}}<button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
         {{/if}}
-      {{else}}
-        <h1>{{name}}<button data-toggle="collapse" data-target="#settings" class="btn pull-right"><i class="icon-cogs"></i>&nbsp;Settings</button></h1>
-      {{/if}}
-      </div>
-      <div class="row-fluid">
-      <div id="settings" class="collapse">
-        <div class="well form-horizontal">
-          <div class="control-group">
-            <label class="control-label wide-label" for="template-engineers">Key</label>
-            <div class="controls">
-              <span class="text-left input-block-level uneditable-input">{{key}}</span>
+        </div>
+        <div class="row-fluid">
+        <div id="settings" class="collapse">
+          <div class="well form-horizontal">
+            <div class="control-group">
+              <label class="control-label wide-label" for="template-engineers">Key</label>
+              <div class="controls">
+                <span class="text-left input-block-level uneditable-input">{{key}}</span>
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label wide-label" for="template-engineers">Name</label>
-            <div class="controls">
-              {{view Ember.TextField class="input-block-level" placeholder="Enter name" valueBinding="name"}}
+            <div class="control-group">
+              <label class="control-label wide-label" for="template-engineers">Name</label>
+              <div class="controls">
+                {{view Ember.TextField class="input-block-level" placeholder="Enter name" valueBinding="name"}}
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="template-engineers">Engineers names</label>
-            <div class="controls">
-              {{view Checklists.Select2Tags id="template-engineers" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
+            <div class="control-group">
+              <label class="control-label" for="template-engineers">Engineers names</label>
+              <div class="controls">
+                {{view Checklists.Select2Tags id="template-engineers" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="template-technicians">Technician names</label>
-            <div class="controls">
-              {{view Checklists.Select2Tags id="template-technicians" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="hide mousetrap" tagsBinding="technicians"}}
+            <div class="control-group">
+              <label class="control-label" for="template-technicians">Technician names</label>
+              <div class="controls">
+                {{view Checklists.Select2Tags id="template-technicians" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="hide mousetrap" tagsBinding="technicians"}}
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="template-choices">Status Choices</label>
-            <div class="controls">
-              {{view Checklists.Select2Tags id="template-choices" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
+            <div class="control-group">
+              <label class="control-label" for="template-choices">Status Choices</label>
+              <div class="controls">
+                {{view Checklists.Select2Tags id="template-choices" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <div class="controls">
-              <label class="checkbox text-left" for="template-send-on-close">Send email when closing
-                {{view Ember.Checkbox class="checkbox" checkedBinding="sendOnClose"}}
-              </label>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox text-left" for="template-send-on-close">Send email when closing
+                  {{view Ember.Checkbox class="checkbox" checkedBinding="sendOnClose"}}
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="template-from-email">From email address</label>
-            <div class="controls">
-              {{view Ember.TextField class="input-block-level" valueBinding="fromEmail"}}
+            <div class="control-group">
+              <label class="control-label" for="template-from-email">From email address</label>
+              <div class="controls">
+                {{view Ember.TextField class="input-block-level" valueBinding="fromEmail"}}
+              </div>
             </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="template-to-emails">email destinations</label>
-            <div class="controls">
-              {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
+            <div class="control-group">
+              <label class="control-label" for="template-to-emails">email destinations</label>
+              <div class="controls">
+                {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
-      <div class="row-fluid">
-      <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
-      </div>
-      <div class="row-fluid">
-          {{#each group in groups}}
-            <div class="accordion-group checklist-accordion-group">
-              <div class="checklist-accordion-heading">
-                <table class="table-condensed group-header  checklist-accordion-toggle">
-                  <tbody>
-                    <tr>
-                      <td class="centered checklist-template-name-column">
-                        <div class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
-                          &nbsp;<i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;&nbsp;{{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
-                        </div>
-                      </td>
-                      <td class="centered template-buttons-area">
-                        <div class="centered-box">
-                          <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
-                          <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
-                        </div>
-                      </td>
-                      <td class="centered template-buttons-area">
-                        <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
-                        <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+        </div>
+        <div class="row-fluid">
+        <button class="btn btn-success pull-right" {{action addGroup target="view"}}><i class="icon-plus"></i>&nbsp;Add Group</button>
+        </div>
+        <div class="row-fluid">
+            {{#each group in groups}}
+              <div class="accordion-group checklist-accordion-group">
+                <div class="checklist-accordion-heading">
+                  <table class="table-condensed group-header  checklist-accordion-toggle">
+                    <tbody>
+                      <tr>
+                        <td class="centered checklist-template-name-column">
+                          <div class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
+                            &nbsp;<i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;&nbsp;{{view Checklists.TemplateField class="mousetrap template-field input-xlarge" name="group" valueBinding="group.title"}}
+                          </div>
+                        </td>
+                        <td class="centered template-buttons-area">
+                          <div class="centered-box">
+                            <button class="btn centered" {{action moveGroupUp group target="view"}}><i class="icon-chevron-up"></i></button>
+                            <button class="btn centered" {{action moveGroupDown group target="view"}}><i class="icon-chevron-down"></i></button>
+                          </div>
+                        </td>
+                        <td class="centered template-buttons-area">
+                          <button class="btn btn-success pull-right" {{action addCheck group target="view"}}><i class="icon-plus"></i>&nbsp;</button>
+                          <button class="btn btn-danger pull-right" {{action deleteGroup group target="view"}}><i class="icon-trash"></i>&nbsp;</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                {{#each item in group.checks}}
+                  {{view Checklists.TemplateCheckView contextBinding="item"}}
+                {{/each}}
               </div>
-              {{#each item in group.checks}}
-                {{view Checklists.TemplateCheckView contextBinding="item"}}
-              {{/each}}
-            </div>
-          {{/each}}
-      <div class="row-fluid">
-        <button class="btn pull-left" {{action goBack}}><i class="icon-reply"></i>&nbsp;Back</button>
-        <button class="btn btn-primary pull-right" {{action saveTemplate this}}>Save</button>
-        <button class="btn pull-right" {{action goToMain}}>Cancel</button>
-      </div>
+            {{/each}}
+        <div class="row-fluid">
+          <button class="btn pull-left" {{action goBack}}><i class="icon-reply"></i>&nbsp;Back</button>
+          <button class="btn btn-primary pull-right" {{action saveTemplate this target="view"}}>Save</button>
+          <button class="btn pull-right" {{action goToMain}}>Cancel</button>
+        </div>
+      </form>
   </div>
 </div>
 {{#if needsOverlay}}

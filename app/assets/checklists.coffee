@@ -301,6 +301,8 @@ Checklists.TemplateView = Ember.View.extend
     @get('controller.content').moveGroupDown(event.context.get('position'))
   deleteGroup: (event) ->
     @get('controller.content').removeGroup(event.context.get('position'))
+  saveTemplate: (event) ->
+    console.log(event.context)
 
 Checklists.TemplateController = Ember.ObjectController.extend
   content: null
