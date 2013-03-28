@@ -32,7 +32,8 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     "org.mozilla" % "rhino" % "1.7R4",
     "se.radley" %% "play-plugins-salat" % "1.1",
-    "org.scalaz" %% "scalaz-core" % "6.0.4"
+    "org.scalaz" %% "scalaz-core" % "6.0.4",
+    "com.typesafe" %% "play-plugins-mailer" % "2.0.4"
   )
 
   val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
