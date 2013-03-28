@@ -782,6 +782,11 @@ Checklists.ChecklistView = Ember.View.extend
   settingsControllerBinding: 'Checklists.router.templateSettingsController'
   toggleGroup: (event) ->
     event.context.set('collapsed', not event.context.get('collapsed'))
+  closeChecklist: ->
+    bootbox.confirm "Are you sure you want to close? This action is irreversible", (result) ->
+      if result
+        Ember.run ->
+          Checklists.get('router').send('closeChecklist')
   didInsertElement: ->
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveChecklist')
@@ -911,6 +916,7 @@ Checklists.Router = Ember.Router.extend
         checklist =  router.get('checklistController').get('content')
         Checklists.ChecklistRepository.saveChecklist(checklist)
       closeChecklist: (router) ->
+        bootbox.hideAll()
         checklist =  router.get('checklistController').get('content')
         checklist.set('closed', true)
         Checklists.ChecklistRepository.saveChecklist(checklist)

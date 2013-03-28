@@ -102,6 +102,18 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     cl.copy(groups = mergedGroups)
   }
 
+  def mailChecklistCompletion(c: Checklist) {
+    ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>
+      import com.typesafe.plugin._
+      val mail = use[MailerPlugin].email
+
+      mail.setSubject(t.name + " closed")
+      mail.addRecipient(t.toEmail: _*)
+      mail.addFrom(t.fromEmail)
+      mail.sendHtml("Check complete")
+    }
+  }
+
   def saveChecklist(t:Checklist):Either[ErrorCode, Checklist] = {
     findOrCreate(t.key, t.date).map { cl =>
       cl.closed match {
@@ -110,6 +122,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
           dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
 
           ChecklistTemplate.updateEngineersNames(t.key, t.engineers, t.technicians)
+          if (t.closed) {
+            mailChecklistCompletion(t)
+          }
           Right(merged)
         }
         case true => Left(ErrorCode.ChecklistClosed)

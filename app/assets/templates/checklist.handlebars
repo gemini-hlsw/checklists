@@ -74,7 +74,7 @@
           <div class="centered-content label label-info">Day closed</div>
         {{else}}
           <button class="btn btn-primary pull-right" {{action saveChecklist this}}>Save</button>
-          <button class="btn btn-warning pull-right" {{action closeChecklist this}}>Save &amp; Close</button>
+          <button class="btn btn-warning pull-right" {{action closeChecklist this target="view"}}>Save &amp; Close</button>
         {{/if}}
       </div>
     </div>
