@@ -39,9 +39,16 @@
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label for="template-choices"">Status Choices</label>
+            <label class="control-label" for="template-choices">Status Choices</label>
             <div class="controls">
               {{view Checklists.Select2Tags id="template-choices" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox text-left" for="template-choices">Send email when closing
+                {{view Ember.Checkbox class="checkbox" checkedBinding="sendOnClose"}}
+              </label>
             </div>
           </div>
         </div>

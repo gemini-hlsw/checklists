@@ -81,7 +81,7 @@ object TemplateSettings {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0, engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet)
+case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0, engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet, sendOnClose: Boolean = false, fromEmail: String = "", toEmail: Seq[String] = Seq.empty)
 
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val columnCount = 2
@@ -133,7 +133,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       "groups"      -> Json.toJson(t.groups),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),
-      "choices"     -> Json.toJson(t.choices)
+      "choices"     -> Json.toJson(t.choices),
+      "sendOnClose" -> JsBoolean(t.sendOnClose)
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
@@ -144,7 +145,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
       engineers   = (json \ "engineers").as[Seq[String]].toSet,
       technicians = (json \ "technicians").as[Seq[String]].toSet,
-      choices     = (json \ "choices").as[Seq[String]].toSet
+      choices     = (json \ "choices").as[Seq[String]].toSet,
+      sendOnClose = ~(json \ "sendOnClose").asOpt[Boolean]
     )
   }
 }
