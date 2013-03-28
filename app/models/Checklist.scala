@@ -6,6 +6,7 @@ import se.radley.plugin.salat._
 import org.joda.time.DateMidnight
 import play.api.libs.json._
 import play.api.Play.current
+import play.Logger
 import mongoContext._
 import JsonFormatters._
 import scala.collection.immutable.TreeMap
@@ -65,6 +66,7 @@ case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, clo
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
+  val emailRegex = """(\w+)@([\w\.]+)""".r
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
     Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
@@ -108,7 +110,8 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       val mail = use[MailerPlugin].email
 
       mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
-      mail.addRecipient(t.toEmail: _*)
+      var destinations = t.toEmail.filter(emailRegex.findFirstIn(_).isDefined)
+      mail.addRecipient(destinations: _*)
       mail.addFrom(t.fromEmail)
       mail.setReplyTo(t.fromEmail)
       val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
@@ -126,7 +129,11 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
           ChecklistTemplate.updateEngineersNames(t.key, t.engineers, t.technicians)
           if (t.closed) {
-            mailChecklistCompletion(t)
+            try {
+              mailChecklistCompletion(t)
+              } catch {
+                case e:Exception =>Logger.error(e.getMessage)
+              }
           }
           Right(merged)
         }
