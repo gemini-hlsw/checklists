@@ -342,6 +342,7 @@ Checklists.Template = Ember.Object.extend
   colPos: 0
   rowPos: 0
   saveOnClose: false
+  fromEmail: ''
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')
