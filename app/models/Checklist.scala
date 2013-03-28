@@ -106,17 +106,20 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def mailChecklistCompletion(c: Checklist) {
     ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>
-      import com.typesafe.plugin._
-      val mail = use[MailerPlugin].email
-
-      mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
       var destinations = t.toEmail.filter(emailRegex.findFirstIn(_).isDefined)
-      mail.addRecipient(destinations: _*)
-      mail.addFrom(t.fromEmail)
-      mail.setReplyTo(t.fromEmail)
-      val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
-      var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
-      mail.sendHtml("<html><body><p>Checklist " + t.name +" was closed, check it at:</br> <a href=" + url + "/>" + url + "</a></p></body></html>")
+      if (destinations.size > 0 && emailRegex.findFirstIn(t.fromEmail).isDefined) {
+        import com.typesafe.plugin._
+        val mail = use[MailerPlugin].email
+        
+
+        mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
+        mail.addRecipient(destinations: _*)
+        mail.addFrom(t.fromEmail)
+        mail.setReplyTo(t.fromEmail)
+        val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
+        var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
+        mail.sendHtml("<html><body><p>Checklist " + t.name +" was closed, check it at:</br> <a href=" + url + "/>" + url + "</a></p></body></html>")
+      }
     }
   }
 
