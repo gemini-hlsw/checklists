@@ -107,11 +107,12 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       import com.typesafe.plugin._
       val mail = use[MailerPlugin].email
 
-      mail.setSubject(t.name + " closed")
+      mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
       mail.addRecipient(t.toEmail: _*)
       mail.addFrom(t.fromEmail)
-      var url = "https://gemini-checklists.herokuapp.com/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
-      mail.sendHtml("<html><body><p>Checklist " + t.name +" was completed, check at: <a href=" + url + "/>" + url + "</a></p></body></html>")
+      val host = current.configuration.getString("site.host").getOrElse("http://localhost:9000")
+      var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
+      mail.sendHtml("<html><body><p>Checklist " + t.name +" was closed, check it at:</br> <a href=" + url + "/>" + url + "</a></p></body></html>")
     }
   }
 
