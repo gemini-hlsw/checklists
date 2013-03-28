@@ -46,15 +46,21 @@
           </div>
           <div class="control-group">
             <div class="controls">
-              <label class="checkbox text-left" for="template-choices">Send email when closing
+              <label class="checkbox text-left" for="template-send-on-close">Send email when closing
                 {{view Ember.Checkbox class="checkbox" checkedBinding="sendOnClose"}}
               </label>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="template-choices">From email address</label>
+            <label class="control-label" for="template-from-email">From email address</label>
             <div class="controls">
               {{view Ember.TextField class="input-block-level" valueBinding="fromEmail"}}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="template-to-emails">email destinations</label>
+            <div class="controls"> {{toEmail}}
+              {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
             </div>
           </div>
         </div>

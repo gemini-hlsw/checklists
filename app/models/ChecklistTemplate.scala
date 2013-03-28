@@ -135,7 +135,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       "technicians" -> Json.toJson(t.technicians),
       "choices"     -> Json.toJson(t.choices),
       "sendOnClose" -> JsBoolean(t.sendOnClose),
-      "fromEmail"   -> JsString(t.fromEmail)
+      "fromEmail"   -> JsString(t.fromEmail),
+      "toEmail"     -> Json.toJson(t.toEmail)
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
@@ -148,7 +149,8 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       technicians = (json \ "technicians").as[Seq[String]].toSet,
       choices     = (json \ "choices").as[Seq[String]].toSet,
       sendOnClose = ~(json \ "sendOnClose").asOpt[Boolean],
-      fromEmail   = ~(json \ "fromEmail").asOpt[String]
+      fromEmail   = ~(json \ "fromEmail").asOpt[String],
+      toEmail     = (json \ "toEmail").as[Seq[String]]
     )
   }
 }
