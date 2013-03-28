@@ -10,6 +10,7 @@ import play.Logger
 import mongoContext._
 import JsonFormatters._
 import scala.collection.immutable.TreeMap
+import play.api.libs.concurrent.Akka
 
 import scalaz._
 import Scalaz._
@@ -132,11 +133,13 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
           ChecklistTemplate.updateEngineersNames(t.key, t.engineers, t.technicians)
           if (t.closed) {
-            try {
-              mailChecklistCompletion(t)
+            Akka.future {
+              try {
+               mailChecklistCompletion(t)
               } catch {
                 case e:Exception =>Logger.error(e.getMessage)
               }
+            }
           }
           Right(merged)
         }
