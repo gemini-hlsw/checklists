@@ -13,10 +13,6 @@ object Global extends GlobalSettings {
     if (sites.isEmpty) {
       (Site(site = "GS", name = "Gemini South") :: Site(site = "GN", name = "Gemini North") :: Nil).map(Site.insertSite)
     }
-    val templates = ChecklistTemplate.findTemplates
-    if (templates.isEmpty) {
-      (ChecklistTemplate(key = "GS", name = "Gemini South", groups = Nil, colPos = -1, rowPos = -1) :: ChecklistTemplate(key = "GN", name = "Gemini North", groups = Nil, colPos = -1, rowPos = -1) :: Nil).map(ChecklistTemplate.saveTemplate)
-    }
     val version = DatastoreVersion.findLatest() | DatastoreVersion.store(1)
     println("Store Version: " + version.version)
   }

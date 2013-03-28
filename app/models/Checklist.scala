@@ -110,7 +110,8 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       mail.setSubject(t.name + " closed")
       mail.addRecipient(t.toEmail: _*)
       mail.addFrom(t.fromEmail)
-      mail.sendHtml("Check complete")
+      var url = "https://gemini-checklists.herokuapp.com/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
+      mail.sendHtml("<html><body><p>Checklist " + t.name +" was completed, check at: <a href=" + url + "/>" + url + "</a></p></body></html>")
     }
   }
 
