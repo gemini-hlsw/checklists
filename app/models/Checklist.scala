@@ -110,6 +110,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
       mail.addRecipient(t.toEmail: _*)
       mail.addFrom(t.fromEmail)
+      mail.setReplyTo(t.fromEmail)
       val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
       var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
       mail.sendHtml("<html><body><p>Checklist " + t.name +" was closed, check it at:</br> <a href=" + url + "/>" + url + "</a></p></body></html>")
