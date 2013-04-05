@@ -52,16 +52,18 @@
                 </label>
               </div>
             </div>
-            <div class="control-group">
-              <label class="control-label" for="template-from-email">From email address</label>
-              <div class="controls">
-                {{view Ember.TextField class="input-block-level email" valueBinding="fromEmail"}}
+            <div {{bindAttr class="sendOnClose:in :collapse"}}>
+              <div class="control-group">
+                <label class="control-label" for="template-from-email">From email address</label>
+                <div class="controls">
+                  {{view Ember.TextField class="input-block-level email" valueBinding="fromEmail"}}
+                </div>
               </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="template-to-emails">email destinations</label>
-              <div class="controls">
-                {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" name="toEmail" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
+              <div class="control-group">
+                <label class="control-label" for="template-to-emails">email destinations</label>
+                <div class="controls">
+                  {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" name="toEmail" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
+                </div>
               </div>
             </div>
           </div>
