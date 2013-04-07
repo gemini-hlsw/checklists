@@ -11,6 +11,8 @@ import mongoContext._
 import JsonFormatters._
 import scala.collection.immutable.TreeMap
 import play.api.libs.concurrent.Akka
+import org.fusesource.scalate._
+import org.fusesource.scalate.support.StringTemplateSource
 
 import scalaz._
 import Scalaz._
