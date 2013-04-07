@@ -36,9 +36,9 @@ object Check {
 
     def reads(json: JsValue) = Check(
       ~(json \ "description").asOpt[String],
-      (json \ "status").asOpt[String].filter(_.nonEmpty),
-      (json \ "comment").asOpt[String].filter(_.nonEmpty),
-      (json \ "choices").as[Seq[String]],
+       (json \ "status").asOpt[String].filter(_.nonEmpty),
+       (json \ "comment").asOpt[String].filter(_.nonEmpty),
+       (json \ "choices").as[Seq[String]],
       ~(json \ "freeText").asOpt[Boolean]
     )
   }
@@ -71,14 +71,6 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
   val emailRegex = """(\w+)@([\w\.]+)""".r
   val engine = new TemplateEngine
-
-  val params = Map("templateName" -> "my name", "template" -> ChecklistTemplate(name="GS EO", groups=Seq.empty), "date" -> "ABC")
-  val subject = engine.layout(new StringTemplateSource("subject.ssp", """
-    <%@ val date: String %>
-    <%@ val templateName: String %>
-    ${templateName} checklist for ${date} closed
-    """), params)
-  println(subject)
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
     Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
@@ -117,14 +109,22 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   }
 
   def mailChecklistCompletion(c: Checklist) {
+    def buildSubjectText(t:ChecklistTemplate):String = {
+      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "date" -> JsonFormatters.fmt.print(c.date))
+      engine.layout(new StringTemplateSource("subject.ssp", """
+        <%@ val date: String %>
+        <%@ val templateName: String %>
+        <%@ val templateKey: String %>
+        ${templateName} checklist for ${date} closed"""), params)
+    }
+
     ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>
       var destinations = t.toEmail.filter(emailRegex.findFirstIn(_).isDefined)
       if (destinations.size > 0 && emailRegex.findFirstIn(t.fromEmail).isDefined) {
         import com.typesafe.plugin._
         val mail = use[MailerPlugin].email
-        var subject = engine.layout(new StringTemplateSource("subject.ssp", "{{t.name}}  checklist for {{date}} closed"))
 
-        mail.setSubject(subject)
+        mail.setSubject(buildSubjectText(t))
         mail.addRecipient(destinations: _*)
         mail.addFrom(t.fromEmail)
         mail.setReplyTo(t.fromEmail)
