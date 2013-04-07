@@ -110,24 +110,32 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   }
 
   def mailChecklistCompletion(c: Checklist) {
+    def safeLayout(name:String, params:Map[String, AnyRef], vars:String, template:String, safeTemplate:String) = {
+      try {
+        engine.layout(new StringTemplateSource(name, vars + template), params)
+      } catch {
+        case e:Exception => engine.layout(new StringTemplateSource(name, vars + safeTemplate), params)
+      }
+    }
+
     def buildSubjectText(t:ChecklistTemplate):String = {
-      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "date" -> JsonFormatters.fmt.print(c.date))
-      engine.layout(new StringTemplateSource("subject.ssp", """
-        <%@ val date: String %>
+      val variables = """<%@ val date: String %>
         <%@ val templateName: String %>
-        <%@ val templateKey: String %>""" + t.subjectText), params)
+        <%@ val templateKey: String %>"""
+      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "date" -> JsonFormatters.fmt.print(c.date))
+      safeLayout("subject.ssp", params, variables, t.subjectText, ChecklistTemplate.defaultSubjectText)
     }
 
     def buildBodyText(t:ChecklistTemplate):String = {
       val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
       var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
 
-      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "url" -> url, "date" -> JsonFormatters.fmt.print(c.date))
-      engine.layout(new StringTemplateSource("body.ssp", """
-        <%@ val date: String %>
+      val variables = """<%@ val date: String %>
         <%@ val templateName: String %>
         <%@ val url: String %>
-        <%@ val templateKey: String %>""" + t.bodyText), params)
+        <%@ val templateKey: String %>"""
+      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "url" -> url, "date" -> JsonFormatters.fmt.print(c.date))
+      safeLayout("body.ssp", params, variables, t.bodyText, ChecklistTemplate.defaultBodyText)
     }
 
     ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>
