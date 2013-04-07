@@ -66,9 +66,19 @@
                 </div>
               </div>
               <div class="control-group">
-                <label class="control-label" for="template-subject">Subject Text</label>
+                <label class="control-label" for="template-subject">Subject Text&nbsp;&nbsp;<i class="icon-question-sign" {{action showSubjectInfo target="view"}}></i></label>
                 <div class="controls">
                   {{view Ember.TextField id="template-subject" class="input-block-level" name="template-subject" valueBinding="subjectText"}}
+                <div id="template-subject-info" class="template-info alert alert-info alert-block text-left hide">
+                  <button type="button" class="close" {{action hideSubjectInfo target="view"}}>&times;</button>
+                  <small>The Subject of the email can be formatted using variables enclosed in ${var},<br/>Supported variables:</small>
+                  <dl class="text-left dl-horizontal">
+                    <dt><small>date</small></dt><dd><small>Date in the format YYYYMMDD</small></dd>
+                    <dt><small>templateName</small></dt><dd><small>Name of the template, e.g: '{{name}}'</small></dd>
+                    <dt><small>templateKey</small></dt><dd><small>Key of the template, e.g: '{{key}}'</small></dd>
+                  </dl>
+                  </small>
+                </div>
                 </div>
               </div>
               <div class="control-group">

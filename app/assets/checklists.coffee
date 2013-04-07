@@ -285,6 +285,13 @@ Checklists.TemplateView = Ember.View.extend
         $(element).parents('.control-group').addClass(errorClass).removeClass(validClass)
       unhighlight: (element, errorClass, validClass) ->
         $(element).parents('.error').removeClass(errorClass).addClass(validClass)
+  showSubjectInfo: ->
+    if this.$('#template-subject-info').is(':visible')
+      this.$('#template-subject-info').fadeOut()
+    else
+      this.$('#template-subject-info').fadeIn()
+  hideSubjectInfo: ->
+    this.$('#template-subject-info').fadeOut()
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
   toggleGroup: (event) ->

@@ -198,3 +198,7 @@ td.centered {
 textarea {
     color: rgb(82, 87, 92);
 }
+
+.template-info {
+    margin-top: 10px;
+}
