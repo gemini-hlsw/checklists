@@ -69,7 +69,12 @@
                 <label class="control-label" for="template-subject">Subject Text</label>
                 <div class="controls">
                   {{view Ember.TextField id="template-subject" class="input-block-level" name="template-subject" valueBinding="subjectText"}}
-                  {{!view ChecklistsChecklists.ResizableTextArea id="template-subject" class="input-block-level textarea-animated" name="template-subject" valueBinding="subjectText"}}
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="template-body">Body Text</label>
+                <div class="controls">
+                  {{view Checklists.ResizableTextArea id="template-body" class="input-block-level textarea-animated" name="template-body" valueBinding="bodyText"}}
                 </div>
               </div>
             </div>
