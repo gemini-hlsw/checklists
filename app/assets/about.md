@@ -5,6 +5,10 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.5
+
+- When closing a day an email can be sent. Email addresses and content can be configured on each template
+
 ###### Version 0.4.1
 
 - Fixed bug when opening and closing the choices list on the template editor
