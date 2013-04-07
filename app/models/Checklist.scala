@@ -118,6 +118,19 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
         ${templateName} checklist for ${date} closed"""), params)
     }
 
+    def buildBodyText(t:ChecklistTemplate):String = {
+      val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
+      var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
+
+      val params = Map("templateName" -> t.name, "templateKey" -> t.key, "url" -> url, "date" -> JsonFormatters.fmt.print(c.date))
+      engine.layout(new StringTemplateSource("subject.ssp", """
+        <%@ val date: String %>
+        <%@ val templateName: String %>
+        <%@ val url: String %>
+        <%@ val templateKey: String %>
+        <html><body><p>Checklist ${templateName} was closed, check it at:</br> <a href="${url}"/>${url}</a></p></body></html>"""), params)
+    }
+
     ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>
       var destinations = t.toEmail.filter(emailRegex.findFirstIn(_).isDefined)
       if (destinations.size > 0 && emailRegex.findFirstIn(t.fromEmail).isDefined) {
@@ -128,9 +141,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
         mail.addRecipient(destinations: _*)
         mail.addFrom(t.fromEmail)
         mail.setReplyTo(t.fromEmail)
-        val host = current.configuration.getString("site.url").getOrElse("http://localhost:9000")
-        var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
-        mail.sendHtml("<html><body><p>Checklist " + t.name +" was closed, check it at:</br> <a href=" + url + "/>" + url + "</a></p></body></html>")
+        mail.sendHtml(buildBodyText(t))
       }
     }
   }
