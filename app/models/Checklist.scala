@@ -70,6 +70,15 @@ case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, clo
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
   val emailRegex = """(\w+)@([\w\.]+)""".r
+  val engine = new TemplateEngine
+
+  val params = Map("templateName" -> "my name", "template" -> ChecklistTemplate(name="GS EO", groups=Seq.empty), "date" -> "ABC")
+  val subject = engine.layout(new StringTemplateSource("subject.ssp", """
+    <%@ val date: String %>
+    <%@ val templateName: String %>
+    ${templateName} checklist for ${date} closed
+    """), params)
+  println(subject)
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
     Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
@@ -113,9 +122,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       if (destinations.size > 0 && emailRegex.findFirstIn(t.fromEmail).isDefined) {
         import com.typesafe.plugin._
         val mail = use[MailerPlugin].email
-        
+        var subject = engine.layout(new StringTemplateSource("subject.ssp", "{{t.name}}  checklist for {{date}} closed"))
 
-        mail.setSubject(t.name + " checklist for " + JsonFormatters.fmt.print(c.date) + " closed")
+        mail.setSubject(subject)
         mail.addRecipient(destinations: _*)
         mail.addFrom(t.fromEmail)
         mail.setReplyTo(t.fromEmail)
