@@ -81,11 +81,27 @@ object TemplateSettings {
   }
 }
 
-case class ChecklistTemplate(id: ObjectId = new ObjectId, key: String = "", name:String, groups: Seq[CheckTemplateGroup], colPos:Int = 0, rowPos:Int = 0, engineers: Set[String] = Set.empty, technicians: Set[String] = Set.empty, choices: Set[String] = CheckChoice.defaultChoices.toSet, sendOnClose: Boolean = false, fromEmail: String = "noreply@gemini.edu", toEmail: Seq[String] = Seq.empty)
+case class ChecklistTemplate(
+  id: ObjectId = new ObjectId,
+  key: String = "",
+  name:String,
+  groups: Seq[CheckTemplateGroup],
+  colPos:Int = 0,
+  rowPos:Int = 0,
+  engineers: Set[String] = Set.empty,
+  technicians: Set[String] = Set.empty,
+  choices: Set[String] = CheckChoice.defaultChoices.toSet,
+  sendOnClose: Boolean = false,
+  fromEmail: String = "noreply@gemini.edu",
+  toEmail: Seq[String] = Seq.empty, 
+  subjectTemplate: String = ChecklistTemplate.defaultSubjectTemplate,
+  bodyTemplate: String = ChecklistTemplate.defaultBodyTemplate)
 
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val columnCount = 2
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
+  val defaultSubjectTemplate = """${templateName} checklist for ${date} closed"""
+  val defaultBodyTemplate = """<html><body><p>Checklist ${templateName} was closed, check it at:</br> <a href="${url}"/>${url}</a></p></body></html>"""
 
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
 
