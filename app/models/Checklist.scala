@@ -123,7 +123,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       var url = host + "/#/" + t.key + "/" + JsonFormatters.fmt.print(c.date)
 
       val params = Map("templateName" -> t.name, "templateKey" -> t.key, "url" -> url, "date" -> JsonFormatters.fmt.print(c.date))
-      engine.layout(new StringTemplateSource("subject.ssp", """
+      engine.layout(new StringTemplateSource("body.ssp", """
         <%@ val date: String %>
         <%@ val templateName: String %>
         <%@ val url: String %>
