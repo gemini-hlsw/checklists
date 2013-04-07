@@ -71,6 +71,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
   val emailRegex = """(\w+)@([\w\.]+)""".r
   val engine = new TemplateEngine
+  engine.allowCaching =  false
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
     Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
