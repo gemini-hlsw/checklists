@@ -114,7 +114,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       engine.layout(new StringTemplateSource("subject.ssp", """
         <%@ val date: String %>
         <%@ val templateName: String %>
-        <%@ val templateKey: String %>""" + t.subjectTemplate), params)
+        <%@ val templateKey: String %>""" + t.subjectText), params)
     }
 
     def buildBodyText(t:ChecklistTemplate):String = {
@@ -126,7 +126,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
         <%@ val date: String %>
         <%@ val templateName: String %>
         <%@ val url: String %>
-        <%@ val templateKey: String %>""" + t.bodyTemplate), params)
+        <%@ val templateKey: String %>""" + t.bodyText), params)
     }
 
     ChecklistTemplate.findTemplate(c.key).filter(_.sendOnClose).foreach { t =>

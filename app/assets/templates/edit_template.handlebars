@@ -65,6 +65,12 @@
                   {{view Checklists.Select2Tags id="template-to-emails" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter email addresses" name="toEmail" valuesBinding="toEmail" dropdownCssClass="hide mousetrap" tagsBinding="toEmail"}}
                 </div>
               </div>
+              <div class="control-group">
+                <label class="control-label" for="template-subject">Subject Text</label>
+                <div class="controls">
+                  {{view Checklists.ResizableTextArea id="template-subject" class="input-block-level textarea-animated" name="template-subject" valueBinding="subjectText"}}
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -360,6 +360,8 @@ Checklists.Template = Ember.Object.extend
   saveOnClose: false
   fromEmail: ''
   toEmail: []
+  subjectText: ''
+  bodyText: ''
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')

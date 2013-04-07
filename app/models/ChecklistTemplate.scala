@@ -94,14 +94,14 @@ case class ChecklistTemplate(
   sendOnClose: Boolean = false,
   fromEmail: String = "noreply@gemini.edu",
   toEmail: Seq[String] = Seq.empty, 
-  subjectTemplate: String = ChecklistTemplate.defaultSubjectTemplate,
-  bodyTemplate: String = ChecklistTemplate.defaultBodyTemplate)
+  subjectText: String = ChecklistTemplate.defaultSubjectText,
+  bodyText: String = ChecklistTemplate.defaultBodyText)
 
 object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   val columnCount = 2
   val dao = new SalatDAO[ChecklistTemplate, ObjectId](collection = mongoCollection("checklists_templates")) {}
-  val defaultSubjectTemplate = """${templateName} checklist for ${date} closed"""
-  val defaultBodyTemplate = """<html><body><p>Checklist ${templateName} was closed, check it at:</br> <a href="${url}"/>${url}</a></p></body></html>"""
+  val defaultSubjectText = """${templateName} checklist for ${date} closed"""
+  val defaultBodyText = """<html><body><p>Checklist ${templateName} was closed, check it at:</br> <a href="${url}"/>${url}</a></p></body></html>"""
 
   def findTemplates:Seq[ChecklistTemplate] = dao.find(MongoDBObject()).map(hydrateChecks).toSeq
 
@@ -152,7 +152,9 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       "choices"     -> Json.toJson(t.choices),
       "sendOnClose" -> JsBoolean(t.sendOnClose),
       "fromEmail"   -> JsString(t.fromEmail),
-      "toEmail"     -> Json.toJson(t.toEmail)
+      "toEmail"     -> Json.toJson(t.toEmail),
+      "subjectText" -> JsString(t.subjectText),
+      "bodyText"    -> JsString(t.bodyText)
     ))
 
     def reads(json: JsValue) = ChecklistTemplate(
@@ -160,13 +162,15 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       name        = ~(json \ "name").asOpt[String],
       colPos      = ~(json \ "colPos").asOpt[Int],
       rowPos      = ~(json \ "rowPos").asOpt[Int],
-      groups      = (json \ "groups").as[Seq[CheckTemplateGroup]],
-      engineers   = (json \ "engineers").as[Seq[String]].toSet,
-      technicians = (json \ "technicians").as[Seq[String]].toSet,
-      choices     = (json \ "choices").as[Seq[String]].toSet,
+      groups      =  (json \ "groups").as[Seq[CheckTemplateGroup]],
+      engineers   =  (json \ "engineers").as[Seq[String]].toSet,
+      technicians =  (json \ "technicians").as[Seq[String]].toSet,
+      choices     =  (json \ "choices").as[Seq[String]].toSet,
       sendOnClose = ~(json \ "sendOnClose").asOpt[Boolean],
       fromEmail   = ~(json \ "fromEmail").asOpt[String],
-      toEmail     = (json \ "toEmail").as[Seq[String]]
+      toEmail     =  (json \ "toEmail").as[Seq[String]],
+      subjectText =  (json \ "subjectText").asOpt[String] | ChecklistTemplate.defaultSubjectText,
+      bodyText    =  (json \ "bodyText").asOpt[String] | ChecklistTemplate.defaultBodyText
     )
   }
 }
