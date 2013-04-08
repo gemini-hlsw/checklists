@@ -136,7 +136,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 
   def updateEngineersNames(key: String, engineers: Seq[String], technicians: Seq[String]) {
-    findTemplate(key).map(t => t.copy(engineers = t.engineers ++ engineers.toSet, technicians = t.technicians ++ technicians.toSet)).map(saveTemplate)
+    findTemplate(key).map(t => t.copy(engineers = t.engineers ++ engineers, technicians = t.technicians ++ technicians)).filter(t => !t.engineers.forall(engineers.contains) || !t.technicians.forall(technicians.contains)).map(saveTemplate)
   }
 
   def loadSettings(key: String):Option[TemplateSettings] = {
