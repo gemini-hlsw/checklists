@@ -7,6 +7,7 @@ import com.novus.salat.dao._
 import se.radley.plugin.salat._
 import play.api.Play.current
 import play.api.libs.json._
+import play.Logger
 import org.joda.time.{DateMidnight, DateTime}
 import JsonFormatters._
 
@@ -110,6 +111,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   def hydrateChecks(t: ChecklistTemplate):ChecklistTemplate = t.copy(groups = t.groups.map(_.hydrateChecks(t.choices)))
 
   def saveTemplate(t: ChecklistTemplate) = {
+    Logger.info("Save template key:" + t.key)
     val id = findTemplate(t.key).map(_.id).getOrElse(t.id)
     dao.removeById(id, WriteConcern.Normal)
     dao.save(t.copy(id = id))
