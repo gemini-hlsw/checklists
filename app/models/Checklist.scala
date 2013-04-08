@@ -114,7 +114,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       try {
         engine.layout(new StringTemplateSource(name, vars + template), params)
       } catch {
-        case e:Exception => engine.layout(new StringTemplateSource(name, vars + safeTemplate), params)
+        case e:Exception => Logger.warn("Failed to execute template:" + template);engine.layout(new StringTemplateSource(name, vars + safeTemplate), params)
       }
     }
 
@@ -158,6 +158,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       cl.closed match {
         case false => {
           val merged:Checklist = mergeLists(t)(cl)
+          Logger.info("Save checklist " + cl.key + " on " + cl.date)
           dao.update(MongoDBObject("_id" -> merged.id), merged, true, false, WriteConcern.Normal)
 
           ChecklistTemplate.updateEngineersNames(t.key, t.engineers, t.technicians)

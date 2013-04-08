@@ -131,6 +131,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 
   def createNew(p: TemplateCreationParams):ValidationNEL[String, ChecklistTemplate] = {
+    Logger.info("Create new template with parameters " + p)
     findTemplate(p.key).map(_ => ("Template with key already exists").failNel).getOrElse(newTemplate(nextPosition(p)).successNel)
   }
 
@@ -140,7 +141,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
 
   def loadSettings(key: String):Option[TemplateSettings] = {
     findTemplate(key).map(t => TemplateSettings(t.key, t.engineers, t.technicians, t.groups))
-}
+  }
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {
     def writes(t: ChecklistTemplate) = JsObject(Seq(
