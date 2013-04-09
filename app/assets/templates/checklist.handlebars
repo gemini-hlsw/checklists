@@ -44,9 +44,8 @@
                     <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}} 
                   </div>
                   <div class="progress pull-right inline group-progress">
-                    <div class="bar bar-success" style="width: 35%;"></div>
-                    <div class="bar bar-warning" style="width: 20%;"></div>
-                    <div class="bar bar-danger" style="width: 10%;"></div>
+                    <div class="bar bar-success" {{bindAttr style="group.successpct"}}></div>
+                    <div class="bar bar-danger" {{bindAttr style="group.missingpct"}}"></div>
                   </div>
                 </div>
               </a>

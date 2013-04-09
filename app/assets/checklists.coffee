@@ -865,6 +865,18 @@ Checklists.ChecksGroup = Ember.Object.extend
   title: ''
   checks: ''
   collapsed: false # Move to controller
+  _counter: (p, i) ->
+    p + if i.status isnt "" then 1 else 0
+  successcount: ( ->
+    count = @get('checks').reduce(@_counter, 0)
+    100 * count / @get('checks').length
+  ).property('checks.@each.status')
+  successpct: ( ->
+    "width: #{@get('successcount')}%"
+  ).property('successcount')
+  missingpct: ( ->
+    "width: #{100-@get('successcount')}%"
+  ).property('successcount')
 
 Checklists.ChecklistRepository = Ember.Object.create
   checklistsCache: {}
