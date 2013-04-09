@@ -38,7 +38,18 @@
         {{#each group in groups}}
           <div class="accordion-group checklist-accordion-group">
             <div class="accordion-heading checklist-accordion-heading">
-              <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}><i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}> {{group.title}}</i></a>
+              <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
+                <div class="row-fluid">
+                  <div class="inline">
+                    <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}} 
+                  </div>
+                  <div class="progress pull-right inline group-progress">
+                    <div class="bar bar-success" style="width: 35%;"></div>
+                    <div class="bar bar-warning" style="width: 20%;"></div>
+                    <div class="bar bar-danger" style="width: 10%;"></div>
+                  </div>
+                </div>
+              </a>
             </div>
             <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
               <div class="accordion-inner checklist-accordion-inner">

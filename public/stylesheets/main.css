@@ -202,3 +202,8 @@ textarea {
 .template-info {
     margin-top: 10px;
 }
+
+.group-progress {
+    width: 20%;
+    margin-bottom: 0px;
+}
