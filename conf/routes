@@ -20,4 +20,4 @@ GET     /api/v1.0/reports/months/:key                   controllers.Api.availabl
 GET     /api/v1.0/checklist/report/:key/:year/:month    controllers.Api.checkListReport(key:String, year:Int, month: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /5/assets/*file                                 controllers.Assets.at(path="/public", file)
+GET     /6/assets/*file                                 controllers.Assets.at(path="/public", file)

@@ -7,6 +7,7 @@ observatory operations
 
 ###### Version 0.5.1
 
+- Added Progress bar to each group indicating how many checks have been set
 - Added Feedback button connected to JIRA
 - FIX When simultaneous users edit engineers/technician names they overwrite each other, now they are merged
 
