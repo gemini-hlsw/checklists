@@ -5,6 +5,11 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.5.1
+
+- Added Feedback button connected to JIRA
+- FIX When simultaneous users edit engineers/technician names they overwrite each other, now they are merged
+
 ###### Version 0.5
 
 - When closing a day an email can be sent. Email addresses and content can be configured on each template
