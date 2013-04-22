@@ -34,13 +34,13 @@ object Check {
       "freeText"    -> Json.toJson(c.freeText)
     ))
 
-    def reads(json: JsValue) = Check(
+    def reads(json: JsValue) = JsSuccess(Check(
       ~(json \ "description").asOpt[String],
        (json \ "status").asOpt[String].filter(_.nonEmpty),
        (json \ "comment").asOpt[String].filter(_.nonEmpty),
        (json \ "choices").as[Seq[String]],
       ~(json \ "freeText").asOpt[Boolean]
-    )
+    ))
   }
 }
 
@@ -57,11 +57,11 @@ object CheckGroup {
       "checks" -> Json.toJson(g.checks)
     ))
 
-    def reads(json: JsValue) = CheckGroup(
+    def reads(json: JsValue) = JsSuccess(CheckGroup(
       (json \ "name").asOpt[String].getOrElse(""),
       (json \ "title").asOpt[String].getOrElse(""),
       (json \ "checks").as[Seq[Check]]
-    )
+    ))
   }
 }
 
@@ -70,7 +70,7 @@ case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, clo
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
   val emailRegex = """(\w+)@([\w\.]+)""".r
-  val engine = new TemplateEngine
+  val engine = new TemplateEngine(Seq.empty, "")
   engine.allowCaching =  false
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
@@ -188,7 +188,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       "technicians" -> Json.toJson(c.technicians)
     ))
 
-    def reads(json: JsValue) = Checklist(
+    def reads(json: JsValue) = JsSuccess(Checklist(
       key        = (json \ "key").asOpt[String].getOrElse(""),
       name        = (json \ "name").asOpt[String].getOrElse(""),
       closed      = (json \ "closed").asOpt[Boolean].getOrElse(false),
@@ -196,7 +196,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       groups      = (json \ "groups").as[Seq[CheckGroup]],
       engineers   = (json \ "engineers").as[Seq[String]],
       technicians = (json \ "technicians").as[Seq[String]]
-    )
+    ))
   }
 }
 

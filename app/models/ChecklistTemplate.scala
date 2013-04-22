@@ -38,12 +38,12 @@ object CheckTemplate {
       "freeText" -> JsBoolean(c.freeText)
     ))
 
-    def reads(json: JsValue) = CheckTemplate(
+    def reads(json: JsValue) = JsSuccess(CheckTemplate(
       title    = ~(json \ "title").asOpt[String],
       position = ~(json \ "position").asOpt[Int],
       choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean])),
       freeText = ~(json \ "freeText").asOpt[Boolean]
-    )
+    ))
   }
 }
 
@@ -60,12 +60,12 @@ object CheckTemplateGroup {
       "position" -> JsNumber(g.position)
     ))
 
-    def reads(json: JsValue) = CheckTemplateGroup(
+    def reads(json: JsValue) = JsSuccess(CheckTemplateGroup(
       name     = ~(json \ "name").asOpt[String],
       title    = ~(json \ "title").asOpt[String],
       checks   = (json \ "checks").as[Seq[CheckTemplate]],
       position = ~(json \ "position").asOpt[Int]
-    )
+    ))
   }
 }
 
@@ -160,7 +160,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       "bodyText"    -> JsString(t.bodyText)
     ))
 
-    def reads(json: JsValue) = ChecklistTemplate(
+    def reads(json: JsValue) = JsSuccess(ChecklistTemplate(
       key         = ~(json \ "key").asOpt[String],
       name        = ~(json \ "name").asOpt[String],
       colPos      = ~(json \ "colPos").asOpt[Int],
@@ -174,7 +174,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
       toEmail     =  (json \ "toEmail").as[Seq[String]],
       subjectText =  (json \ "subjectText").asOpt[String] | ChecklistTemplate.defaultSubjectText,
       bodyText    =  (json \ "bodyText").asOpt[String] | ChecklistTemplate.defaultBodyText
-    )
+    ))
   }
 }
 
@@ -183,9 +183,9 @@ case class TemplateCreationParams(key: String, name: String, colPos: Int = 0, ro
 
 object TemplateCreationParams {
   implicit object TemplateCreationParamsFormat extends Reads[TemplateCreationParams] {
-    def reads(json: JsValue) = TemplateCreationParams(
+    def reads(json: JsValue) = JsSuccess(TemplateCreationParams(
       key         = ~(json \ "key").asOpt[String],
       name        = ~(json \ "name").asOpt[String]
-    )
+    ))
   }
 }

@@ -1,7 +1,6 @@
 package models
 
 import com.mongodb.casbah.commons.conversions.MongoConversionHelper
-import org.scala_tools.time.Imports._
 import org.bson.{BSON, Transformer}
 import org.joda.time.DateMidnight
 
