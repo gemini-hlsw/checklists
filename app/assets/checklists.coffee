@@ -182,28 +182,27 @@ Checklists.Select2Tags = Ember.View.extend
     data = []
     (data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0) if @get('values')?
     tags = if @get('tags')? then @get('tags') else []
-    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data,).on('change', @_change)
+    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
 
 Checklists.Select2Multiple = Ember.View.extend
-  tagName: 'select'
+  tagName: 'input'
+  type: 'hidden'
   classNames: ['ember-select']
-  defaultTemplate: Ember.Handlebars.compile('{{#each view.content}}{{this}}{{/each}}'),
   attributeBindings: ['placeholder', 'tabindex']
-  multiple: 'multiple'
+  _data: ->
+    if @get('content')? then ({id: i, text:i} for i in @get('content') when i.trim().length > 0)  else []
+  _selection: ->
+    if @get('selection')? then (i for i in @get('selection') when i.trim().length > 0) else []
+  _build: ->
+    this.$().select2({multiple: yes, data: @_data()}).val(@_selection())
   valuesUpdater: (->
-    val = this.$().select2("val")
-    #if val.length isnt data.length
-    p 'set val '
-    data = []
-    (data.push(i) for i in @get('choices') when i.trim().length > 0) if @get('choices')?
-    p data
-    p '------'
-    #if val.length isnt data.length
-    this.$().select2("val", data, true).on('change', @_change)
-    p '------'
-  ).observes('choices')
+    @_build()
+  ).observes('content.@each')
+  selectionUpdater: (->
+    this.$().select2({multiple: yes, data: @_data()}).val(@_selection())
+  ).observes('content.@each')
   didInsertElement: ->
-    this.$().select2().val(['a'])
+    this.$().select2({multiple: yes, data: @_data()})
 
 ###
 # View of a resizable text area

@@ -27,7 +27,7 @@
                 {{view Ember.TextField class="input-block-level required" placeholder="Enter name" valueBinding="name"}}
               </div>
             </div>
-            <!--div class="control-group">
+            <div class="control-group">
               <label class="control-label" for="template-engineers">Engineers names</label>
               <div class="controls">
                 {{view Checklists.Select2Tags id="template-engineers" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="engineers" dropdownCssClass="mousetrap" tagsBinding="engineers"}}
@@ -44,11 +44,11 @@
               <div class="controls">
                 {{view Checklists.Select2Tags id="template-choices" class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="choices" dropdownCssClass="hide mousetrap" tagsBinding="choices"}}
               </div>
-            </div-->
+            </div>
             <div class="control-group">
               <label class="control-label" for="template-warn-choices">Warning status&nbsp;&nbsp;<i class="icon-question-sign" {{action showWarnInfo target="view"}}></i></label>
               <div class="controls">
-                {{view Checklists.Select2Multiple id="template-warn-choices" class="input-block-level" choicesBinding="warnChoices" contentBinding="choices" placeholder="Select choices to flag as warnings"}}
+                {{view Checklists.Select2Multiple id="template-warn-choices" class="input-block-level" selectionBinding="warnChoices" contentBinding="choices" placeholder="Select choices to flag as warnings"}}
                 <div id="template-warn-info" class="template-info alert alert-info alert-block text-left hide">
                     <button type="button" class="close" {{action hideWarnInfo target="view"}}>&times;</button>
                     <small>If an item status is marked with the warn choices the group will be flagged for attention</small>
