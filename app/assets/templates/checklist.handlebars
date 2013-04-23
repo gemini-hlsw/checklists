@@ -36,7 +36,7 @@
     <div class="accordion" id="accordion">
       <tbody>
         {{#each group in groups}}
-          {{view Checklists.ChecksGroupView}}
+          {{view Checklists.ChecksGroupView contextBinding="group" settingsBinding="Checklists.router.templateSettingsController"}}
         {{/each}}
     </div>
     <div class="centered-box row-fluid">

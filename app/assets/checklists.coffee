@@ -869,26 +869,40 @@ Checklists.Check = Ember.Object.extend
 
 Checklists.ChecksGroupView = Ember.View.extend
   templateName: 'check_group'
+  collapsed: false # Move to controller
   toggleGroup: (event) ->
-    event.context.set('collapsed', not event.context.get('collapsed'))
+    @set('collapsed', not @get('collapsed'))
+  _warncounter: (p, i) ->
+    choices: p.choices
+    current: p.current + if p.choices and i.get('status') isnt "" and p.choices.indexOf(i.get('status'))>=0 then 1 else 0
+  warncount: (->
+    @get('context.checks').reduce(@_warncounter, {choices: @get('settings.warnChoices'), current: 0}).current
+  ).property('context.checks.@each.status')
+  successpct: ( ->
+    pct = Math.round(100 * @get('successcount') / @get('context.checks').length)
+    "width: #{pct}%"
+  ).property('successcount')
+  warnpct: ( ->
+    pct = Math.round(100 * @get('warncount') / @get('context.checks').length)
+    "width: #{pct}%"
+  ).property('warncount')
+  missingpct: ( ->
+    pct = Math.round(100 * @get('donecount') / @get('context.checks').length)
+    "width: #{100-pct}%"
+  ).property('warncount')  
+  _counter: (p, i) ->
+    p + if i.status isnt "" then 1 else 0
+  successcount: ( ->
+    @get('donecount') - @get('warncount')
+  ).property('donecount', 'warncount')  
+  donecount: ( ->
+    count = @get('context.checks').reduce(@_counter, 0)
+  ).property('context.checks.@each.status')
 
 Checklists.ChecksGroup = Ember.Object.extend
   name: ''
   title: ''
   checks: ''
-  collapsed: false # Move to controller
-  _counter: (p, i) ->
-    p + if i.status isnt "" then 1 else 0
-  successcount: ( ->
-    count = @get('checks').reduce(@_counter, 0)
-    Math.round(100 * count / @get('checks').length)
-  ).property('checks.@each.status')
-  successpct: ( ->
-    "width: #{@get('successcount')}%"
-  ).property('successcount')
-  missingpct: ( ->
-    "width: #{100-@get('successcount')}%"
-  ).property('successcount')
 
 Checklists.ChecklistRepository = Ember.Object.create
   checklistsCache: {}

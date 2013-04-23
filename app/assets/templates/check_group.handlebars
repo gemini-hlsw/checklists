@@ -3,16 +3,17 @@
               <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
                 <div class="row-fluid">
                   <div class="inline">
-                    <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}}
+                    <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}} {{view.warn}}
                   </div>
                   <div class="progress pull-right inline group-progress">
-                    <div class="bar bar-success" {{bindAttr style="group.successpct"}}></div>
-                    <div class="bar bar-danger" {{bindAttr style="group.missingpct"}}></div>
+                    <div class="bar bar-success" {{bindAttr style="view.successpct"}}></div>
+                    <div class="bar bar-warning" {{bindAttr style="view.warnpct"}}></div>
+                    <div class="bar bar-danger" {{bindAttr style="view.missingpct"}}></div>
                   </div>
                 </div>
               </a>
             </div>
-            <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
+            <div id="collapseOne" {{bindAttr class=":accordion-body :collapse view.collapsed:in"}}>
               <div class="accordion-inner checklist-accordion-inner">
                   <table class="table table-stripped table-bordered checklist-table ">
                     <tbody>
