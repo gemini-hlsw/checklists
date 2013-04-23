@@ -182,38 +182,28 @@ Checklists.Select2Tags = Ember.View.extend
     data = []
     (data.push({id: i, text:i}) for i in @get('values') when i.trim().length > 0) if @get('values')?
     tags = if @get('tags')? then @get('tags') else []
-    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
+    this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data,).on('change', @_change)
 
-Checklists.Select2 = Ember.View.extend
-  tagName: 'input'
-  classNames: ['ember-tags']
-  defaultTemplate: ''
-
-  attributeBindings: ['type', 'tabindex', 'placeholder', 'value', 'dropdownCssClass', 'containerCssClass']
-  type: 'hidden'
-  options: null
-  value: null
-  dropdownCssClass: ''
-  containerCssClass: ''
+Checklists.Select2Multiple = Ember.View.extend
+  tagName: 'select'
+  classNames: ['ember-select']
+  defaultTemplate: Ember.Handlebars.compile('{{#each view.content}}{{this}}{{/each}}'),
+  attributeBindings: ['placeholder', 'tabindex']
+  multiple: 'multiple'
   valuesUpdater: (->
-    data = []
-    data.push({id: i, text:i}) for i,k in @get('options') when i.trim().length > 0
     val = this.$().select2("val")
-    if val.length isnt data.length
-      this.$().select2({data: data, initSelection: @_initSelection}).select2("val", data)
-  ).observes('values')
-
-  _initSelection: (e, cb) ->
-    if Ember.View.views[e.context.id]?
-      view = Ember.View.views[e.context.id]
-      data = if view.get('value')? then {id: view.get('value'), text: view.get('value')} else null
-      cb(data)
-  _change: (event, ref) ->
-    Ember.View.views[event.target.id].set('value', event.val) if Ember.View.views[event.target.id]
-  didInsertElement: ->
+    #if val.length isnt data.length
+    p 'set val '
     data = []
-    (data.push({id: i, text:i}) for i, k in @get('options') when i.trim().length > 0) if @get('options')?
-    this.$().select2({data: data, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection:@_initSelection}).on('change', @_change)
+    (data.push(i) for i in @get('choices') when i.trim().length > 0) if @get('choices')?
+    p data
+    p '------'
+    #if val.length isnt data.length
+    this.$().select2("val", data, true).on('change', @_change)
+    p '------'
+  ).observes('choices')
+  didInsertElement: ->
+    this.$().select2().val(['a'])
 
 ###
 # View of a resizable text area
@@ -237,7 +227,6 @@ Checklists.Select2Checks = Ember.View.extend
       this.$().select2({data: data, initSelection: @_initSelection}).select2("val", data)
   ).observes('values')
   _format: (state) ->
-    console.log(state)
     "<input type='checkbox'>&nbsp;" + state.text;
   _initSelection: (e, cb) ->
     if Ember.View.views[e.context.id]?
@@ -285,20 +274,25 @@ Checklists.TemplateView = Ember.View.extend
         $(element).parents('.control-group').addClass(errorClass).removeClass(validClass)
       unhighlight: (element, errorClass, validClass) ->
         $(element).parents('.error').removeClass(errorClass).addClass(validClass)
+  _showInfo: (item) ->
+    if this.$(item).is(':visible')
+      this.$(item).fadeOut()
+    else
+      this.$(item).fadeIn()
+  _hideInfo: (item) ->
+    this.$(item).fadeOut()
   showSubjectInfo: ->
-    if this.$('#template-subject-info').is(':visible')
-      this.$('#template-subject-info').fadeOut()
-    else
-      this.$('#template-subject-info').fadeIn()
+    @_showInfo('#template-subject-info')
   hideSubjectInfo: ->
-    this.$('#template-subject-info').fadeOut()
+    @_hideInfo('#template-subject-info')
   showBodyInfo: ->
-    if this.$('#template-body-info').is(':visible')
-      this.$('#template-body-info').fadeOut()
-    else
-      this.$('#template-body-info').fadeIn()
+    @_showInfo('#template-body-info')
   hideBodyInfo: ->
-    this.$('#template-body-info').fadeOut()
+    @_hideInfo('#template-body-info')
+  showWarnInfo: ->
+    @_showInfo('#template-warn-info')
+  hideWarnInfo: ->
+    @_hideInfo('#template-warn-info')
   willDestroyElement: ->
     Mousetrap.unbind ['ctrl+s', 'command+s']
   toggleGroup: (event) ->
@@ -376,6 +370,7 @@ Checklists.Template = Ember.Object.extend
   toEmail: []
   subjectText: ''
   bodyText: ''
+  warnChoices: []
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')

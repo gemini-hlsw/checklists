@@ -1902,12 +1902,14 @@ the specific language governing permissions and limitations under the Apache Lic
         // single
         val: function () {
             var val, triggerChange = false, data = null, self = this;
+            console.log('val ' + arguments);
 
             if (arguments.length === 0) {
                 return this.opts.element.val();
             }
 
             val = arguments[0];
+            console.log('val ' + val);
 
             if (arguments.length > 1) {
                 triggerChange = arguments[1];
@@ -2463,6 +2465,7 @@ the specific language governing permissions and limitations under the Apache Lic
         setVal: function (val) {
             var unique;
             if (this.select) {
+                console.log('ONV ' + val);
                 this.select.val(val);
             } else {
                 unique = [];
@@ -2489,6 +2492,7 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             // val is an id. !val is true for [undefined,null,'',0] - 0 is legal
+
             if (!val && val !== 0) {
                 this.opts.element.val("");
                 this.updateSelection([]);
@@ -2498,7 +2502,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
                 return;
             }
-
             // val is a list of ids
             this.setVal(val);
 
