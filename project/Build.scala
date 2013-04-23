@@ -12,8 +12,8 @@ object ApplicationBuild extends Build with EmberJsKeys {
     "com.novus" %% "salat" % "1.9.2-SNAPSHOT",
     "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" %% "play-plugins-mailer" % "2.1.0",
-    "org.fusesource.scalate" % "scalate-wikitext_2.9" % "1.6.1",
-    "org.fusesource.scalate" % "scalate-page_2.9" % "1.6.1"
+    "org.fusesource.scalate" %% "scalate-wikitext" % "1.6.1",
+    "org.fusesource.scalate" %% "scalate-page" % "1.6.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
