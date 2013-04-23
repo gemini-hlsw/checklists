@@ -875,6 +875,9 @@ Checklists.ChecksGroupView = Ember.View.extend
   _warncounter: (p, i) ->
     choices: p.choices
     current: p.current + if p.choices and i.get('status') isnt "" and p.choices.indexOf(i.get('status'))>=0 then 1 else 0
+  hasWarnings: (->
+      @get('warncount') > 0
+    ).property('warncount')
   warncount: (->
     @get('context.checks').reduce(@_warncounter, {choices: @get('settings.warnChoices'), current: 0}).current
   ).property('context.checks.@each.status')
