@@ -195,16 +195,22 @@ Checklists.Select2 = Ember.View.extend
   _data: ->
     if @get('content')? then ({id: i, text:i} for i in @get('content') when i.trim().length > 0)  else []
   _selection: ->
-    if @get('selection')? then (i for i in @get('selection') when i.trim().length > 0) else []
-  _change: (event, ref) ->
+    if @get('multiple')
+      if @get('selection')? then (i for i in @get('selection') when i.trim().length > 0) else []
+    else
+      if @get('selection')?.length then @get('selection') else null
+  _change: (event) ->
     Ember.View.views[event.target.id].set('selection', event.val) if Ember.View.views[event.target.id]
   _build: ->
+    p @_data()
     this.$().select2(
       multiple: @get('multiple')
       containerCssClass: @get('containerCssClass')
       dropdownCssClass: @get('dropdownCssClass')
       data: @_data()
-    ).val(@_selection()).on('change', @_change)
+    ).on('change', @_change)
+    if @_selection()?
+      this.$().select2("val", @_selection())
   valuesUpdater: (->
     @_build()
   ).observes('content.@each')
