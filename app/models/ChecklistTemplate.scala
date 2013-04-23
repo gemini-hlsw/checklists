@@ -69,7 +69,7 @@ object CheckTemplateGroup {
   }
 }
 
-case class TemplateSettings(key: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup])
+case class TemplateSettings(key: String, engineers: Set[String], technicians: Set[String], groups: Seq[CheckTemplateGroup], warnChoices: Seq[String])
 
 object TemplateSettings {
   implicit object TemplateSettingsWrites extends Writes[TemplateSettings] {
@@ -77,6 +77,7 @@ object TemplateSettings {
       "key"         -> JsString(t.key),
       "engineers"   -> Json.toJson(t.engineers),
       "technicians" -> Json.toJson(t.technicians),
+      "warnChoices" -> Json.toJson(t.warnChoices),
       "groups"      -> JsArray(t.groups.map(g => g.checks.map(_.freeText).map(JsBoolean)).map(JsArray))
     ))
   }
@@ -141,7 +142,7 @@ object ChecklistTemplate extends ModelCompanion[ChecklistTemplate, ObjectId] {
   }
 
   def loadSettings(key: String):Option[TemplateSettings] = {
-    findTemplate(key).map(t => TemplateSettings(t.key, t.engineers, t.technicians, t.groups))
+    findTemplate(key).map(t => TemplateSettings(t.key, t.engineers, t.technicians, t.groups, t.warnChoices))
   }
 
   implicit object ChecklistTemplateFormat extends Format[ChecklistTemplate] {

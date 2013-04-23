@@ -184,11 +184,12 @@ Checklists.Select2Tags = Ember.View.extend
     tags = if @get('tags')? then @get('tags') else []
     this.$().select2({tags: tags, containerCssClass: @get('containerCssClass'), dropdownCssClass: @get('dropdownCssClass'), allowClear: true, initSelection: @_initSelection}).select2("val", data).on('change', @_change)
 
-Checklists.Select2Multiple = Ember.View.extend
+Checklists.Select2 = Ember.View.extend
   tagName: 'input'
   type: 'hidden'
   classNames: ['ember-select']
-  attributeBindings: ['placeholder', 'tabindex']
+  attributeBindings: ['placeholder', 'tabindex', 'multiple']
+  multiple: false
   _data: ->
     if @get('content')? then ({id: i, text:i} for i in @get('content') when i.trim().length > 0)  else []
   _selection: ->
@@ -196,7 +197,7 @@ Checklists.Select2Multiple = Ember.View.extend
   _change: (event, ref) ->
     Ember.View.views[event.target.id].set('selection', event.val) if Ember.View.views[event.target.id]
   _build: ->
-    this.$().select2({multiple: yes, data: @_data()}).val(@_selection()).on('change', @_change)
+    this.$().select2({multiple: @get('multiple'), data: @_data()}).val(@_selection()).on('change', @_change)
   valuesUpdater: (->
     @_build()
   ).observes('content.@each')

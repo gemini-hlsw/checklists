@@ -48,7 +48,7 @@
             <div class="control-group">
               <label class="control-label" for="template-warn-choices">Warning status&nbsp;&nbsp;<i class="icon-question-sign" {{action showWarnInfo target="view"}}></i></label>
               <div class="controls">
-                {{view Checklists.Select2Multiple id="template-warn-choices" class="input-block-level" selectionBinding="warnChoices" contentBinding="choices" placeholder="Select choices to flag as warnings"}}
+                {{view Checklists.Select2 id="template-warn-choices" multiple="true" class="input-block-level" selectionBinding="warnChoices" contentBinding="choices" placeholder="Select choices to flag as warnings"}}
                 <div id="template-warn-info" class="template-info alert alert-info alert-block text-left hide">
                     <button type="button" class="close" {{action hideWarnInfo target="view"}}>&times;</button>
                     <small>If an item status is marked with the warn choices the group will be flagged for attention</small>
