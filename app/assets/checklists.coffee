@@ -193,16 +193,18 @@ Checklists.Select2Multiple = Ember.View.extend
     if @get('content')? then ({id: i, text:i} for i in @get('content') when i.trim().length > 0)  else []
   _selection: ->
     if @get('selection')? then (i for i in @get('selection') when i.trim().length > 0) else []
+  _change: (event, ref) ->
+    Ember.View.views[event.target.id].set('selection', event.val) if Ember.View.views[event.target.id]
   _build: ->
-    this.$().select2({multiple: yes, data: @_data()}).val(@_selection())
+    this.$().select2({multiple: yes, data: @_data()}).val(@_selection()).on('change', @_change)
   valuesUpdater: (->
     @_build()
   ).observes('content.@each')
   selectionUpdater: (->
-    this.$().select2({multiple: yes, data: @_data()}).val(@_selection())
+    @_build()
   ).observes('content.@each')
   didInsertElement: ->
-    this.$().select2({multiple: yes, data: @_data()})
+    @_build()
 
 ###
 # View of a resizable text area
