@@ -36,42 +36,7 @@
     <div class="accordion" id="accordion">
       <tbody>
         {{#each group in groups}}
-          <div class="accordion-group checklist-accordion-group">
-            <div class="accordion-heading checklist-accordion-heading">
-              <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
-                <div class="row-fluid">
-                  <div class="inline">
-                    <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}} 
-                  </div>
-                  <div class="progress pull-right inline group-progress">
-                    <div class="bar bar-success" {{bindAttr style="group.successpct"}}></div>
-                    <div class="bar bar-danger" {{bindAttr style="group.missingpct"}}"></div>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div id="collapseOne" {{bindAttr class=":accordion-body :collapse group.collapsed:in"}}>
-              <div class="accordion-inner checklist-accordion-inner">
-                  <table class="table table-stripped table-bordered checklist-table ">
-                    <tbody>
-                      {{#each item in group.checks}}
-                        <tr>
-                          <td class="centered checklist-description-column">{{item.description}}</td>
-                          <td class="centered checklist-status-column centered-content">
-                            {{#if item.freeText}}
-                              {{view Checklists.ResizableTextArea class="textarea-animated" name="status" valueBinding="item.status"}}
-                            {{else}}
-                              {{view Checklists.Select2 class="input-medium" containerCssClass="checklist-select2" placeholder="Status" selectionBinding="item.status" contentBinding="item.choices"}}
-                            {{/if}}
-                          </td>
-                          <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="description" valueBinding="item.comment"}}</td>
-                        </tr>
-                      {{/each}}
-                    </tbody>
-                  </table>
-              </div> 
-            </div>
-          </div>
+          {{view Checklists.ChecksGroupView}}
         {{/each}}
     </div>
     <div class="centered-box row-fluid">

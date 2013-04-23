@@ -202,7 +202,6 @@ Checklists.Select2 = Ember.View.extend
   _change: (event) ->
     Ember.View.views[event.target.id].set('selection', event.val) if Ember.View.views[event.target.id]
   _build: ->
-    p @_data()
     this.$().select2(
       multiple: @get('multiple')
       containerCssClass: @get('containerCssClass')
@@ -822,8 +821,6 @@ Checklists.ThemesMenuView = Ember.View.extend
 Checklists.ChecklistView = Ember.View.extend
   templateName: 'checklist'
   settingsControllerBinding: 'Checklists.router.templateSettingsController'
-  toggleGroup: (event) ->
-    event.context.set('collapsed', not event.context.get('collapsed'))
   closeChecklist: ->
     bootbox.confirm "Are you sure you want to close? This action is irreversible", (result) ->
       if result
@@ -869,6 +866,11 @@ Checklists.Check = Ember.Object.extend
   status: ''
   comment: ''
   freeText: false
+
+Checklists.ChecksGroupView = Ember.View.extend
+  templateName: 'check_group'
+  toggleGroup: (event) ->
+    event.context.set('collapsed', not event.context.get('collapsed'))
 
 Checklists.ChecksGroup = Ember.Object.extend
   name: ''
