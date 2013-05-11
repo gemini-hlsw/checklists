@@ -815,6 +815,14 @@ Checklists.ThemesMenuView = Ember.View.extend
   switchToDark: ->
     @set('controller.theme', 'dark')
 
+
+Checklists.MarkdownView = Ember.View.extend
+  tagName: 'textarea'
+  didInsertElement: ->
+    converter = Markdown.getSanitizingConverter()
+    editor = new Markdown.Editor(converter)
+    editor.run()
+
 ###
 # View and controller for a checklist
 ###
@@ -827,6 +835,10 @@ Checklists.ChecklistView = Ember.View.extend
         Ember.run ->
           Checklists.get('router').send('closeChecklist')
   didInsertElement: ->
+    converter = Markdown.getSanitizingConverter()
+    editor = new Markdown.Editor(converter)
+    editor.run()
+
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveChecklist')
       false
@@ -846,6 +858,7 @@ Checklists.Checklist = Ember.ObjectController.extend
   isSaved: true
   engineers: []
   technicians: []
+  comment: ''
   needsOverlay: ( ->
     not @get('isLoaded') or not @get('isSaved')
   ).property('isLoaded', 'isSaved')

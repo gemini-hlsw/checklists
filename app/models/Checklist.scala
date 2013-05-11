@@ -65,7 +65,7 @@ object CheckGroup {
   }
 }
 
-case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty)
+case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty, comment: Option[String] = None)
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
@@ -179,13 +179,14 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   implicit object ChecklistFormat extends Format[Checklist] {
     def writes(c: Checklist) = JsObject(Seq(
-      "key"        -> JsString(c.key),
+      "key"         -> JsString(c.key),
       "name"        -> JsString(c.name),
       "closed"      -> JsBoolean(c.closed),
       "date"        -> Json.toJson(c.date),
       "groups"      -> Json.toJson(c.groups),
       "engineers"   -> Json.toJson(c.engineers),
-      "technicians" -> Json.toJson(c.technicians)
+      "technicians" -> Json.toJson(c.technicians),
+      "comment"     -> c.comment.map(JsString).getOrElse(JsNull)
     ))
 
     def reads(json: JsValue) = JsSuccess(Checklist(
