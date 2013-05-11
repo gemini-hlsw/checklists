@@ -22,7 +22,7 @@
         <table class="table table-stripped table-bordered checklist-table ">
           <tbody>
             {{#each item in group.checks}}
-              {{view Checklists.CheckView}}
+              {{view Checklists.CheckView contextBinding="item" settingsBinding="Checklists.router.templateSettingsController"}}
             {{/each}}
           </tbody>
         </table>
