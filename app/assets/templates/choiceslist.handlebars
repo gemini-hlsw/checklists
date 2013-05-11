@@ -1,23 +1,29 @@
 <div class="collapse in">
-  <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
+  {{#if freeText}}
+  {{else}}
+    <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
+  {{/if}}
   <label class="input-mini pull-right checkbox inline">
     {{view Ember.Checkbox checkedBinding="freeText"}}
     Any text
   </label>
+  {{#if freeText}}
+  {{else}}
     <table class="table table-striped table-hover table-bordered table-condensed">
-    <tbody>
-      {{#with freeText as parentFreeText}}
-        {{#each c in choices}}
-          <tr>
-            <td>
-              <label class="checkbox">
-                {{view Checklists.ChoicesCheckbox checkedBinding="c.selected" disabledBinding="parentFreeText" class="checkbox"}} {{c.name}}
-              </label>
-            </small>
-            </td>
-          </tr>
-        {{/each}}
-      {{/with}}
-    <tbody>
-  </table>
+      <tbody>
+        {{#with freeText as parentFreeText}}
+          {{#each c in choices}}
+            <tr>
+              <td>
+                <label class="checkbox">
+                  {{view Checklists.ChoicesCheckbox checkedBinding="c.selected" disabledBinding="parentFreeText" class="checkbox"}} {{c.name}}
+                </label>
+              </small>
+              </td>
+            </tr>
+          {{/each}}
+        {{/with}}
+      <tbody>
+    </table>
+  {{/if}}
 </dix>
