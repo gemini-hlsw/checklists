@@ -874,6 +874,9 @@ Checklists.Checklist = Ember.ObjectController.extend
     if d? then d.format(Checklists.calendarDateFormat) else ''
   ).property('date')
 
+Checklists.CheckView = Ember.View.extend
+  templateName: 'check'
+
 Checklists.Check = Ember.Object.extend
   description: ''
   status: ''
@@ -905,7 +908,7 @@ Checklists.ChecksGroupView = Ember.View.extend
   missingpct: ( ->
     pct = Math.round(100 * @get('donecount') / @get('context.checks').length)
     "width: #{100-pct}%"
-  ).property('warncount')  
+  ).property('warncount')
   _counter: (p, i) ->
     p + if i.status isnt "" then 1 else 0
   successcount: ( ->

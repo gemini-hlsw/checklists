@@ -31,10 +31,11 @@
             {{view Checklists.Select2Tags class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.technicians"}}
           </div>
         </div>
-        <div class="wmd-panel">
-          <div id="wmd-button-bar"></div>
-          {{!Checklists.MarkdownView valueBinding="comment"}}
-          {{Ember.TextArea valueBinding="comment"}}
+        <div class="control-group">
+          <label {{action toggleComment target="controller"}} class="control-label" for="technicians">General comments<i {{bindAttr class=":pull-right commentCollapsed:icon-double-angle-right:icon-caret-down"}}></i></label>
+          <div {{bindAttr class=":accordion-body :collapse commentCollapsed::in"}}>
+            {{view Checklists.MarkdownView editorId="comments" valueBinding="comment"}}
+          </div>
         </div>
       </div>
     </div>
