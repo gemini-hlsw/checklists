@@ -65,7 +65,7 @@ object CheckGroup {
   }
 }
 
-case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty, comment: Option[String] = None)
+case class Checklist(id: ObjectId = new ObjectId, key: String, name: String, closed: Boolean = false, date:DateMidnight, groups: Seq[CheckGroup], engineers: Seq[String] = Seq.empty, technicians: Seq[String] = Seq.empty, comment: String = "")
 
 object Checklist extends ModelCompanion[Checklist, ObjectId] {
   lazy val dao = new SalatDAO[Checklist, ObjectId](collection = mongoCollection("checklists")) {}
@@ -186,17 +186,18 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       "groups"      -> Json.toJson(c.groups),
       "engineers"   -> Json.toJson(c.engineers),
       "technicians" -> Json.toJson(c.technicians),
-      "comment"     -> c.comment.map(JsString).getOrElse(JsNull)
+      "comment"     -> JsString(c.comment)
     ))
 
     def reads(json: JsValue) = JsSuccess(Checklist(
-      key        = (json \ "key").asOpt[String].getOrElse(""),
-      name        = (json \ "name").asOpt[String].getOrElse(""),
-      closed      = (json \ "closed").asOpt[Boolean].getOrElse(false),
+      key         = ~(json \ "key").asOpt[String],
+      name        = ~(json \ "name").asOpt[String],
+      closed      = ~(json \ "closed").asOpt[Boolean],
       date        = (json \ "date").asOpt[DateMidnight].getOrElse(DateMidnight.now()),
       groups      = (json \ "groups").as[Seq[CheckGroup]],
       engineers   = (json \ "engineers").as[Seq[String]],
-      technicians = (json \ "technicians").as[Seq[String]]
+      technicians = (json \ "technicians").as[Seq[String]],
+      comment     = ~(json \ "comment").asOpt[String]
     ))
   }
 }

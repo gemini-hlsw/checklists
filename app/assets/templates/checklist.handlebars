@@ -10,7 +10,7 @@
       {{else}}
         <h1>{{name}}<br/>{{longFormattedDate}}</h1>
       {{/if}}
-    <div class="row-fluid centered">
+     <div class="row-fluid centered">
       <button class="btn pull-left" {{action goToPrevious}}><i class="icon-double-angle-left"></i> Prev</button>
       <button class="btn pull-right" {{action goToNext}}>Next <i class="icon-double-angle-right"></i></button>
       {{#if closed}}
@@ -31,12 +31,23 @@
             {{view Checklists.Select2Tags class="input-block-level" containerCssClass="checklist-select2" placeholder="Enter names" valuesBinding="technicians" dropdownCssClass="mousetrap" tagsBinding="view.settingsController.technicians"}}
           </div>
         </div>
-        <div class="control-group">
-          <label {{action toggleComment target="controller"}} class="control-label" for="technicians">General comments<i {{bindAttr class=":pull-right commentCollapsed:icon-double-angle-right:icon-caret-down"}}></i></label>
-          <div {{bindAttr class=":accordion-body :collapse commentCollapsed::in"}}>
-            {{view Checklists.MarkdownView editorId="comments" valueBinding="comment"}}
+        {{#if closed}}
+          {{#if displayComment}}
+            <div class="control-group">
+              <label class="control-label" for="comments">General comments</label>
+              <div class="controls text-left comments-box">
+                {{view Checklists.MarkdownView contentBinding="comment"}}
+              </div>
+            </div>
+          {{/if}}
+        {{else}}
+          <div class="control-group">
+            <label {{action toggleComment target="controller"}} class="control-label" for="comments">General comments<i {{bindAttr class=":pull-right commentCollapsed:icon-double-angle-right:icon-double-angle-down"}}></i></label>
+            <div {{bindAttr class=":accordion-body :collapse :controls :text-left commentCollapsed::in"}}>
+                {{view Checklists.MarkdownEditorView classNames="input-block-level" valueBinding="comment"}}
+            </div>
           </div>
-        </div>
+        {{/if}}
       </div>
     </div>
     <div class="accordion" id="accordion">

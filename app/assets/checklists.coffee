@@ -815,13 +815,17 @@ Checklists.ThemesMenuView = Ember.View.extend
   switchToDark: ->
     @set('controller.theme', 'dark')
 
-
 Checklists.MarkdownView = Ember.View.extend
-  tagName: 'textarea'
   didInsertElement: ->
-    converter = Markdown.getSanitizingConverter()
-    editor = new Markdown.Editor(converter)
-    editor.run()
+    p $(@get('formattedContent'))
+    this.$().append($(@get('formattedContent')))
+  formattedContent: (->
+    if markdown? then markdown.toHTML(@get('content')) else @get('content')
+    ).property('content')
+
+Checklists.MarkdownEditorView = Ember.TextArea.extend
+  didInsertElement: ->
+    this.$().markdown()
 
 ###
 # View and controller for a checklist
@@ -835,10 +839,6 @@ Checklists.ChecklistView = Ember.View.extend
         Ember.run ->
           Checklists.get('router').send('closeChecklist')
   didInsertElement: ->
-    converter = Markdown.getSanitizingConverter()
-    editor = new Markdown.Editor(converter)
-    editor.run()
-
     Mousetrap.bind ['ctrl+s', 'command+s'], ->
       Checklists.get('router').send('saveChecklist')
       false
@@ -847,6 +847,12 @@ Checklists.ChecklistView = Ember.View.extend
 
 Checklists.ChecklistController = Ember.ObjectController.extend
   content: null
+  displayComment: (->
+    @get('closed') and @get('comment').length > 0
+    ).property('closed', 'comment')
+  commentCollapsed: true
+  toggleComment: (event) ->
+    @set('commentCollapsed', not @get('commentCollapsed'))
 
 Checklists.Checklist = Ember.ObjectController.extend
   key: ''
@@ -964,11 +970,11 @@ Checklists.ChecklistRepository = Ember.Object.create
       @get('checklistsCache')["#{key}-#{date}"]
     else
       checklist = @newChecklist(key, date)
-      @get('checklistsCache')["#{key}-#{date}"] = checklist
       $.ajax
         url: "/api/v1.0/checklist/#{key}/#{date}",
         success: (response) =>
           @checklistFillJson(checklist, response)
+          @get('checklistsCache')["#{key}-#{date}"] = checklist
       checklist
   saveChecklist: (checklist) ->
     checklist.set('isSaved', false)
@@ -1028,6 +1034,7 @@ Checklists.Router = Ember.Router.extend
       connectOutlets: (router, template) ->
         router.setupReportsController(template.key)
         checklist = Checklists.ChecklistRepository.findOne(template.key, template.date)
+        router.get('checklistController').set('content', checklist)
 
         router.get('toolbarController').set('state', 'checklist')
         router.get('toolbarController').set('key', template.key)

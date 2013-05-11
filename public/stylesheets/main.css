@@ -211,3 +211,12 @@ textarea {
 .group-warning {
     margin-top: -1px;
 }
+
+.md-editor {
+    border-radius: 4px;
+}
+
+.comments-box {
+    border: 1px dotted rgb(153, 153, 153);
+    border-radius: 2px;
+}
