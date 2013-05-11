@@ -7,11 +7,11 @@
                   </div>
                   <div class="progress pull-right inline group-progress">
                     <div class="bar bar-success" {{bindAttr style="view.successpct"}}></div>
-                    <div class="bar bar-warning" {{bindAttr style="view.warnpct"}}></div>
+                    <div class="bar bar-danger" {{bindAttr style="view.warnpct"}}></div>
                   </div>
                   <div class="pull-right inline group-warning">
                     {{#if view.hasWarnings}}
-                      <span class="label label-warning">Found {{view.warncount}} warnings</span>&nbsp;
+                      <span class="label label-important">Found {{view.warncount}} warnings</span>&nbsp;
                     {{/if}}
                   </div>
                 </div>
