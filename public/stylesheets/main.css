@@ -148,6 +148,10 @@ td.centered {
     width: 30%;
 }
 
+.checklist-single-comment-field {
+    width: 97%;
+}
+
 /* Select2 CSS to fit better with bootstrap */
 .checklist-select2 input {
     border-radius: 4px;
