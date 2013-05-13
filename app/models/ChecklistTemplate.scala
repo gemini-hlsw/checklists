@@ -21,7 +21,7 @@ object CheckChoice {
   val defaultCheckChoices = defaultChoices.map(CheckChoice(_, true))
 }
 
-case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = CheckChoice.defaultCheckChoices, freeText: Boolean = false) {
+case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoice] = CheckChoice.defaultCheckChoices, freeText: Boolean = false, commentOnly: Boolean = false) {
   def hydrateChecks(defaultChoices:Set[String]):CheckTemplate = if (this.choices.isEmpty) {
       copy(choices = defaultChoices.map(CheckChoice(_, true)).toSeq)
     } else {
@@ -32,17 +32,19 @@ case class CheckTemplate(title: String, position: Int = 0, choices:Seq[CheckChoi
 object CheckTemplate {
   implicit object CheckTemplateFormat extends Format[CheckTemplate] {
     def writes(c: CheckTemplate) = JsObject(Seq(
-      "title"    -> JsString(c.title),
-      "position" -> JsNumber(c.position),
-      "choices"  -> Json.toJson(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected))))),
-      "freeText" -> JsBoolean(c.freeText)
+      "title"       -> JsString(c.title),
+      "position"    -> JsNumber(c.position),
+      "choices"     -> Json.toJson(c.choices.map(x => JsObject(Seq("name" -> JsString(x.name), "selected" -> JsBoolean(x.selected))))),
+      "freeText"    -> JsBoolean(c.freeText),
+      "commentOnly" -> JsBoolean(c.commentOnly)
     ))
 
     def reads(json: JsValue) = JsSuccess(CheckTemplate(
-      title    = ~(json \ "title").asOpt[String],
-      position = ~(json \ "position").asOpt[Int],
-      choices  = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean])),
-      freeText = ~(json \ "freeText").asOpt[Boolean]
+      title       = ~(json \ "title").asOpt[String],
+      position    = ~(json \ "position").asOpt[Int],
+      choices     = (json \ "choices").as[Seq[JsObject]].map(o => CheckChoice(~(o \ "name").asOpt[String], ~(o \ "selected").asOpt[Boolean])),
+      freeText    = ~(json \ "freeText").asOpt[Boolean],
+      commentOnly = ~(json \ "commentOnly").asOpt[Boolean]
     ))
   }
 }

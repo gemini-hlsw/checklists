@@ -3,9 +3,13 @@
   {{else}}
     <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
   {{/if}}
-  <label class="input-mini pull-right checkbox inline">
+  <label class="pull-right checkbox inline">
     {{view Ember.Checkbox checkedBinding="freeText"}}
-    Any text
+    Any status
+  </label>
+  <label class="pull-right checkbox inline">
+    {{view Ember.Checkbox checkedBinding="commentOnly"}}
+    Comment Only&nbsp;&nbsp;
   </label>
   {{#if freeText}}
   {{else}}
