@@ -17,13 +17,13 @@ import org.fusesource.scalate.support.StringTemplateSource
 import scalaz._
 import Scalaz._
 
-case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices, freeText: Boolean = false) {
-  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment), this.choices, this.freeText)
+case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices, freeText: Boolean = false, commentOnly: Boolean = false) {
+  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment), this.choices, this.freeText, this.commentOnly)
 }
 
 object Check {
   def newFromTemplate(t: CheckTemplate):Check =
-    Check(t.title, None, None, t.choices.filter(_.selected).map(_.name), t.freeText)
+    Check(t.title, None, None, t.choices.filter(_.selected).map(_.name), t.freeText, t.commentOnly)
 
   implicit object CheckFormat extends Format[Check] {
     def writes(c: Check) = JsObject(Seq(
@@ -31,7 +31,8 @@ object Check {
       "status"      -> JsString(~c.status),
       "comment"     -> JsString(~c.comment),
       "choices"     -> Json.toJson(c.choices),
-      "freeText"    -> Json.toJson(c.freeText)
+      "freeText"    -> Json.toJson(c.freeText),
+      "commentOnly" -> Json.toJson(c.commentOnly)
     ))
 
     def reads(json: JsValue) = JsSuccess(Check(
@@ -39,7 +40,8 @@ object Check {
        (json \ "status").asOpt[String].filter(_.nonEmpty),
        (json \ "comment").asOpt[String].filter(_.nonEmpty),
        (json \ "choices").as[Seq[String]],
-      ~(json \ "freeText").asOpt[Boolean]
+      ~(json \ "freeText").asOpt[Boolean],
+      ~(json \ "commentOnly").asOpt[Boolean]
     ))
   }
 }

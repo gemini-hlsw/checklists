@@ -896,6 +896,7 @@ Checklists.Check = Ember.Object.extend
   comment: ''
   warn: false
   freeText: false
+  commentOnly: false
 
 Checklists.ChecksGroupView = Ember.View.extend
   templateName: 'check_group'
