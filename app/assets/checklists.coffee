@@ -614,7 +614,7 @@ Checklists.TemplateRepository = Ember.Object.create
 
 switchLink = (title, name, postfix) ->
   $("link[name=#{title}]").each ->
-    this.href = "6/assets/stylesheets/#{title}-#{name}#{postfix}.css"
+    this.href = "7/assets/stylesheets/#{title}-#{name}#{postfix}.css"
 
 Checklists.switchStyle = (name)->
   switchLink("bootstrap", name, ".min")

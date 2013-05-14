@@ -1,6 +1,5 @@
   <td class="centered checklist-description-column">{{item.description}}</td>
     {{#if item.commentOnly}}
-    
       <td colspan="2" class="centered centered-content">
         {{view Checklists.ResizableTextArea class="textarea-animated checklist-single-comment-field" name="comment" valueBinding="item.comment"}}
       </td>
