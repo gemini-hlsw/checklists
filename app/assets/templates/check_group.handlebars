@@ -3,7 +3,7 @@
     <a class="accordion-toggle checklist-accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" {{action toggleGroup group target="view"}}>
       <div class="row-fluid">
         <div class="inline">
-          <i {{bindAttr class="group.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}}
+          <i {{bindAttr class="view.collapsed:icon-caret-down:icon-caret-right"}}></i>&nbsp;{{group.title}}
         </div>
         <div class="progress pull-right inline group-progress">
           <div class="bar bar-success" {{bindAttr style="view.successpct"}}></div>
@@ -17,7 +17,7 @@
       </div>
     </a>
   </div>
-  
+
   <div id="collapseOne" {{bindAttr class=":accordion-body :collapse view.collapsed:in"}}>
     <div class="accordion-inner checklist-accordion-inner">
         <table class="table table-stripped table-bordered checklist-table">
