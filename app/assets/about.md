@@ -10,6 +10,7 @@ observatory operations
 - CHECKS-8 Add a field for a general comment on a check. You can indicate that you only want comments for a given check
 - CHECKS-9 Support the concept of choices that trigger a warning if selected. On the template editor you can indicate what states are warnings
 - CHECKS-4 Update to play framework 2.1
+- CHECKS-5 Add gzip compression
 
 ###### Version 0.5.1
 

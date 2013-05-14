@@ -13,7 +13,8 @@ object ApplicationBuild extends Build with EmberJsKeys {
     "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" %% "play-plugins-mailer" % "2.1.0",
     "org.fusesource.scalate" %% "scalate-wikitext" % "1.6.1",
-    "org.fusesource.scalate" %% "scalate-page" % "1.6.1"
+    "org.fusesource.scalate" %% "scalate-page" % "1.6.1",
+    "com.typesafe.play.extras" %% "iteratees-extras" % "1.0.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

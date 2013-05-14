@@ -1,10 +1,12 @@
 import models.{ChecklistTemplate, Site, RegisterJodaDateMidnightConversionHelpers, DatastoreVersion}
 import play.api.{Application, GlobalSettings}
+import play.extras.iteratees._
+import play.api.mvc.WithFilters
 
 import scalaz._
 import Scalaz._
 
-object Global extends GlobalSettings {
+object Global extends WithFilters(new GzipFilter) with GlobalSettings {
   override def onStart(app: Application) {
     RegisterJodaDateMidnightConversionHelpers()
 
