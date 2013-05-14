@@ -887,7 +887,7 @@ Checklists.CheckView = Ember.View.extend
   classNameBindings: ['isWarn:error'] # There is a bug to put this in the template
   templateName: 'check'
   isWarn: (->
-    if @get('settings.warnChoices')? then @get('settings.warnChoices').indexOf(@get('context.status')) > 0 else false
+    if @get('settings.warnChoices')? then @get('settings.warnChoices').indexOf(@get('context.status')) >= 0 else false
   ).property('context.status')
 
 Checklists.Check = Ember.Object.extend
