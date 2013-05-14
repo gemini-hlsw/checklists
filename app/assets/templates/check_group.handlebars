@@ -19,7 +19,7 @@
   </div>
   <div id="collapseOne" {{bindAttr class=":accordion-body :collapse view.collapsed:in"}}>
     <div class="accordion-inner checklist-accordion-inner">
-        <table class="table table-stripped table-bordered checklist-table ">
+        <table class="table table-stripped table-bordered checklist-table">
           <tbody>
             {{#each item in group.checks}}
               {{view Checklists.CheckView contextBinding="item" settingsBinding="Checklists.router.templateSettingsController"}}

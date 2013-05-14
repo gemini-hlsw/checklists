@@ -23,7 +23,7 @@ object ApplicationBuild extends Build with EmberJsKeys {
     routesImport += "se.radley.plugin.salat.Binders._",
     templatesImport += "org.bson.types.ObjectId",
 
-    coffeescriptOptions := Seq("native", "/opt/local/bin/coffee -p")
+    //coffeescriptOptions := Seq("native", "/opt/local/bin/coffee -p")
   )
 
 }
