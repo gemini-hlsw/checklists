@@ -5,6 +5,12 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.6
+
+- CHECKS-8 Add a field for a general comment on a check. You can indicate that you only want comments for a given check
+- CHECKS-9 Support the concept of choices that trigger a warning if selected. On the template editor you can indicate what states are warnings
+- CHECKS-4 Update to play framework 2.1
+
 ###### Version 0.5.1
 
 - Added Progress bar to each group indicating how many checks have been set

@@ -459,6 +459,17 @@ Checklists.Template = Ember.Object.extend
 
 Checklists.ChoicesListView = Ember.View.extend
   templateName: 'choiceslist'
+  showChoices: (->
+    @get('context.freeText') or @get('context.commentOnly')
+    ).property('context.commentOnly', 'context.freeText')
+  commentOnlyObserver: (->
+    if @get('context.commentOnly')
+      @set('context.freeText', false)
+    ).observes('context.commentOnly')
+  freeTextObserver: (->
+    if @get('context.freeText')
+      @set('context.commentOnly', false)
+    ).observes('context.freeText')
   checkAll: ->
     @get('context').checkAll()
   checkNone: ->

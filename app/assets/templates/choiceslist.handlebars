@@ -1,8 +1,5 @@
 <div class="collapse in">
-  {{#if freeText}}
-  {{else}}
-    <button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="freeText:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
-  {{/if}}
+    <button {{bindAttr class="view.showChoices:disabled:enabled :btn :btn-small :pull-left"}} {{action checkAll target="view"}}><i class="icon-ok-sign"></i>&nbsp;all</button>&nbsp;<button {{bindAttr class="view.showChoices:disabled:enabled :btn :btn-small :pull-left"}} {{action checkNone target="view"}}><i class="icon-remove-sign"></i>&nbsp;none</button>
   <label class="pull-right checkbox inline">
     {{view Ember.Checkbox checkedBinding="freeText"}}
     Any status
@@ -11,8 +8,6 @@
     {{view Ember.Checkbox checkedBinding="commentOnly"}}
     Comment Only&nbsp;&nbsp;
   </label>
-  {{#if freeText}}
-  {{else}}
     <table class="table table-striped table-hover table-bordered table-condensed">
       <tbody>
         {{#with freeText as parentFreeText}}
@@ -20,7 +15,7 @@
             <tr>
               <td>
                 <label class="checkbox">
-                  {{view Checklists.ChoicesCheckbox checkedBinding="c.selected" disabledBinding="parentFreeText" class="checkbox"}} {{c.name}}
+                  {{view Checklists.ChoicesCheckbox checkedBinding="c.selected" disabledBinding="view.showChoices" class="checkbox"}} {{c.name}}
                 </label>
               </small>
               </td>
@@ -29,5 +24,4 @@
         {{/with}}
       <tbody>
     </table>
-  {{/if}}
 </dix>
