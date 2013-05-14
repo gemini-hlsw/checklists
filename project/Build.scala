@@ -21,7 +21,7 @@ object ApplicationBuild extends Build with EmberJsKeys {
     resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
     emberJsVersion := "1.0.0-pre.2",
     routesImport += "se.radley.plugin.salat.Binders._",
-    templatesImport += "org.bson.types.ObjectId",
+    templatesImport += "org.bson.types.ObjectId"
 
     //coffeescriptOptions := Seq("native", "/opt/local/bin/coffee -p")
   )
