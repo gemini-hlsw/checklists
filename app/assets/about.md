@@ -5,6 +5,10 @@ observatory operations
 
 ##### Change Log
 
+###### Version 0.6.1
+
+- Fixed bug when a user wants to delete an engineer or technician entry
+
 ###### Version 0.6
 
 - CHECKS-8 Add a field for a general comment on a check. You can indicate that you only want comments for a given check
