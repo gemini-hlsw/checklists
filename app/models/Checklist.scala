@@ -108,7 +108,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
       ng <- cl.groups
       if (og.name == ng.name)
     } yield ng.copy(checks = mergeChecks(ng.checks, og.checks))
-    cl.copy(groups = mergedGroups, engineers = (newCL.engineers ++ oldCL.engineers).distinct, technicians = (newCL.technicians ++ oldCL.technicians).distinct)
+    cl.copy(groups = mergedGroups)
   }
 
   def mailChecklistCompletion(c: Checklist) {
