@@ -3,7 +3,7 @@ package models
 import com.novus.salat.dao.{SalatDAO, ModelCompanion}
 import com.mongodb.casbah.Imports._
 import se.radley.plugin.salat._
-import org.joda.time.DateMidnight
+import org.joda.time.{DateMidnight, DateTimeZone}
 import play.api.libs.json._
 import play.api.Play.current
 import play.Logger
@@ -80,8 +80,9 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
 
   def findOrCreate(key:String, date:DateMidnight):Option[Checklist] = findChecklist(key, date).orElse(ChecklistTemplate.findTemplate(key).map(newFromTemplate(_, date)))
 
-  def findChecklist(key:String, date:DateMidnight):Option[Checklist] =
-    dao.findOne(MongoDBObject("key" -> key, "date" -> date))
+  def findChecklist(key:String, date:DateMidnight):Option[Checklist] = {
+    dao.findOne(MongoDBObject("key" -> key, "date" -> date.toDateTime(DateTimeZone.UTC)))
+  }
 
   def findChecklistRange(key:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] =
     dao.find(MongoDBObject("key" -> key, "date" -> MongoDBObject("$gte" -> from, "$lte" -> to))).toList

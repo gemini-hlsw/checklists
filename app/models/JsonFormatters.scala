@@ -1,11 +1,11 @@
 package models
 
 import play.api.libs.json._
-import org.joda.time.{DateMidnight, DateTime}
+import org.joda.time.{DateMidnight, DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
 
 object JsonFormatters {
-  val fmt = DateTimeFormat.forPattern("yyyyMMdd")
+  val fmt = DateTimeFormat.forPattern("yyyyMMdd").withZone(DateTimeZone.UTC)
 
   implicit object JodaDateFormat extends Format[DateTime] {
     def reads(json: JsValue) = JsSuccess(new DateTime(json.as[String]))
