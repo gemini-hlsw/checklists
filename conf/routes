@@ -5,7 +5,6 @@
 # Home page
 GET     /                                               controllers.Application.index
 GET     /about                                          controllers.Application.about
-GET     /test                                           controllers.Application.test
         
 GET     /api/v1.0/sites                                 controllers.Api.sites
 POST    /api/v1.0/validation/templatekey                controllers.Api.validateKey
