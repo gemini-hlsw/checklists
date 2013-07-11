@@ -81,7 +81,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   def findOrCreate(key:String, date:DateMidnight):Option[Checklist] = findChecklist(key, date).orElse(ChecklistTemplate.findTemplate(key).map(newFromTemplate(_, date)))
 
   def findChecklist(key:String, date:DateMidnight):Option[Checklist] = {
-    dao.findOne(MongoDBObject("key" -> key, "date" -> date.toDateTime(DateTimeZone.UTC)))
+    dao.findOne(MongoDBObject("key" -> key, "date" -> date))
   }
 
   def findChecklistRange(key:String, from:DateMidnight, to:DateMidnight):Seq[Checklist] =
