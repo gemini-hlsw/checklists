@@ -2,7 +2,7 @@ package models
 
 import com.mongodb.casbah.commons.conversions.MongoConversionHelper
 import org.bson.{BSON, Transformer}
-import org.joda.time.DateMidnight
+import org.joda.time.{DateMidnight, DateTimeZone}
 
 object RegisterJodaDateMidnightConversionHelpers extends JodaDateMidnightHelpers {
   def apply() {
@@ -55,7 +55,7 @@ trait JodaDateMidnightDeserializer extends MongoConversionHelper {
     log.trace("Decoding JDK Dates .")
 
     def transform(o: AnyRef): AnyRef = o match {
-      case jdkDate: java.util.Date => new DateMidnight(jdkDate)
+      case jdkDate: java.util.Date => new DateMidnight(jdkDate, DateTimeZone.UTC)
       case d: DateMidnight => d
       case _ => o
     }
