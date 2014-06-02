@@ -9,7 +9,7 @@ object ApplicationBuild extends Build with EmberJsKeys {
 
   val appDependencies = Seq(
     "se.radley" % "play-plugins-salat_2.10" % "1.2",
-    "com.novus" %% "salat" % "1.9.2-SNAPSHOT",
+    "com.novus" %% "salat" % "1.9.2",
     "org.scalaz" %% "scalaz-core" % "6.0.4",
     "com.typesafe" %% "play-plugins-mailer" % "2.1.0",
     "org.fusesource.scalate" %% "scalate-wikitext" % "1.6.1",
