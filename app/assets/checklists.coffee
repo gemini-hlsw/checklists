@@ -207,6 +207,7 @@ Checklists.Select2 = Ember.View.extend
       containerCssClass: @get('containerCssClass')
       dropdownCssClass: @get('dropdownCssClass')
       data: @_data()
+      allowClear: true
     ).on('change', @_change)
     if @_selection()?
       this.$().select2("val", @_selection())
