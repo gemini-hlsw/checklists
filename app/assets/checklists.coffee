@@ -200,6 +200,8 @@ Checklists.Select2 = Ember.View.extend
     else
       if @get('selection')?.length then @get('selection') else null
   _change: (event) ->
+    if event.removed?
+      Ember.View.views[event.target.id].set('deleted', true)
     Ember.View.views[event.target.id].set('selection', event.val) if Ember.View.views[event.target.id]
   _build: ->
     this.$().select2(
@@ -957,6 +959,7 @@ Checklists.ChecklistRepository = Ember.Object.create
   checkFromJson: (json) ->
     check = Checklists.Check.create()
     check.setProperties(json)
+    check.set('deleted', false)
   checklistGroupFromJson: (json) ->
     group = Checklists.ChecksGroup.create
       name: ''

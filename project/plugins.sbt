@@ -9,4 +9,4 @@ resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositori
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("play" % "sbt-plugin" % "2.1.0")
 
-addSbtPlugin("com.ketalo.play.plugins" % "emberjs" % "0.1.1-SNAPSHOT")
+addSbtPlugin("com.ketalo.play.plugins" % "emberjs" % "1.0.0")

@@ -17,8 +17,10 @@ import org.fusesource.scalate.support.StringTemplateSource
 import scalaz._
 import Scalaz._
 
-case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices, freeText: Boolean = false, commentOnly: Boolean = false) {
-  def merge(that:Check): Check = Check(this.description, status.orElse(that.status), comment.orElse(that.comment), this.choices, this.freeText, this.commentOnly)
+case class Check(description:String, status: Option[String], comment: Option[String], choices: Seq[String] = CheckChoice.defaultChoices, freeText: Boolean = false, commentOnly: Boolean = false, deleted: Option[Boolean] = None) {
+  def mergeStatus(another: Option[String]) = if (~deleted) status else status.orElse(another)
+
+  def merge(that:Check): Check = {println(this.description + " " + this.status + " " + that.status + " " + deleted);copy(status = mergeStatus(that.status), comment = comment.orElse(that.comment))}
 }
 
 object Check {
@@ -41,7 +43,8 @@ object Check {
        (json \ "comment").asOpt[String].filter(_.nonEmpty),
        (json \ "choices").as[Seq[String]],
       ~(json \ "freeText").asOpt[Boolean],
-      ~(json \ "commentOnly").asOpt[Boolean]
+      ~(json \ "commentOnly").asOpt[Boolean],
+       (json \ "deleted").asOpt[Boolean]
     ))
   }
 }
@@ -76,7 +79,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
   engine.allowCaching =  false
 
   def newFromTemplate(t:ChecklistTemplate, date: DateMidnight): Checklist =
-    Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate(_)))
+    Checklist(key = t.key, name = t.name, date = date, groups = t.groups.map(CheckGroup.newFromTemplate))
 
   def findOrCreate(key:String, date:DateMidnight):Option[Checklist] = findChecklist(key, date).orElse(ChecklistTemplate.findTemplate(key).map(newFromTemplate(_, date)))
 
@@ -98,7 +101,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     for {
       nc <- newChecks
       oc <- oldChecks
-      if (nc.description == oc.description)
+      if nc.description == oc.description
     } yield nc.merge(oc)
   }
 
@@ -107,7 +110,7 @@ object Checklist extends ModelCompanion[Checklist, ObjectId] {
     val mergedGroups = for {
       og <- oldCL.groups
       ng <- cl.groups
-      if (og.name == ng.name)
+      if og.name == ng.name
     } yield ng.copy(checks = mergeChecks(ng.checks, og.checks))
     cl.copy(groups = mergedGroups)
   }

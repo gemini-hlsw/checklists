@@ -8,7 +8,7 @@
   {{#if item.freeText}}
     {{view Checklists.ResizableTextArea class="textarea-animated" name="status" valueBinding="item.status"}}
   {{else}}
-    {{view Checklists.Select2 class="input-medium" containerCssClass="checklist-select2" placeholder="Status" selectionBinding="item.status" contentBinding="item.choices"}}
+    {{view Checklists.Select2 class="input-medium" containerCssClass="checklist-select2" placeholder="Status" deletedBinding="item.deleted" selectionBinding="item.status" contentBinding="item.choices"}}
   {{/if}}
   </td>
   <td class="centered centered-content checklist-comment-column">{{view Checklists.ResizableTextArea class="textarea-animated" name="comment" valueBinding="item.comment"}}</td>
